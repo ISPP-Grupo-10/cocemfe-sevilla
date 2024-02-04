@@ -1,0 +1,23 @@
+name: "📖 Elaborar Documento"
+description: "Añade una tarea de elaboración de un Documento."
+title: "[Documentation] "
+labels: ["documentation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # **📖 Elaborar Documento**
+  - type: textarea
+    id: document-description
+    attributes:
+      label: "Descripción del Documento"
+      description: "Proporciona un breve resumen del contenido del documento."
+    validations:
+      required: true
+  - type: textarea
+    id: document-context
+    attributes:
+      label: "Contexto Adicional"
+      description: "Añade cualquier otro contexto o información adicional sobre el documento aquí."
+    validations:
+      required: false
