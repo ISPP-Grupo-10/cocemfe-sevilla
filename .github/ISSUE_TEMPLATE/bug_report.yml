@@ -1,0 +1,35 @@
+name: "🐞 Reporte de Error"
+description: "Informa un problema para ayudar a mejorar el proyecto."
+title: "[Error] "
+labels: ["error"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # **🐞 Reporte de Error**
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: "Descripción del Error"
+      description: "Proporciona una descripción clara y concisa del error."
+    validations:
+      required: true
+  - type: textarea
+    id: bug-reproduction
+    attributes:
+      label: "Pasos para Reproducir"
+      description: "Escribe los pasos aquí (agrega o elimina tantos pasos como sea necesario)"
+      placeholder: |
+        1.
+        2.
+        3.
+        4.
+    validations:
+      required: true
+  - type: textarea
+    id: bug-context
+    attributes:
+      label: "Contexto Adicional"
+      description: "Añade cualquier otro contexto o información adicional sobre el problema aquí."
+    validations:
+      required: false

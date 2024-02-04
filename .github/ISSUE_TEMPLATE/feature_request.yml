@@ -1,0 +1,27 @@
+name: "🚀🆕 Solicitud de Funcionalidad"
+description: "Sugiere una idea o posible nueva característica para este proyecto."
+title: "[feature] "
+labels: ["feature"]
+body:
+  - type: markdown
+    attributes:
+        value: |
+            # **🚀 Solicitud de Funcionalidad**
+  - type: textarea
+    attributes:
+        label: "Describe la funcionalidad."
+        description: "Una descripción clara y concisa de lo que implica la funcionalidad."
+    validations:
+        required: true
+  - type: textarea
+    attributes:
+        label: "Describe la solución que te gustaría."
+        description: "Una descripción clara y concisa de lo que te gustaría que sucediera."
+    validations:
+        required: false
+  - type: textarea
+    attributes:
+      label: "Contexto Adicional"
+      description: "Añade cualquier otro contexto o información adicional sobre el problema aquí."
+    validations: 
+      required: false
