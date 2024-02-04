@@ -1,0 +1,22 @@
+type: subject #id
+
+body
+
+### type
+# feat (new feature)
+# fix (bug fix)
+# research (addition of experimental code, may be non-functional)
+# refactor (code refactoring)
+# docs (documentation update)
+# test (addition or modification of tests)
+# conf (modification of configuration files)
+
+### subject
+# A brief description of the problem addressed, starting with a participle verb.
+# Reference the corresponding issue (if any) like this: `#<ID_issue>`
+
+### body (optional)
+# Used in case the subject is not descriptive enough.
+
+### Example
+# conf: Updated docker-compose.yml #1
