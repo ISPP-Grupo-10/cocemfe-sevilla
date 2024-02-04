@@ -1,0 +1,19 @@
+name: "🧾 Otros"
+description: "Issue genérica"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # **🧾 Detalles de la Issue**
+  - type: textarea
+    attributes:
+      label: "Descripción"
+      description: "Breve resumen del problema a solucionar"
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "Contexto Adicional"
+      description: "Añade cualquier otro contexto o información adicional sobre el problema aquí."
+    validations: 
+      required: false
