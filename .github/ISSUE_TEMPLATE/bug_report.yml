@@ -1,7 +1,7 @@
 name: "🐞 Reporte de Error"
 description: "Informa un problema para ayudar a mejorar el proyecto."
-title: "[Error] "
-labels: ["error"]
+title: "[Bug] "
+labels: ["bug"]
 body:
   - type: markdown
     attributes:

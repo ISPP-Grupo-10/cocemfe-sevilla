@@ -1,6 +1,6 @@
 name: "🚀🆕 Solicitud de Funcionalidad"
 description: "Sugiere una idea o posible nueva característica para este proyecto."
-title: "[feature] "
+title: "[Feature] "
 labels: ["feature"]
 body:
   - type: markdown
