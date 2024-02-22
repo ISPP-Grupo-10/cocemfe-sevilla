@@ -1,9 +1,13 @@
 from django.db import models
+from codenfe_sevilla.professionals.models import Professional
+from codenfe_sevilla.suggestions.models import Suggestion
 
 class Voting(models.Model):
     vote = models.BooleanField()
     date = models.DateField()
     justification = models.TextField()
+    professional = models.ForeignKey(Professional, on_delete=models.CASCADE, null=True, related_name='votings')
+    suggestion= models.ForeignKey(Suggestion, on_delete=models.CASCADE, null=True, related_name='votings')
 
-    def str(self):
+    def __str__(self):
         return f"Vote: {self.vote}, Date: {self.date}"
