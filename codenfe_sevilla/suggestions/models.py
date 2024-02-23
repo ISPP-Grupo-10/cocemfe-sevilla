@@ -1,6 +1,6 @@
 from django.db import models
-from codenfe_sevilla.documents.models import Document
-from codenfe_sevilla.professionals.models import Professional
+from documents.models import Document
+from professionals.models import Professional
 
 class Suggestion(models.Model):
     main = models.CharField(max_length=255)
