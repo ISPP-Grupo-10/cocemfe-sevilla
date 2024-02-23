@@ -4,5 +4,5 @@ from documents.models import Document
 # Create your views here.
 def docsList(request):
 
-
-    return render(request, "documents/docsList.html")
+    documentos = Document.objects.all()
+    return render(request, "documents/docsList.html", {'documentos': documentos})

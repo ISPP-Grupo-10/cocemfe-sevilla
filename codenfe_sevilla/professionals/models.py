@@ -17,7 +17,7 @@ class Professional(models.Model):
     address = models.CharField(max_length=255)
     license = models.CharField(max_length=50)
     organizations = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='professionals', default= 1)
-    documents = models.ManyToManyField('documents.Document', related_name='professional_documents')
+    documents = models.ManyToManyField('documents.Document', related_name='professional_documents', blank=True)
 
     def __str__(self):
         return self.username
