@@ -1,0 +1,25 @@
+{% block content %}
+<table>
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if documentos %}
+            {% for doc in documentos%} 
+            <tr>
+                <td>{{doc.name}}</td>
+                <td>{{doc.status}}</td>
+            </tr>
+            {% endfor %}
+        {% else  %}
+            <tr>
+                <td>Vacío</td>
+                <td>Vacío</td>
+            </tr>
+        {% endif %}
+    </tbody>
+{% endblock  %}
+

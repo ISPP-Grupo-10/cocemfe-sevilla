@@ -1,6 +1,6 @@
 from django.db import models
-from codenfe_sevilla.professionals.models import Professional
-from codenfe_sevilla.suggestions.models import Suggestion
+from professionals.models import Professional
+from suggestions.models import Suggestion
 
 class Voting(models.Model):
     vote = models.BooleanField()
