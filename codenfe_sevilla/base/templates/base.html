@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{% block title %}{% endblock %}</title>
+  {% load bootstrap5 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+</head>
+<body>
+
+<!-- Grey with black text -->
+    <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid d-flex ">
+            <div style="width: 20%; height: 100%;">
+                <img src="https://www.cocemfe.es/wp-content/uploads/thegem-logos/logo_afb4a0816f68e0c0dc0425488429ff40_2x.png" alt="Descripción de la imagen" style="width: 200px; height: auto;">
+            </div>
+            <div style="background-color: #00A599; width: 80%; height: 60px; display: flex; align-items: center;">
+                <a class="navbar-brand" href="#">Documentos</a>
+                <a class="navbar-brand" href="#">Usuarios</a>
+                <a class="navbar-brand" href="#">Organizaciones</a>
+            </div>
+        </div>
+    </nav>
+    {% block encabezado %}
+    {% endblock %}
+    {% block contenido %}
+    {% endblock %}
+</body>
+</html>
