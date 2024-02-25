@@ -1,26 +1,32 @@
 {% extends "base.html" %}
-{% block content %}
-<table>
+
+{% block contenido %}
+<table class="table table-bordered">
     <thead>
         <tr>
-            <th>Nombre</th>
-            <th>Status</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Estado</th>
         </tr>
     </thead>
     <tbody>
         {% if documentos %}
-            {% for doc in documentos%} 
+            {% for doc in documentos %}
             <tr>
-                <td>{{doc.name}}</td>
-                <td>{{doc.status}}</td>
+                <td>{{ doc.name }}</td>
+                {% if doc.status == True %}
+                    <td>Abierto</td>
+                {% else %}
+                    <td>Cerrado</td>
+                {% endif %}
             </tr>
             {% endfor %}
-        {% else  %}
+        {% else %}
             <tr>
-                <td>Vacío</td>
-                <td>Vacío</td>
+                <td colspan="2">Vacío</td>
             </tr>
         {% endif %}
     </tbody>
-{% endblock  %}
+</table>
+{% endblock %}
+
 
