@@ -39,9 +39,11 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "documents",
     "professionals",
-    "votings", 
-    "suggestions"
-
+    "suggestions",
+    "votings",
+    "organizations",
+    "bootstrap5",
+    "base"
 ]
 
 MIDDLEWARE = [

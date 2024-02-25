@@ -5,4 +5,4 @@ from documents.models import Document
 def docsList(request):
 
     documentos = Document.objects.all()
-    return render(request, "documents/docsList.html", {'documentos': documentos})
+    return render(request, "docsList.html", {'documentos': documentos})
