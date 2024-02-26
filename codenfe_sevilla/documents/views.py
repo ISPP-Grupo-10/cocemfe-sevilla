@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import PDFUploadForm
 from .models import Document
 from django.utils import timezone
+
 # Create your views here.
 def upload_pdf(request):
     if request.method == 'POST':
@@ -11,7 +12,7 @@ def upload_pdf(request):
             document.start_date = timezone.now().date()
             document.status = False
             document.save()
-            return redirect('upload_pdf')
+            return redirect('list_pdf')
     else:
         form = PDFUploadForm()
     return render(request, 'upload_pdf.html', {'form': form})
@@ -26,14 +27,16 @@ def update_pdf(request,pk):
         form = PDFUploadForm(request.POST, instance=document)
         if form.is_valid():
             form.save()
-            return redirect('view_pdf', pk = pk)
+            return redirect('list_pdf')
     else:
         form = PDFUploadForm(instance=document)
     return render(request, 'update_pdf.html', {'form': form, 'document': document})
 
 def delete_pdf(request, pk):
     document = get_object_or_404(Document, pk=pk)
-    if request.method == 'POST':
-        document.delete()
-        return redirect('ruta_hacia_lista_de_documentos')  
-    return render(request, 'delete_document.html', {'document': document})
+    document.delete()
+    return redirect('list_pdf')  
+
+def list_pdf(request):
+    documentos = Document.objects.all()
+    return render(request, "list_pdf.html", {'documentos': documentos})

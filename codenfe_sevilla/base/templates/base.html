@@ -3,7 +3,6 @@
 <head>
   <title>{% block title %}{% endblock %}</title>
   <meta name="viewport" content="width=device-width; initial-scale=1.0"/>
-
   {% load bootstrap5 %}
   {% bootstrap_css %}
   {% bootstrap_javascript %}
@@ -24,14 +23,13 @@
             </div>
             <div style="background-color: #00A599; width: 80%; height: 60px; display: flex; align-items: center; justify-content: space-between;">
                 <div>
-                    <a class="navbar-brand" href="#">Documentos</a>
+                    <a class="navbar-brand" href="/documents">Documentos</a>
                     <a class="navbar-brand" href="#">Usuarios</a>
                     <a class="navbar-brand" href="#">Organizaciones</a>
                 </div>
                 <div>
-                    cerrar sesión   
+                    Cerrar Sesión 
                 </div>
-                
             </div>
     </nav>
     {% block encabezado %}
