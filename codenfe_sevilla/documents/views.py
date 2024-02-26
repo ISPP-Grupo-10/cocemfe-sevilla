@@ -26,9 +26,9 @@ def upload_pdf(request):
                         messages.error(request, "El archivo debe ser un PDF.")
                 else:
                     messages.error(request, "La fecha de finalización debe ser posterior a la fecha actual.")
-          else:
-              form = PDFUploadForm()
-          return render(request, 'upload_pdf.html', {'form': form})
+        else:
+            form = PDFUploadForm()
+        return render(request, 'upload_pdf.html', {'form': form})
     else:
         return render(request, '403.html')
 
