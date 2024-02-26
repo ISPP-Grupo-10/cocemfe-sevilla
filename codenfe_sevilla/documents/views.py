@@ -34,7 +34,11 @@ def upload_pdf(request):
 
 def view_pdf(request, pk):
     pdf = get_object_or_404(Document, pk=pk)
-    return render(request, 'view_pdf.html', {'pdf': pdf})
+    professional=request.user
+    if professional in pdf.professionals.all():
+        return render(request, 'view_pdf.html', {'pdf': pdf})
+    else:
+        return render(request, '403.html')
 
 def update_pdf(request,pk):
     document = get_object_or_404(Document, pk=pk)
