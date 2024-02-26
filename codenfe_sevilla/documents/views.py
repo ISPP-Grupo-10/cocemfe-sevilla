@@ -4,6 +4,7 @@ from .models import Document
 from django.utils import timezone
 from django.contrib import messages
 # Create your views here.
+
 def upload_pdf(request):
     if request.user.is_superuser:
         if request.method == 'POST':
@@ -16,8 +17,11 @@ def upload_pdf(request):
                         document = form.save(commit=False)
                         document.start_date = timezone.now().date()
                         document.status = False
+                        professionals = form.cleaned_data['professionals']
                         document.save()
-                        return redirect('upload_pdf')
+                        document.professionals.set(professionals)
+                        document.save()
+                        return redirect('list_pdf')
                     else:
                         messages.error(request, "El archivo debe ser un PDF.")
                 else:
@@ -32,7 +36,31 @@ def view_pdf(request, pk):
     pdf = get_object_or_404(Document, pk=pk)
     return render(request, 'view_pdf.html', {'pdf': pdf})
 
-def docsList(request):
+def update_pdf(request,pk):
+    document = get_object_or_404(Document, pk=pk)
+    if request.method == 'POST':
+        form = PDFUploadForm(request.POST, instance=document)
+        if form.is_valid():
+            end_date = form.cleaned_data['end_date']
+            professionals = form.cleaned_data['professionals']
+            if end_date > timezone.now().date():
+                form.save()
+                document.professionals.set(professionals)
+                return redirect('list_pdf')
+            else:
+                messages.error(request, "La fecha de finalización debe ser posterior a la fecha actual.")
+        else:
+            messages.error(request, "Por favor completa todos los campos del formulario.")
+    else:
+        form = PDFUploadForm(instance=document)
+    return render(request, 'update_pdf.html', {'form': form, 'document': document})
 
+def delete_pdf(request, pk):
+    document = get_object_or_404(Document, pk=pk)
+    document.delete()
+    return redirect('list_pdf')  
+
+def list_pdf(request):
     documentos = Document.objects.all()
-    return render(request, "docsList.html", {'documentos': documentos})
+    return render(request, "list_pdf.html", {'documentos': documentos})
+
