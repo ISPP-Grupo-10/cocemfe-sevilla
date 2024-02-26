@@ -30,3 +30,10 @@ def update_pdf(request,pk):
     else:
         form = PDFUploadForm(instance=document)
     return render(request, 'update_pdf.html', {'form': form, 'document': document})
+
+def delete_pdf(request, pk):
+    document = get_object_or_404(Document, pk=pk)
+    if request.method == 'POST':
+        document.delete()
+        return redirect('ruta_hacia_lista_de_documentos')  
+    return render(request, 'delete_document.html', {'document': document})
