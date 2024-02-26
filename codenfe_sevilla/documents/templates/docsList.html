@@ -2,92 +2,78 @@
 {% load static %}
 
 {% block contenido %}
-<h2 class="text-center">Documentos</h2>
-
-<!-- Botón para abrir el modal de búsqueda -->
-<div class="text-right mb-3 mr-4">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#searchModal">
-        Filtros
-    </button>
-</div>
-
-<!-- Modal de búsqueda -->
-<div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="searchModalLabel">Filtros</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+<div class="container-fluid">
+    <h2 class="text-center">Documentos</h2>
+    <div class="row">
+        <div class="col-md-10">
+            <div class="contenedor-table">
+                <table class="table table-borderless text-center tabla-personalizada">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Fecha de Subida</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if documentos %}
+                            {% for doc in documentos %}
+                            <tr class="spaceUnder">
+                                <td>{{ doc.name }}</td>
+                                <td>{{ doc.start_date }}</td>
+                                {% if doc.status == True %}
+                                    <td>Abierto</td>
+                                {% else %}
+                                    <td>Cerrado</td>
+                                {% endif %}
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <a href="#" class="btn btn-primary">Editar</a>
+                                        <a href="#" class="btn btn-primary">Eliminar</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="4" class="text-center">No hay documentos que mostrar</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
             </div>
-            <div class="modal-body">
-                <!-- Aquí va el formulario de búsqueda -->
-                <form id="searchForm" method="GET" action="{% url 'docsList' %}">
-                    <!-- Formulario de búsqueda -->
-                    <form method="GET" action="{% url 'docsList' %}">
-                        <div class="form-row align-items-center justify-content-center mb-3">
-                            <div class="col-auto">
-                                <input type="text" name="name" class="form-control" placeholder="Nombre">
-                            </div>
-                            <div class="col-auto">
-                                <select name="status" class="form-control">
-                                    <option value="">Estado</option>
-                                    <!-- Opciones para el estado -->
-                                </select>
-                            </div>
-                            <div class="col-auto">
-                                <input type="date" name="start_date" class="form-control">
-                            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card">
+                <div class="card-header">Filtros</div>
+                <div class="card-body">
+                    <form id="searchForm" method="GET" action="{% url 'docsList' %}">
+                        <div class="form-group">
+                            <label for="name">Nombre:</label>
+                            <input type="text" name="name" id="name" class="form-control" placeholder="Nombre" value="{{ request.GET.name }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="status">Estado:</label>
+                            <select name="status" id="status" class="form-control">
+                                <option value="" disabled {% if not request.GET.status %}selected{% endif %}>Estado</option>
+                                <option value="True" {% if request.GET.status == 'True' %}selected{% endif %}>Abierto</option>
+                                <option value="False" {% if request.GET.status == 'False' %}selected{% endif %}>Cerrado</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="start_date">Fecha de Subida:</label>
+                            <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request.GET.start_date }}">
+                        </div>
+                        <div class="form-group mt-2 text-right">
+                            <button type="submit" class="btn btn-primary">Buscar</button>
+                            <a href="{% url 'docsList' %}" class="btn btn-primary">Limpiar</a>
                         </div>
                     </form>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="submit" form="searchForm" class="btn btn-primary">Buscar</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
-
-<div class="contenedor-table">
-    <table class="table table-borderless text-center tabla-personalizada">
-        <thead>
-            <tr>
-                <th scope="col">Nombre</th>
-                <th scope="col">Fecha de Subida</th>
-                <th scope="col">Estado</th>
-                <th scope="col">Opciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% if documentos %}
-                {% for doc in documentos %}
-                <tr class="spaceUnder">
-                    <td>{{ doc.name }}</td>
-                    <td>{{ doc.start_date }}</td>
-                    {% if doc.status == True %}
-                        <td>Abierto</td>
-                    {% else %}
-                        <td>Cerrado</td>
-                    {% endif %}
-                    <td>
-                        <div class="btn-group" role="group">
-                            <a href="#" class="btn btn-primary">Editar</a>
-                            <a href="#" class="btn btn-primary">Eliminar</a>
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            {% else %}
-                <tr>
-                    <td colspan="4" class="text-center">No hay documentos que mostrar</td>
-                </tr>
-            {% endif %}
-        </tbody>
-    </table>
 </div>
 
 <link rel="stylesheet" href="{% static 'css/docsList.css' %}"/>
