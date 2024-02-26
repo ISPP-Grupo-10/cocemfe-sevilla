@@ -53,3 +53,4 @@ def delete_pdf(request, pk):
 def list_pdf(request):
     documentos = Document.objects.all()
     return render(request, "list_pdf.html", {'documentos': documentos})
+
