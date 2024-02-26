@@ -4,6 +4,7 @@
 {% endblock %}
 {% block contenido %}
 
+
 <style>
     .center-box {
         width: 50%; /* Ancho del recuadro */
@@ -68,38 +69,46 @@
     }
 </style>
 
-<div class="center-box">
-    <h1 class="form-heading">NUEVO DOCUMENTO</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-
-        <div class="form-group">
-            <label for="id_name"><b>Nombre:</b></label>
-            <input type="text" name="name" id="id_name">
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-danger" role="alert">
+            {{ message }}
         </div>
+    {% endfor %}
+{% endif %}
+    <div class="center-box">
+        <h1 class="form-heading">NUEVO DOCUMENTO</h1>
 
-        <div class="form-group">
-            <label for="id_pdf_file"><b>Seleccione un archivo:</b></label>
-            <input type="file" name="pdf_file" id="id_pdf_file">
-        </div>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
 
-        <div class="form-group">
-            <label for="id_end_date"><b>Fecha de cierre:</b></label>
-            <input type="date" name="end_date" id="id_end_date">
-        </div>
+            <div class="form-group">
+                <label for="id_name"><b>Nombre:</b></label>
+                <input type="text" name="name" id="id_name">
+            </div>
 
-        <div class="form-group">
-            <label><b>Añade revisores:</b></label><br>
-            {% for professional in form.professionals.field.queryset %}
-                <input type="checkbox" id="id_professional_{{ professional.id }}" name="professionals" value="{{ professional.id }}">
-                <label for="id_professional_{{ professional.id }}">{{ professional.name }}</label><br>
-            {% endfor %}
-        </div>
+            <div class="form-group">
+                <label for="id_pdf_file"><b>Seleccione un archivo:</b></label>
+                <input type="file" name="pdf_file" id="id_pdf_file">
+            </div>
 
-        <div class="button-container">
-            <button type="submit">Crear</button>
-        </div>
-    </form>
-</div>
+            <div class="form-group">
+                <label for="id_end_date"><b>Fecha de cierre:</b></label>
+                <input type="date" name="end_date" id="id_end_date">
+            </div>
+
+            <div class="form-group">
+                <label><b>Añade revisores:</b></label><br>
+                {% for professional in form.professionals.field.queryset %}
+                    <input type="checkbox" id="id_professional_{{ professional.id }}" name="professionals" value="{{ professional.id }}">
+                    <label for="id_professional_{{ professional.id }}">{{ professional.name }}</label><br>
+                {% endfor %}
+            </div>
+
+            <div class="button-container">
+                <button type="submit">Crear</button>
+            </div>
+        </form>
+    </div>
 
 {% endblock %}
