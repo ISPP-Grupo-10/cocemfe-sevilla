@@ -19,3 +19,8 @@ def upload_pdf(request):
 def view_pdf(request, pk):
     pdf = get_object_or_404(Document, pk=pk)
     return render(request, 'view_pdf.html', {'pdf': pdf})
+
+def docsList(request):
+
+    documentos = Document.objects.all()
+    return render(request, "docsList.html", {'documentos': documentos})

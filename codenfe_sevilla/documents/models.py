@@ -7,7 +7,7 @@ class Document(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     status = models.BooleanField(default=True)
-    professionals = models.ManyToManyField(Professional, related_name='documents')
+    professionals = models.ManyToManyField('professionals.Professional', related_name='document_professionals')
 
     def __str__(self):
         return self.name
