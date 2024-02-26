@@ -26,9 +26,9 @@ def upload_pdf(request):
                         messages.error(request, "El archivo debe ser un PDF.")
                 else:
                     messages.error(request, "La fecha de finalización debe ser posterior a la fecha actual.")
-        else:
-            form = PDFUploadForm()
-        return render(request, 'upload_pdf.html', {'form': form})
+          else:
+              form = PDFUploadForm()
+          return render(request, 'upload_pdf.html', {'form': form})
     else:
         return render(request, '403.html')
 
@@ -62,7 +62,7 @@ def update_pdf(request,pk):
 def delete_pdf(request, pk):
     document = get_object_or_404(Document, pk=pk)
     document.delete()
-    return redirect('list_pdf')  
+    return redirect('list_pdf')   
 
 def list_pdf(request):
     documentos = Document.objects.all()
