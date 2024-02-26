@@ -4,7 +4,7 @@
 {% block contenido %}
 <h2 class="text-center">Documentos</h2>
 <div class="contenedor-table">
-    <table class="table table-borderless tabla-personalizada">
+    <table class="table table-borderless text-center tabla-personalizada">
         <thead>
             <tr>
                 <th scope="col">Nombre</th>
@@ -18,16 +18,16 @@
                 {% for doc in documentos %}
                 <tr>
                     <td>{{ doc.name }}</td>
+                    <td>{{ doc.start_date }}</td>
                     {% if doc.status == True %}
                         <td>Abierto</td>
                     {% else %}
                         <td>Cerrado</td>
                     {% endif %}
-                    <td>{{ doc.start_date }}</td>
                     <td>
                         <div class="btn-group" role="group">
-                            <a href="#" class="btn btn-warning btn-sm">Editar</a>
-                            <a href="#" class="btn btn-danger btn-sm">Eliminar</a>
+                            <a href="#" class="btn btn-primary">Editar</a>
+                            <a href="#" class="btn btn-primary">Eliminar</a>
                         </div>
                     </td>
                 </tr>
