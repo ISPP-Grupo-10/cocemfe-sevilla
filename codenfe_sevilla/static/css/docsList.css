@@ -1,0 +1,12 @@
+.contenedor-table{
+    border-radius: 10px; 
+    background-color: rgb(160, 226, 229); 
+    padding: 10px;
+    margin-right: 25px;
+    margin-left: 25px;
+}
+
+.tabla-personalizada td{
+    background-color: white;
+    border-radius: 10px; 
+}

@@ -1,33 +1,44 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block contenido %}
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th scope="col">Nombre</th>
-            <th scope="col">Estado</th>
-            <th scope="col">Opciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% if documentos %}
-            {% for doc in documentos %}
+<h2 class="text-center">Documentos</h2>
+<div class="contenedor-table">
+    <table class="table table-borderless tabla-personalizada">
+        <thead>
             <tr>
-                <td>{{ doc.name }}</td>
-                {% if doc.status == True %}
-                    <td>Abierto</td>
-                {% else %}
-                    <td>Cerrado</td>
-                {% endif %}
+                <th scope="col">Nombre</th>
+                <th scope="col">Fecha de Subida</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Opciones</th>
             </tr>
-            {% endfor %}
-        {% else %}
-            <tr>
-                <td colspan="2">Vacío</td>
-            </tr>
-        {% endif %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {% if documentos %}
+                {% for doc in documentos %}
+                <tr>
+                    <td>{{ doc.name }}</td>
+                    {% if doc.status == True %}
+                        <td>Abierto</td>
+                    {% else %}
+                        <td>Cerrado</td>
+                    {% endif %}
+                    <td>{{ doc.start_date }}</td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <a href="#" class="btn btn-warning btn-sm">Editar</a>
+                            <a href="#" class="btn btn-danger btn-sm">Eliminar</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="4" class="text-center">No hay documentos que mostrar</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+<link rel="stylesheet" href="{%static 'css/docsList.css'%}"/>
 {% endblock %}
-
-
