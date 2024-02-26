@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block contenido %}
+<h2 class="text-center">Organizaciones</h2>
+<div class="contenedor-table">
+    <table class="table table-borderless text-center tabla-personalizada">
+        <thead>
+            <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Teléfono</th>
+                <th scope="col">Email</th>
+                <th scope="col">Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if organizations %}
+                {% for org in organizations %}
+                <tr class="spaceUnder">
+                    <td>{{ org.name }}</td>
+                    <td>{{ org.telephone_number }}</td>
+                    <td>{{ org.email }}</td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <a href="#" class="btn btn-primary">Editar</a>
+                            <a href="#" class="btn btn-primary">Eliminar</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="4" class="text-center">No hay organizaciones que mostrar</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+<link rel="stylesheet" href="{%static 'css/list.css'%}"/>
+{% endblock %}

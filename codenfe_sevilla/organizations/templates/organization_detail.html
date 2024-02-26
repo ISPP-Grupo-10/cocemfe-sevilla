@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Detalles{% endblock %}
+{% block encabezado %}
+{% endblock %}
+{% block contenido %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de la Organización</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="text-center">Detalles de la Organización</h2>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Nombre:</strong> {{ organization.name }}</p>
+                        <p><strong>Número de Teléfono:</strong> {{ organization.telephone_number }}</p>
+                        <p><strong>Dirección:</strong> {{ organization.address }}</p>
+                        <p><strong>Correo Electrónico:</strong> {{ organization.email }}</p>
+                        <p><strong>Código Postal:</strong> {{ organization.zip_code }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+{% endblock %}

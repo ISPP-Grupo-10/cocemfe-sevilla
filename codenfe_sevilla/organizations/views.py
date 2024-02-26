@@ -13,6 +13,9 @@ def create_organization(request):
         form = OrganizationForm()
     return render(request, 'create_organization.html', {'form': form})
 
+def organization_options(request):
+    return render(request, 'organization_options.html')
+    
 def get_organization(request, pk):
     organization = get_object_or_404(Organization, pk=pk)
     return render(request, 'organization_detail.html', {'organization': organization})
@@ -35,4 +38,4 @@ def delete_organization(request, pk):
 
 def organization_list(request):
     organizations = Organization.objects.all()
-    return render(request, 'organization_list.html', {'organizations': organizations})
+    return render(request, 'list_organizations.html', {'organizations': organizations})
