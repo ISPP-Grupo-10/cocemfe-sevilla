@@ -3,3 +3,4 @@ from .models import  Organization
 
 # Register your models here.
 admin.site.register(Organization)
+
