@@ -3,6 +3,13 @@
 {% block encabezado %}
 {% endblock %}
 {% block contenido %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-danger" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
     <h1>Modificar Documento</h1>
     <form method="post">
         {% csrf_token %}
@@ -11,6 +18,11 @@
         
         <label for="end_date">Fecha de Fin:</label>
         <input type="date" id="end_date" name="end_date" value="{{ document.end_date }}"><br><br>
+
+        <label for="users">Pofesionales:</label>
+        {{ form.professionals }}   
+        <br>
+        <br>
         
         <button type="submit">Guardar Cambios</button>
     </form>
