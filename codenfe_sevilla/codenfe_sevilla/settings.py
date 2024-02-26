@@ -104,7 +104,12 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
+    {
+        "NAME": "professionals.validators.validate_password_strength",
+    },
 ]
+
+AUTH_USER_MODEL = 'professionals.Professional'
 
 
 # Internationalization
