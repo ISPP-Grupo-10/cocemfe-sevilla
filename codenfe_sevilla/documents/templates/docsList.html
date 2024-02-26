@@ -16,7 +16,7 @@
         <tbody>
             {% if documentos %}
                 {% for doc in documentos %}
-                <tr>
+                <tr class="spaceUnder">
                     <td>{{ doc.name }}</td>
                     <td>{{ doc.start_date }}</td>
                     {% if doc.status == True %}

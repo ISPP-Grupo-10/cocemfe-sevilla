@@ -24,4 +24,9 @@ td:last-child {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
 }
+
+.tabla-personalizada {
+    border-collapse: separate;
+    border-spacing: 0 15px;
+}
   
