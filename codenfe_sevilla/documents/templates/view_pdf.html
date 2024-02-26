@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Visualizar PDF</title>
-    <meta name="viewport" content="width=device-width; initial-scale=1.0"/>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %}Visualizar PDF{% endblock %}
+{% block encabezado %}
+{% endblock %}
+{% block contenido %}
     <h1>Nombre: {{ pdf.name }}</h1>
     <h3>Fecha de inicio: {{ pdf.start_date }}</h3>
     <h3>Fecha de fin: {{ pdf.end_date }}</h3>
     <embed src="{{ pdf.pdf_file.url }}#toolbar=0" type="application/pdf" width="50%" height="600px" />
-</body>
-</html>
+    {% endblock %}

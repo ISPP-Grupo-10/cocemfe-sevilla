@@ -1,14 +1,15 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Subir PDF</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %}Subir documentos{% endblock %}
+{% block encabezado %}
+{% endblock %}
+{% block contenido %}
+
+
     <h1>Subir PDF</h1>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Subir PDF</button>
     </form>
-</body>
-</html>
+
+    {% endblock %}

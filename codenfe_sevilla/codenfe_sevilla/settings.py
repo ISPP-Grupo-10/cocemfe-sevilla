@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     "professionals",
     "suggestions",
     "votings",
+    "organizations",
+    "bootstrap5",
+    "base"
 ]
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 MIDDLEWARE = [
