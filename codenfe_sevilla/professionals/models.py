@@ -4,13 +4,10 @@ from .validators import validate_password_strength
 from organizations.models import Organization
 
 class Professional(AbstractUser):
+
     address = models.CharField(max_length=255)
     license = models.CharField(max_length=50)
     organizations = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='profesionals', null=True, blank=True)
 
     def __str__(self):
         return self.username
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._meta.get_field('password').validators.append(validate_password_strength)
