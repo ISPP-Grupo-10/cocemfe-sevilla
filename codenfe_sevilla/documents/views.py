@@ -19,3 +19,14 @@ def upload_pdf(request):
 def view_pdf(request, pk):
     pdf = get_object_or_404(Document, pk=pk)
     return render(request, 'view_pdf.html', {'pdf': pdf})
+
+def update_pdf(request,pk):
+    document = get_object_or_404(Document, pk=pk)
+    if request.method == 'POST':
+        form = PDFUploadForm(request.POST, instance=document)
+        if form.is_valid():
+            form.save()
+            return redirect('view_pdf', pk = pk)
+    else:
+        form = PDFUploadForm(instance=document)
+    return render(request, 'update_pdf.html', {'form': form, 'document': document})

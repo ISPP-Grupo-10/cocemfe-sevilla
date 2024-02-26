@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Modificar Documento{% endblock %}
+{% block encabezado %}
+{% endblock %}
+{% block contenido %}
+    <h1>Modificar Documento</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="name">Nombre:</label>
+        <input type="text" id="name" name="name" value="{{ document.name }}"><br><br>
+        
+        <label for="end_date">Fecha de Fin:</label>
+        <input type="date" id="end_date" name="end_date" value="{{ document.end_date }}"><br><br>
+        
+        <button type="submit">Guardar Cambios</button>
+    </form>
+{% endblock %}
