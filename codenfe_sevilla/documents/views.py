@@ -21,6 +21,17 @@ def view_pdf(request, pk):
     return render(request, 'view_pdf.html', {'pdf': pdf})
 
 def docsList(request):
-
     documentos = Document.objects.all()
+
+    name = request.GET.get('name')
+    status = request.GET.get('status')
+    start_date = request.GET.get('start_date')
+
+    if name:
+        documentos = documentos.filter(name__icontains=name)
+    if status:
+        documentos = documentos.filter(status=status)
+    if start_date:
+        documentos = documentos.filter(start_date=start_date)
+
     return render(request, "docsList.html", {'documentos': documentos})
