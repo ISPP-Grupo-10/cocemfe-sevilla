@@ -6,25 +6,39 @@ from django.contrib import messages
 # Create your views here.
 
 def upload_pdf(request):
-    if request.method == 'POST':
-        form = PDFUploadForm(request.POST, request.FILES)
-        
-        if form.is_valid():
-            document = form.save(commit=False)
-            document.start_date = timezone.now().date()
-            document.status = False
-            professionals = form.cleaned_data['professionals']
-            document.save()
-            document.professionals.set(professionals)
-            document.save()
-            return redirect('list_pdf')
+    if request.user.is_superuser:
+        if request.method == 'POST':
+            form = PDFUploadForm(request.POST, request.FILES)
+            if form.is_valid():
+                end_date = form.cleaned_data['end_date']
+                pdf_file = form.cleaned_data['pdf_file']
+                if end_date > timezone.now().date():
+                    if pdf_file.name.endswith('.pdf'):
+                        document = form.save(commit=False)
+                        document.start_date = timezone.now().date()
+                        document.status = False
+                        professionals = form.cleaned_data['professionals']
+                        document.save()
+                        document.professionals.set(professionals)
+                        document.save()
+                        return redirect('list_pdf')
+                    else:
+                        messages.error(request, "El archivo debe ser un PDF.")
+                else:
+                    messages.error(request, "La fecha de finalización debe ser posterior a la fecha actual.")
+          else:
+              form = PDFUploadForm()
+          return render(request, 'upload_pdf.html', {'form': form})
     else:
-        form = PDFUploadForm()
-    return render(request, 'upload_pdf.html', {'form': form})
+        return render(request, '403.html')
 
 def view_pdf(request, pk):
     pdf = get_object_or_404(Document, pk=pk)
-    return render(request, 'view_pdf.html', {'pdf': pdf})
+    professional=request.user
+    if professional in pdf.professionals.all():
+        return render(request, 'view_pdf.html', {'pdf': pdf})
+    else:
+        return render(request, '403.html')
 
 def update_pdf(request,pk):
     document = get_object_or_404(Document, pk=pk)
@@ -48,7 +62,7 @@ def update_pdf(request,pk):
 def delete_pdf(request, pk):
     document = get_object_or_404(Document, pk=pk)
     document.delete()
-    return redirect('list_pdf')  
+    return redirect('list_pdf')   
 
 def list_pdf(request):
     documentos = Document.objects.all()

@@ -4,7 +4,13 @@
 {% endblock %}
 {% block contenido %}
 
-
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-danger" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
     <h1>Subir PDF</h1>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
