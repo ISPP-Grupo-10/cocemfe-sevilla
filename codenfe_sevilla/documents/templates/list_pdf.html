@@ -12,6 +12,7 @@
                         <tr>
                             <th scope="col">Nombre</th>
                             <th scope="col">Fecha de Subida</th>
+                            <th scope="col">Fecha de Cierre</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Opciones</th>
                         </tr>
@@ -22,6 +23,7 @@
                             <tr class="spaceUnder">
                                 <td>{{ doc.name }}</td>
                                 <td>{{ doc.start_date }}</td>
+                                <td>{{ doc.end_date }}</td>
                                 {% if doc.status == True %}
                                     <td>Abierto</td>
                                 {% else %}
@@ -29,26 +31,29 @@
                                 {% endif %}
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <a href="#" class="btn btn-primary">Editar</a>
-                                        <a href="#" class="btn btn-primary">Eliminar</a>
+                                        <a href="{% url 'update_pdf' pk=doc.pk %}" class="btn btn-primary">Editar</a>
+                                        <a href="{% url 'delete_pdf' pk=doc.pk %}" class="btn btn-primary">Eliminar</a>
                                     </div>
                                 </td>
                             </tr>
                             {% endfor %}
                         {% else %}
                             <tr>
-                                <td colspan="4" class="text-center">No hay documentos que mostrar</td>
+                                <td colspan="5" class="text-center">No hay documentos que mostrar</td>
                             </tr>
                         {% endif %}
                     </tbody>
                 </table>
+                <div class="text-right mb-2">
+                    <a href="{% url 'upload_pdf' %}" class="btn btn-primary">Subir documento</a>
+                </div>
             </div>
         </div>
         <div class="col-md-2">
             <div class="card">
                 <div class="card-header">Filtros</div>
                 <div class="card-body">
-                    <form id="searchForm" method="GET" action="{% url 'docsList' %}">
+                    <form id="searchForm" method="GET" action="{% url 'list_pdf' %}">
                         <div class="form-group">
                             <label for="name">Nombre:</label>
                             <input type="text" name="name" id="name" class="form-control" placeholder="Nombre" value="{{ request.GET.name }}">
@@ -67,7 +72,7 @@
                         </div>
                         <div class="form-group mt-2 text-right">
                             <button type="submit" class="btn btn-primary">Buscar</button>
-                            <a href="{% url 'docsList' %}" class="btn btn-primary">Limpiar</a>
+                            <a href="{% url 'list_pdf' %}" class="btn btn-primary">Limpiar</a>
                         </div>
                     </form>
                 </div>
@@ -76,5 +81,5 @@
     </div>
 </div>
 
-<link rel="stylesheet" href="{% static 'css/docsList.css' %}"/>
+<link rel="stylesheet" href="{% static 'css/list_pdf.css' %}"/>
 {% endblock %}
