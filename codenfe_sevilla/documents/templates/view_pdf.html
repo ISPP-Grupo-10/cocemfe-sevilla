@@ -1,10 +1,24 @@
 {% extends 'base.html' %}
-{% block title %}Visualizar PDF{% endblock %}
-{% block encabezado %}
-{% endblock %}
+{% load static %}
+
 {% block contenido %}
-    <h1>Nombre: {{ pdf.name }}</h1>
-    <h3>Fecha de inicio: {{ pdf.start_date }}</h3>
-    <h3>Fecha de fin: {{ pdf.end_date }}</h3>
-    <embed src="{{ pdf.pdf_file.url }}#toolbar=0" type="application/pdf" width="50%" height="600px" />
-    {% endblock %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/view_pdf.css' %}">
+<h2 class="text-center">Detalles de documento</h2>
+<div class='doc-container'>
+    <div class="doc-info">
+        <p><strong>Documento:</strong> {{ pdf.name }}</p>
+        <p><strong>Plazo:</strong> {{ pdf.start_date }} - {{ pdf.end_date }}</p>
+        <p><strong>Ubicación:</strong> {{ pdf.ubication }}</p>
+        <p class="estado-{{ pdf.status|lower }}">{{ pdf.status }}</p>
+    </div>
+    <div class="row">
+        <div class="doc-visualizer">
+            <iframe src="{{ pdf.pdf_file.url }}"></iframe>
+        </div>
+        <div class="doc-comments">
+            <!-- Aquí puedes colocar el contenido de los comentarios -->
+            <h3>Comentarios</h3>
+        </div>
+    </div>
+</div>
+{% endblock %}
