@@ -1,5 +1,5 @@
 """
-WSGI config for codenfe_sevilla project.
+WSGI config for cocemfe_sevilla project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "codenfe_sevilla.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cocemfe_sevilla.settings")
 
 application = get_wsgi_application()
