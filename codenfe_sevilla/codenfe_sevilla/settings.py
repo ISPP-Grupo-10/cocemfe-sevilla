@@ -116,7 +116,7 @@ AUTH_USER_MODEL = 'professionals.Professional'
 
 LANGUAGE_CODE = "es-es"
 
-TIME_ZONE = "GMT+1"
+TIME_ZONE = 'Europe/Madrid'
 
 USE_I18N = True
 
