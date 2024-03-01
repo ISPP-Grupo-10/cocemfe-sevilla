@@ -2,6 +2,8 @@
 {% load static %}
 
 {% block contenido %}
+
+<link rel="stylesheet" href="{% static 'css/list_pdf.css' %}"/>
 <h2 class="text-center">Documentos</h2>
 <div class="contenedor-table">
     <table class="table table-borderless text-center tabla-personalizada">
@@ -18,7 +20,9 @@
             {% if documentos %}
                 {% for doc in documentos %}
                 <tr class="spaceUnder">
-                    <td>{{ doc.name }}</td>
+                    <td>
+                        <a href="{% url 'view_pdf_admin' doc.id %}" style="color: black;"> {{ doc.name }} </a>
+                    </td>
                     <td>{{ doc.start_date }}</td>
                     <td>{{ doc.end_date }}</td>
                     {% if doc.status == True %}
@@ -45,5 +49,5 @@
         <a href="{% url 'upload_pdf' %}" class="btn btn-primary">Subir documento</a>
     </div>
 </div>
-<link rel="stylesheet" href="{% static 'css/list_pdf.css' %}"/>
+
 {% endblock %}
