@@ -1,0 +1,13 @@
+<!-- professional_detail.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>{{ professional.name }} {{ professional.surname }}</h2>
+  <p>Username: {{ professional.username }}</p>
+  <p>Email: {{ professional.email }}</p>
+  <p>Telephone Number: {{ professional.telephone_number }}</p>
+  <p>License Number: {{ professional.license_number }}</p>
+  <p>Organization: {{ professional.organizations }}</p>
+
+{% endblock %}
