@@ -12,9 +12,15 @@
         <p class="estado-{{ pdf.status|lower }}">{{ pdf.status }}</p>
     </div>
     <div class="row">
+        {% if pdf.pdf_file %}
         <div class="doc-visualizer">
             <iframe src="{{ pdf.pdf_file.url }}"></iframe>
         </div>
+        {% else %}
+        <div class="doc-visualizer">
+            <p>No hay archivo adjunto.</p>
+        </div>
+        {% endif %}
         <div class="doc-comments">
             <!-- Aquí puedes colocar el contenido de los comentarios -->
             <h3>Comentarios</h3>
