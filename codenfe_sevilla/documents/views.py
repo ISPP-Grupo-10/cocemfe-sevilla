@@ -87,5 +87,6 @@ def list_pdf(request):
     if start_date:
         documentos = documentos.filter(start_date=start_date)
 
-    return render(request, "list_pdf.html", {'documentos': documentos})
+    return render(request, "list_pdf.html", {'documentos': documentos, 'Document': Document})
+
 
