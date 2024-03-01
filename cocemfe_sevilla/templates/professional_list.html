@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Professional List</h2>
+
+  <form method="get" action="{% url 'professional_list' %}">
+    <label for="name">Name:</label>
+    <input type="text" name="name" value="{{ name_filter }}" placeholder="Enter name">
+
+    <label for="surname">Surname:</label>
+    <input type="text" name="surname" value="{{ surname_filter }}" placeholder="Enter surname">
+
+    <label for="license_number">License Number:</label>
+    <input type="text" name="license_number" value="{{ license_number_filter }}" placeholder="Enter license number">
+
+    <label for="organization">Organization:</label>
+    <input type="text" name="organization" value="{{ organization_filter }}" placeholder="Enter organization">
+
+    <button type="submit">Filter</button>
+  </form>
+
+  <ul>
+    {% for professional in professionals %}
+      <li><a href="{% url 'professional_detail' pk=professional.pk %}">{{ professional.name }} {{ professional.surname }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}

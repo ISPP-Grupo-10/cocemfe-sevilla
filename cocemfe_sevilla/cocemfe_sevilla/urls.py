@@ -1,5 +1,5 @@
 """
-URL configuration for codenfe_sevilla project.
+URL configuration for cocemfe_sevilla project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.0/topics/http/urls/
@@ -19,11 +19,14 @@ from django.urls import path, include
 from documents import views as docsViews
 from django.conf import settings
 from django.conf.urls.static import static
+from professionals import views as profViews
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('', include('base.urls', namespace='base')),
     path('documents/', include('documents.urls')),
+    path('professionals/', include('professionals.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
