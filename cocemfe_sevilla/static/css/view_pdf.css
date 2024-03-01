@@ -1,0 +1,59 @@
+.doc-container {
+    background-color: rgba(0, 162, 152, 0.25); /* Color con transparencia */
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px auto; /* Centra el div horizontalmente */
+    width: 90%;
+}
+
+.doc-info {
+    margin-bottom: 20px; /* Agregar un espacio entre los elementos */
+    display: flex;
+    flex-direction: row; /* Organiza los elementos en una sola fila */
+    justify-content: space-between; /* Distribuye los elementos en los extremos */
+}
+
+.doc-info p {
+    font-size: x-large;
+    margin: 0; /* Elimina los márgenes */
+}
+
+.doc-info p strong {
+    font-weight: bold;
+}
+
+
+.doc-visualizer {
+    margin-bottom: 20px; 
+    width: 65%; 
+}
+
+.doc-visualizer iframe {
+    width: 100%; /* El visor de PDF ocupa todo el ancho disponible */
+    height: 600px; /* Altura fija para el visor de PDF */
+    border: none; /* Para eliminar el borde predeterminado */
+}
+
+.doc-comments {
+    width: 35%; /* Ancho del contenedor de comentarios */
+    padding-left: 20px; /* Agregar un espacio entre los elementos */
+}
+
+.estado-abierto,
+.estado-cerrado,
+.estado-en-revision,
+.estado-revisado,
+.estado-aprobado,
+.estado-rechazado {
+    width: fit-content; /* Ajusta el ancho al contenido del texto */
+    padding: 5px 10px;
+    border-radius: 20px;
+}
+
+/* Ajusta los colores de fondo y texto para cada estado */
+.estado-abierto { background-color: #2ecc71; color: white; }
+.estado-cerrado { background-color: #e74c3c; color: white; }
+.estado-en-revision { background-color: #f1c40f; color: black; }
+.estado-revisado { background-color: #3498db; color: white; }
+.estado-aprobado { background-color: #9b59b6; color: white; }
+.estado-rechazado { background-color: #95a5a6; color: white; }
