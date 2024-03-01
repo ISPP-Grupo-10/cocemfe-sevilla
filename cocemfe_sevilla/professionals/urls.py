@@ -1,10 +1,9 @@
-# urls.py
-
 from django.urls import path
-from .views import ProfessionalDetailView, ProfessionalUpdateView
+from .views import professional_list, ProfessionalDetailView, ProfessionalUpdateView
 
 urlpatterns = [
-    path('detalles-profesionales/<int:pk>/', ProfessionalDetailView.as_view(), name='professional_detail'),
-    path('detalles-profesionales/<int:pk>/editar/', ProfessionalUpdateView.as_view(), name='professional_edit'),
-    # Otras rutas según sea necesario
+    path('professionals/', professional_list, name='professional_list'),
+    path('professionals/<int:pk>/', ProfessionalDetailView.as_view(), name='professional_detail'),
+    path('professionals/<int:pk>/edit/', ProfessionalUpdateView.as_view(), name='professional_edit'),
 ]
+
