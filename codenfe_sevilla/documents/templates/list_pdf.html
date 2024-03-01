@@ -21,7 +21,9 @@
                         {% if documentos %}
                             {% for doc in documentos %}
                             <tr class="spaceUnder">
-                                <td>{{ doc.name }}</td>
+                                <td>
+                                    <a href="{% url 'view_pdf_admin' doc.id %}" style="color: black;"> {{ doc.name }} </a>
+                                </td>
                                 <td>{{ doc.start_date }}</td>
                                 <td>{{ doc.end_date }}</td>
                                 {% if doc.status == True %}

@@ -40,6 +40,15 @@ def view_pdf(request, pk):
     else:
         return render(request, '403.html')
 
+def view_pdf_admin(request, pk):
+    pdf = get_object_or_404(Document, pk=pk)
+    # falta comprobar si el usuario es admin:
+    return render(request, 'view_pdf.html', {'pdf': pdf})
+    '''
+    else:
+        return render(request, '403.html')
+    '''
+
 def update_pdf(request,pk):
     document = get_object_or_404(Document, pk=pk)
     if request.method == 'POST':
