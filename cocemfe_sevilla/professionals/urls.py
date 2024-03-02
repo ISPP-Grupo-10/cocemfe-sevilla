@@ -1,8 +1,10 @@
+from django.conf import settings
 from django.urls import path
-from .views import professional_list, professional_detail_view, professional_update_view
+from .views import professional_list, EditUserView, delete_professional
+from django.conf.urls.static import static
 
 urlpatterns = [
-    path('professionals/', professional_list, name='professional_list'),
-    path('professionals/<int:pk>/', professional_detail_view, name='professional_detail'),
-    path('professionals/<int:pk>/edit/', professional_update_view, name='professional_edit'),
-]
+    path('', professional_list, name='professional_list'),
+    path('<int:id>/delete/', delete_professional, name='delete_professional'),
+    path('<int:pk>/', EditUserView.as_view(), name='professional_detail'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
