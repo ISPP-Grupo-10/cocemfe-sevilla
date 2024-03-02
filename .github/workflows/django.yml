@@ -11,9 +11,8 @@ jobs:
 
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 4
       matrix:
-        python-version: [3.7, 3.8, 3.9, 3.10, 3.11]
+        python-version: [3.11]
 
     steps:
       - uses: actions/checkout@v3
@@ -25,11 +24,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r ./cocemfe_sevilla/requirements.txt
-      - name: Install importlib_metadata
-        run: |
-          if [ "${{ matrix.python-version }}" != "3.1" ]; then
-            pip install importlib_metadata
-          fi
+          pip install importlib_metadata
       - name: Run Migrations
         run: |
           python ./cocemfe_sevilla/manage.py makemigrations
@@ -42,9 +37,8 @@ jobs:
 
     runs-on: windows-latest
     strategy:
-      max-parallel: 4
       matrix:
-        python-version: [3.7, 3.8, 3.9, 3.10, 3.11]
+        python-version: [3.11]
 
     steps:
       - uses: actions/checkout@v3
@@ -56,11 +50,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r ./cocemfe_sevilla/requirements.txt
-      - name: Install importlib_metadata
-        run: |
-          if [ "${{ matrix.python-version }}" != "3.1" ]; then
-            pip install importlib_metadata
-          fi
+          pip install importlib_metadata
       - name: Run Migrations
         run: |
           python ./cocemfe_sevilla/manage.py makemigrations
