@@ -6,4 +6,4 @@ from .models import Professional
 class ProfessionalForm(forms.ModelForm):
     class Meta:
         model = Professional
-        fields = ['name', 'surname', 'telephone_number', 'license_number', 'organizations']
+        fields = ['username','first_name', 'last_name', 'telephone_number', 'license_number', 'organizations']
