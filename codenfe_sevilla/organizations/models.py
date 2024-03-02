@@ -1,6 +1,5 @@
 from django.db import models
 
-# Create your models here.
 class Organization(models.Model):
     name = models.CharField(max_length=255)
     telephone_number = models.CharField(max_length=15)
