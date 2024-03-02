@@ -29,8 +29,7 @@
                     <td><strong>{{ professional.telephone_number }}</strong></td>
                     <td>
                         <div class="btn-group" role="group">
-                            <a href="#" class="btn btn-primary" style="border-radius: 5px; margin-right: 10px;"><strong>Ver</strong></a>
-                            <a href="#" class="btn btn-primary" style="border-radius: 5px; margin-right: 10px;"><strong>Editar</strong></a>
+                            <a href="{% url 'professional_detail' pk=professional.id %}" class="btn btn-primary" style="border-radius: 5px; margin-right: 10px;"><strong>Ver</strong></a>
                             <form method="post" action="{% url 'delete_professional' id=professional.id %}">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-primary" style="border-radius: 5px;"><strong>Eliminar</strong></button>

@@ -4,7 +4,7 @@ from .models import Professional
 class ProfessionalForm(forms.ModelForm):
     class Meta:
         model = Professional
-        fields = ['first_name', 'last_name', 'telephone_number', 'license_number', 'organizations', 'email', 'profile_picture']
+        fields = ['username','first_name', 'last_name', 'telephone_number', 'license_number', 'organizations', 'email', 'profile_picture']
 
 
     def clean(self):

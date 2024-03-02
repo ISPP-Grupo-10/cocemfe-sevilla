@@ -13,15 +13,13 @@ class EditUserView(View):
         form = ProfessionalForm(instance=professional)
         return render(request, 'professional_detail.html', {'form': form, 'professional': professional})
 
-    def professional_update_view(request, pk):
-        professional = get_object_or_404(Professional, pk=pk)
-
     def post(self, request, pk):
         professional = get_object_or_404(Professional, id=pk)
-        form = ProfessionalForm(request.POST, instance=professional)
+        print(request.FILES)
+        form = ProfessionalForm(request.POST,request.FILES, instance=professional)
         if form.is_valid():
             form.save()
-            return redirect('/?message=Profesional editado&status=Success')
+            return redirect('/professionals/?message=Profesional editado&status=Success')
         else:
             return render(request, 'professional_detail.html', {'form': form, 'professional': professional})
 
