@@ -75,5 +75,18 @@ def delete_pdf(request, pk):
 
 def list_pdf(request):
     documentos = Document.objects.all()
-    return render(request, "list_pdf.html", {'documentos': documentos})
+
+    name = request.GET.get('name')
+    status = request.GET.get('status')
+    start_date = request.GET.get('start_date')
+
+    if name:
+        documentos = documentos.filter(name__icontains=name)
+    if status:
+        documentos = documentos.filter(status=status)
+    if start_date:
+        documentos = documentos.filter(start_date=start_date)
+
+    return render(request, "list_pdf.html", {'documentos': documentos, 'Document': Document})
+
 
