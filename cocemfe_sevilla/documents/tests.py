@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from .models import Document
+from documents.models import Document
 from professionals.models import Professional
 from organizations.models import Organization
 
@@ -20,8 +20,8 @@ class DocumentTestCase(TestCase):
             name='Juan',
             surname='Pérez',
             username='juanperez',
-            address='Dirección del profesional',
-            license='Licencia del profesional',
+            telephone_number='987654321',
+            license_number='Licencia del profesional',
             organizations=self.organization
         )
         
@@ -68,3 +68,21 @@ class DocumentTestCase(TestCase):
         response = self.client.get(view_pdf_admin_url)
         self.assertEqual(response.status_code, 200)
         # Puedes agregar más aserciones aquí para verificar otros detalles del documento o la redirección
+
+    def test_filter_documents_by_name(self):
+        # Verificar que los documentos se filtran correctamente por nombre
+        response = self.client.get(reverse('list_pdf'), {'name': 'prueba'})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.document.name)
+
+    def test_filter_documents_by_status(self):
+        # Verificar que los documentos se filtran correctamente por estado
+        response = self.client.get(reverse('list_pdf'), {'status': 'Cerrado'})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.document.name)
+
+    def test_filter_documents_by_start_date(self):
+        # Verificar que los documentos se filtran correctamente por fecha de inicio
+        response = self.client.get(reverse('list_pdf'), {'start_date': '2024-03-01'})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.document.name)
