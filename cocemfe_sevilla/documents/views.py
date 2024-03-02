@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import PDFUploadForm
 from .models import Document
@@ -81,8 +82,12 @@ def list_pdf(request):
 
 def load_comments(request, pk):
     doc = get_object_or_404(Document, id=pk)
-    comments = ChatMessage.objects.filter(document=doc)
-    return render(request, 'list_comments.html', {'doc': doc, 'chat_messages': comments})
+    if request.user in doc.professionals.all() or request.user.is_staff:
+        comments = ChatMessage.objects.filter(document=doc)
+        return render(request, 'list_comments.html', {'doc': doc, 'chat_messages': comments})
+    else:
+        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
+
 
 @login_required
 def publish_comment(request, pk):
@@ -96,10 +101,7 @@ def publish_comment(request, pk):
             comment.document = doc
             comment.post_date = timezone.now()
             comment.save()
-            print(comment)
             return redirect('view_pdf_chat', pk=doc.id)
-        else:
-            print("algo ha ido mal")
     else:
         form = MessageForm()
 
