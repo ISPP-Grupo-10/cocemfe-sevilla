@@ -27,7 +27,9 @@ jobs:
           pip install -r ./cocemfe_sevilla/requirements.txt
       - name: Install importlib_metadata
         run: |
-          pip install importlib_metadata
+          if [ "${{ matrix.python-version }}" != "3.1" ]; then
+            pip install importlib_metadata
+          fi
       - name: Run Migrations
         run: |
           python ./cocemfe_sevilla/manage.py makemigrations
@@ -56,7 +58,9 @@ jobs:
           pip install -r ./cocemfe_sevilla/requirements.txt
       - name: Install importlib_metadata
         run: |
-          pip install importlib_metadata
+          if [ "${{ matrix.python-version }}" != "3.1" ]; then
+            pip install importlib_metadata
+          fi
       - name: Run Migrations
         run: |
           python ./cocemfe_sevilla/manage.py makemigrations
@@ -64,5 +68,6 @@ jobs:
       - name: Run Tests
         run: |
           python ./cocemfe_sevilla/manage.py test
+
 
 
