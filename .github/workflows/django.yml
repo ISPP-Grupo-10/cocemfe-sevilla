@@ -58,4 +58,3 @@ jobs:
       - name: Run Tests
         run: |
           python ./cocemfe_sevilla/manage.py test
-
