@@ -8,7 +8,7 @@ class PDFUploadForm(forms.ModelForm):
 
     class Meta:
         model = Document
-        fields = ['name', 'pdf_file', 'end_date', 'professionals']
+        fields = ['name', 'pdf_file', 'end_date','ubication', 'professionals']
         widgets = {
             'end_date': forms.DateInput(attrs={'type': 'date'})
         }

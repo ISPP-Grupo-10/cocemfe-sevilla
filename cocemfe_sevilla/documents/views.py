@@ -16,7 +16,7 @@ def upload_pdf(request):
                     if pdf_file.name.endswith('.pdf'):
                         document = form.save(commit=False)
                         document.start_date = timezone.now().date()
-                        document.status = False
+                        document.status = 'Abierto'
                         professionals = form.cleaned_data['professionals']
                         document.save()
                         document.professionals.set(professionals)
