@@ -73,6 +73,8 @@ def delete_pdf(request, pk):
     document.delete()
     return redirect('list_pdf')   
 
+from django.core.exceptions import ValidationError
+
 def list_pdf(request):
     documentos = Document.objects.all()
 
@@ -85,8 +87,18 @@ def list_pdf(request):
     if status:
         documentos = documentos.filter(status=status)
     if start_date:
+        try:
+            # Intenta convertir la entrada del filtro de fecha en un objeto de fecha
+            start_date = timezone.datetime.strptime(start_date, '%Y-%m-%d').date()
+        except ValueError:
+            # Si la entrada no es una fecha válida, muestra un mensaje de error
+            messages.error(request, "La fecha de inicio no es válida. Utilice el formato AAAA-MM-DD.")
+            return render(request, "list_pdf.html", {'documentos': documentos, 'Document': Document})
+
+        # Ahora puedes usar start_date en tus filtros
         documentos = documentos.filter(start_date=start_date)
 
     return render(request, "list_pdf.html", {'documentos': documentos, 'Document': Document})
+
 
 

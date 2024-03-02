@@ -4,6 +4,26 @@
 {% block contenido %}
 <div class="container-fluid">
     <h2 class="text-center">Documentos</h2>
+    {% if messages %}
+    <div class="container mt-3">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div id="errorMessage" class="alert alert-danger" role="alert">
+                    {% for message in messages %}
+                        <small>{{ message }}</small><br>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        setTimeout(function() {
+            var errorMessage = document.getElementById('errorMessage');
+            errorMessage.style.display = 'none';
+        }, 20000);
+    </script>
+    {% endif %}
     <div class="row">
         <div class="col-md-10">
             <div class="contenedor-table">
