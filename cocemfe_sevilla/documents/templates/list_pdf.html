@@ -2,52 +2,87 @@
 {% load static %}
 
 {% block contenido %}
-
-<link rel="stylesheet" href="{% static 'css/list_pdf.css' %}"/>
-<h2 class="text-center">Documentos</h2>
-<div class="contenedor-table">
-    <table class="table table-borderless text-center tabla-personalizada">
-        <thead>
-            <tr>
-                <th scope="col">Nombre</th>
-                <th scope="col">Fecha de Subida</th>
-                <th scope="col">Fecha de Cierre</th>
-                <th scope="col">Estado</th>
-                <th scope="col">Opciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% if documentos %}
-                {% for doc in documentos %}
-                <tr class="spaceUnder">
-                    <td>
-                        <a href="{% url 'view_pdf_admin' doc.id %}" style="color: black;"> {{ doc.name }} </a>
-                    </td>
-                    <td>{{ doc.start_date }}</td>
-                    <td>{{ doc.end_date }}</td>
-                    {% if doc.status == True %}
-                        <td>Abierto</td>
-                    {% else %}
-                        <td>Cerrado</td>
-                    {% endif %}
-                    <td>
-                        <div class="btn-group" role="group">
-                            <a href="{% url 'update_pdf' pk=doc.pk %}" class="btn btn-primary">Editar</a>
-                            <a href="{% url 'delete_pdf' pk=doc.pk %}" class="btn btn-primary">Eliminar</a>
+<div class="container-fluid">
+    <h2 class="text-center">Documentos</h2>
+    <div class="row">
+        <div class="col-md-10">
+            <div class="contenedor-table">
+                <table class="table table-borderless text-center tabla-personalizada">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Fecha de Subida</th>
+                            <th scope="col">Fecha de Cierre</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if documentos %}
+                            {% for doc in documentos %}
+                            <tr class="spaceUnder">
+                                <td>
+                                    <a href="{% url 'view_pdf_admin' doc.id %}" style="color: black;"> {{ doc.name }} </a>
+                                </td>
+                                <td>{{ doc.start_date }}</td>
+                                <td>{{ doc.end_date }}</td>
+                                {% if doc.status == True %}
+                                    <td>Abierto</td>
+                                {% else %}
+                                    <td>Cerrado</td>
+                                {% endif %}
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <a href="{% url 'update_pdf' pk=doc.pk %}" class="btn btn-primary">Editar</a>
+                                        <a href="{% url 'delete_pdf' pk=doc.pk %}" class="btn btn-primary">Eliminar</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center">No hay documentos que mostrar</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+                <div class="text-right mb-2">
+                    <a href="{% url 'upload_pdf' %}" class="btn btn-primary">Subir documento</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card">
+                <div class="card-header">Filtros</div>
+                <div class="card-body">
+                    <form id="searchForm" method="GET" action="{% url 'list_pdf' %}">
+                        <div class="form-group">
+                            <label for="name">Nombre:</label>
+                            <input type="text" name="name" id="name" class="form-control" placeholder="Nombre" value="{{ request.GET.name }}">
                         </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            {% else %}
-                <tr>
-                    <td colspan="5" class="text-center">No hay documentos que mostrar</td>
-                </tr>
-            {% endif %}
-        </tbody>
-    </table>
-    <div class="text-right mb-2">
-        <a href="{% url 'upload_pdf' %}" class="btn btn-primary">Subir documento</a>
+                        <div class="form-group">
+                            <label for="status">Estado:</label>
+                            <select name="status" id="status" class="form-control">
+                                <option value="" disabled {% if not request.GET.status %}selected{% endif %}>Estado</option>
+                                {% for choice in Document.STATUS %}
+                                    <option value="{{ choice.0 }}" {% if request.GET.status == choice.0 %}selected{% endif %}>{{ choice.1 }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>                        
+                        <div class="form-group">
+                            <label for="start_date">Fecha de Subida:</label>
+                            <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request.GET.start_date }}">
+                        </div>
+                        <div class="form-group mt-2 text-right">
+                            <button type="submit" class="btn btn-primary">Buscar</button>
+                            <a href="{% url 'list_pdf' %}" class="btn btn-primary">Limpiar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
+<link rel="stylesheet" href="{% static 'css/list_pdf.css' %}"/>
 {% endblock %}
