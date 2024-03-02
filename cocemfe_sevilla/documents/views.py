@@ -3,6 +3,8 @@ from .forms import PDFUploadForm
 from .models import Document
 from django.utils import timezone
 from django.contrib import messages
+from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
 # Create your views here.
 
 def upload_pdf(request):
@@ -12,8 +14,13 @@ def upload_pdf(request):
             if form.is_valid():
                 end_date = form.cleaned_data['end_date']
                 pdf_file = form.cleaned_data['pdf_file']
-                if end_date > timezone.now().date():
-                    if pdf_file.name.endswith('.pdf'):
+                try:
+                    FileExtensionValidator(allowed_extensions=['pdf'])(pdf_file)
+                except ValidationError as e:
+                    form.add_error('pdf_file', e)
+                    messages.error(request, "El archivo debe ser un PDF.")
+                else:
+                    if end_date > timezone.now().date():
                         document = form.save(commit=False)
                         document.start_date = timezone.now().date()
                         document.status = 'Abierto'
@@ -23,9 +30,7 @@ def upload_pdf(request):
                         document.save()
                         return redirect('list_pdf')
                     else:
-                        messages.error(request, "El archivo debe ser un PDF.")
-                else:
-                    messages.error(request, "La fecha de finalización debe ser posterior a la fecha actual.")
+                        messages.error(request, "La fecha de finalización debe ser posterior a la fecha actual.")
         else:
             form = PDFUploadForm()
         return render(request, 'upload_pdf.html', {'form': form})
