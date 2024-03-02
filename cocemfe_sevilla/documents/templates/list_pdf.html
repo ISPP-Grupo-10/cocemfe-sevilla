@@ -26,11 +26,13 @@
                                 </td>
                                 <td>{{ doc.start_date }}</td>
                                 <td>{{ doc.end_date }}</td>
-                                {% if doc.status == True %}
-                                    <td>Abierto</td>
-                                {% else %}
-                                    <td>Cerrado</td>
-                                {% endif %}
+                                <td>
+                                    {% for status_value, status_display in doc.STATUS %}
+                                        {% if doc.status == status_value %}
+                                            {{ status_display }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
                                 <td>
                                     <div class="btn-group" role="group">
                                         <a href="{% url 'update_pdf' pk=doc.pk %}" class="btn btn-primary">Editar</a>
