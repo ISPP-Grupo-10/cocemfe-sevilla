@@ -73,8 +73,6 @@ def delete_pdf(request, pk):
     document.delete()
     return redirect('list_pdf')   
 
-from django.core.exceptions import ValidationError
-
 def list_pdf(request):
     documentos = Document.objects.all()
 
