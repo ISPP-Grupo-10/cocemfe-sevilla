@@ -1,30 +1,75 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comentarios</title>
+{% extends 'base.html' %}
+{% load static %}
 
-</head>
-<body>
-    <h2>Comentarios</h2>
+{% block contenido %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/chat.css' %}"><!DOCTYPE html>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var commentSection = document.getElementById("comment-section");
+        commentSection.scrollTop = commentSection.scrollHeight;
+    });
 
-        <div id="comment-section">
-            {% for comentario in chat_messages|dictsortreversed:"post_date" %}
-                <div class="comment">
-                    <p><strong>{{ comentario.author.username }}</strong>: {{ comentario.content }}</p>
-                    <p><em>{{ comentario.post_date }}</em></p>
+    document.addEventListener("DOMContentLoaded", function () {
+        var textarea = document.getElementById("area-content");
+        var enviarBtn = document.getElementById("button-send");
+
+        textarea.addEventListener("keydown", function (event) {
+            if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
+
+                enviarBtn.click();
+            }
+        });
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+        var textarea = document.getElementById("area-content");
+        var contenido = textarea.getAttribute("data-localstorage-key");
+        var contenidoGuardado = localStorage.getItem(contenido);
+    
+        // Restaura el contenido del área de texto desde localStorage al cargar la página
+        textarea.value =  contenidoGuardado || '';
+    
+        // Agrega un evento de escucha para almacenar el contenido al escribir
+        textarea.addEventListener("input", function () {
+            localStorage.setItem(contenido, textarea.value);
+        });
+    });
+    document.addEventListener("DOMContentLoaded", function(event) { 
+        var scrollpos = localStorage.getItem('scrollpos');
+        if (scrollpos) window.scrollTo(0, scrollpos);
+    });
+
+    setTimeout(function () {
+        location.reload();
+    }, 5000);
+</script>
+
+<div class="contenedor-table">
+        <h2>Chat Documento: {{ doc.name }}</h2>
+        <div class="scroll-messages" id="comment-section">
+            {% for comentario in chat_messages %}
+                <div>
+                    <p class="user-label"><strong>{{ comentario.author.username }}</strong></p>
+                    <br>
+                    <div class="message-box">
+                        {{ comentario.content }}
+                        <p class="message-date"><em>{{ comentario.post_date }}</em></p>
+                    </div>
                 </div>
+                <br>
             {% endfor %}
         </div>
 
-    <form method="post" action="{% url 'publish_comment' pk=doc.pk %}">
-        {% csrf_token %}
-        <label for="title">Nuevo Comentario:</label>
-        <input type="text" name="title">
-        <textarea name="content" rows="4" cols="50"></textarea>
-        <input type="submit" value="Publicar Comentario">
-    </form>
-
-</body>
-</html>
+        <form method="post" action="{% url 'publish_comment' pk=doc.pk %}">
+            {% csrf_token %}
+            <div class="textarea-container">
+                <textarea class="textarea-style" name="content" rows="4" cols="50" id="area-content" data-localstorage-key="contenidoTextarea"></textarea>
+                <button type="submit" class="btn btn-primary btn-enviar" id="button-send">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+                        <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"/>
+                    </svg>
+                </button>
+            </div>
+        </form>
+</div>
+{% endblock %}

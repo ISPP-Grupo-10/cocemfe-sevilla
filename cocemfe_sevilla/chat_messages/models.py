@@ -7,7 +7,6 @@ from professionals.models import Professional
 class ChatMessage(models.Model):
     document = models.ForeignKey(Document, on_delete=models.CASCADE, related_name='chat_messages')
     author = models.ForeignKey(Professional, on_delete=models.CASCADE)
-    title = models.CharField(max_length=50)
     content = models.TextField(max_length=500)
     post_date = models.DateTimeField(auto_now_add=True)
 
