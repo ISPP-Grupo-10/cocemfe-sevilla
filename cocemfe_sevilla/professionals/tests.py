@@ -2,9 +2,8 @@
 
 from django.test import TestCase
 from django.urls import reverse
-from professionals.models import Professional
-from professionals.forms import ProfessionalForm
-from organizations.models import Organization
+from .models import Professional
+from .forms import ProfessionalForm
 
 class ProfessionalModelTest(TestCase):
     def setUp(self):
@@ -95,3 +94,66 @@ class ProfessionalViewTest(TestCase):
         response = self.client.post(url, updated_data)
 
         self.assertEqual(response.status_code, 200)
+
+class ProfessionalListTestCase(TestCase):
+    def setUp(self):
+        self.organization = Organization.objects.create(
+            name='Test Organization',
+            telephone_number='123456789',
+            address='Test Address',
+            email='test@example.com',
+            zip_code=12345,
+        )
+
+        self.professional1 = Professional.objects.create(
+            username='testuser1',
+            email='testuser1@example.com',
+            first_name='John',
+            last_name='Doe',
+            telephone_number='123456789',
+            license_number='12345',
+            organizations=self.organization
+        )
+
+        self.professional2 = Professional.objects.create(
+            username='testuser2',
+            email='testuser2@example.com',
+            first_name='Jane',
+            last_name='Smith',
+            telephone_number='987654321',
+            license_number='67890',
+            organizations=self.organization
+        )
+
+    def test_professional_list_no_filter(self):
+        url = reverse('professional_list')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context['professionals'].order_by('id'),  # Assuming 'id' is the primary key field
+            [repr(self.professional1), repr(self.professional2)],
+            transform=repr
+        )
+
+    def test_professional_list_with_name_filter(self):
+        url = reverse('professional_list') + '?name=John'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(response.context['professionals'], [repr(self.professional1)], transform=repr)
+
+    def test_professional_list_with_surname_filter(self):
+        url = reverse('professional_list') + '?surname=Doe'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(response.context['professionals'], [repr(self.professional1)], transform=repr)
+
+    def test_professional_list_with_license_number_filter(self):
+        url = reverse('professional_list') + '?license_number=12345'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(response.context['professionals'], [repr(self.professional1)], transform=repr)
+
+    def test_professional_list_with_organization_filter(self):
+        response = self.client.get(reverse('professional_list') + '?organization=Test Organization')
+        self.assertIn(self.professional1, response.context['professionals'])
+        self.assertIn(self.professional2, response.context['professionals'])
