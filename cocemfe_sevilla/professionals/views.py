@@ -28,12 +28,30 @@ class EditUserView(View):
 
 def professional_list(request):
     professionals = Professional.objects.all()
+
     name_filter = request.GET.get('name', '')
     if name_filter:
-        professionals = professionals.filter(name__icontains=name_filter)
+        professionals = professionals.filter(first_name__icontains=name_filter)
 
-    return render(request, 'professional_list.html', {'professionals': professionals})
+    surname_filter = request.GET.get('surname', '')
+    if surname_filter:
+        professionals = professionals.filter(last_name__icontains=surname_filter)
 
+    license_number_filter = request.GET.get('license_number', '')
+    if license_number_filter:
+        professionals = professionals.filter(license_number__icontains=license_number_filter)
+
+    organization_filter = request.GET.get('organization', '')
+    if organization_filter:
+        professionals = professionals.filter(organizations__name__icontains=organization_filter)
+
+    return render(request, 'professional_list.html', {
+        'professionals': professionals,
+        'name_filter': name_filter,
+        'surname_filter': surname_filter,
+        'license_number_filter': license_number_filter,
+        'organization_filter': organization_filter,
+    })
 
 def delete_professional(request, id):
     professional = get_object_or_404(Professional, id=id)
