@@ -84,9 +84,12 @@
                                     </ul>
                                 {% endif %}
                             </div>
-                              <button type="submit" class="btn btn-primary">Guardar</button>
-                              <button type="submit" class="btn btn-primary">Eliminar</button>
-                        </form>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                                </form>
+                                <form method="post" action="{% url 'delete_professional' id=professional.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary" style="border-radius: 5px;"><strong>Eliminar</strong></button>
+                                </form>
                     </div>
                 </div>
         </div>
