@@ -2,8 +2,9 @@
 
 from django.test import TestCase
 from django.urls import reverse
-from .models import Professional
-from .forms import ProfessionalForm
+from professionals.models import Professional
+from professionals.forms import ProfessionalForm
+from organizations.models import Organization
 
 class ProfessionalModelTest(TestCase):
     def setUp(self):
