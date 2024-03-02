@@ -1,9 +1,11 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import PDFUploadForm
 from .models import Document
 from django.utils import timezone
 from django.contrib import messages
-# Create your views here.
+from chat_messages.models import ChatMessage
+from chat_messages.forms import MessageForm
 
 def upload_pdf(request):
     if request.user.is_superuser:
@@ -76,4 +78,31 @@ def delete_pdf(request, pk):
 def list_pdf(request):
     documentos = Document.objects.all()
     return render(request, "list_pdf.html", {'documentos': documentos})
+
+def load_comments(request, pk):
+    doc = get_object_or_404(Document, id=pk)
+    comments = ChatMessage.objects.filter(document=doc)
+    return render(request, 'list_comments.html', {'doc': doc, 'chat_messages': comments})
+
+@login_required
+def publish_comment(request, pk):
+    doc = get_object_or_404(Document, id=pk)
+
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.document = doc
+            comment.post_date = timezone.now()
+            comment.save()
+            print(comment)
+            return redirect('view_pdf_chat', pk=doc.id)
+        else:
+            print("algo ha ido mal")
+    else:
+        form = MessageForm()
+
+    comments = ChatMessage.objects.filter(document=doc)
+    return render(request, 'list_comments.html', {'doc': doc, 'chat_messages': comments, 'form': form})
 

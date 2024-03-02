@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comentarios</title>
+
+</head>
+<body>
+    <h2>Comentarios</h2>
+
+        <div id="comment-section">
+            {% for comentario in chat_messages|dictsortreversed:"post_date" %}
+                <div class="comment">
+                    <p><strong>{{ comentario.author.username }}</strong>: {{ comentario.content }}</p>
+                    <p><em>{{ comentario.post_date }}</em></p>
+                </div>
+            {% endfor %}
+        </div>
+
+    <form method="post" action="{% url 'publish_comment' pk=doc.pk %}">
+        {% csrf_token %}
+        <label for="title">Nuevo Comentario:</label>
+        <input type="text" name="title">
+        <textarea name="content" rows="4" cols="50"></textarea>
+        <input type="submit" value="Publicar Comentario">
+    </form>
+
+</body>
+</html>

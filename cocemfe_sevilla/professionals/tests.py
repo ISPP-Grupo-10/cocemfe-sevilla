@@ -68,3 +68,24 @@ class ProfessionalViewTest(TestCase):
         self.assertEqual(response.status_code, 302)  # 302 es el código para redirección después de una actualización
         self.professional.refresh_from_db()
         self.assertEqual(self.professional.name, 'UpdatedName')
+
+
+class ProfessionalListTestCase(TestCase):
+    def setUp(self):
+        self.professional1 = Professional.objects.create(name='John', surname='Doe', license_number='12345', organizations__name='Org1')
+        self.professional2 = Professional.objects.create(name='Jane', surname='Smith', license_number='67890', organizations__name='Org2')
+
+    def test_professional_list_no_filter(self):
+        response = self.client.get(reverse('professional_list'))
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(response.context['professionals'], [repr(self.professional1), repr(self.professional2)])
+
+    def test_professional_list_with_name_filter(self):
+        response = self.client.get(reverse('professional_list') + '?name=John')
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(response.context['professionals'], [repr(self.professional1)])
+
+    def test_professional_list_with_organization_filter(self):
+        response = self.client.get(reverse('professional_list') + '?organization=Org2')
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(response.context['professionals'], [repr(self.professional2)])
