@@ -26,8 +26,10 @@
             <h3>Comentarios</h3>
         </div>
     </div>
+    {% if request.user.is_staff or request.user in pdf.professionals.all %}
     <div class="chat-button">
         <a href="{% url 'view_pdf_chat' pk=pdf.pk %}">Acceder al chat privado</a>
     </div>
+    {% endif %}
 </div>
 {% endblock %}
