@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Detalles{% endblock %}
+{% block encabezado %}
+{% endblock %}
+{% block contenido %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Opciones de Organizaciones</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Opciones de Organizaciones</h1>
+        <br/>
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <a href="{% url "organizations:create_organization" %}" class="btn btn-primary btn-lg btn-block">Crear Organización</a>
+            </div>
+            <div class="col-md-6">
+                <a href="{% url "organizations:organization_list" %}" class="btn btn-secondary btn-lg btn-block">Listar Organizaciones</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+{% endblock %}

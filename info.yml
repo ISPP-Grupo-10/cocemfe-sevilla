@@ -1,0 +1,77 @@
+project:
+  name: 'ISPP-2024-L2-10'
+  owner: 'L2'
+  teamId: '10'
+  identities: {}
+  notifications:
+    email: 'antpelmor@alum.us.es'
+  members:
+    member1:
+      name: 'Guillermo'
+      surname: 'Gomez Romero' 
+      githubUsername: 'guillegomezz8'
+    member2:
+      name: 'Fernando '
+      surname: 'Baquero Fernández' 
+      githubUsername: 'ferbaqfer'
+    member3:
+      name: 'Ignacio'
+      surname: 'Arroyo Mantero' 
+      githubUsername: 'Ignarrman'
+    member4:
+      name: 'Andrés Jesús'
+      surname: 'Somoza Sierra' 
+      githubUsername: 'andressomoza'
+    member5:
+      name: 'Antonio'
+      surname: 'Maqueda Acal' 
+      githubUsername: 'antoniomaqueda'
+    member6:
+      name: 'Tadeo'
+      surname: 'Cabrera Gómez' 
+      githubUsername: 'tcabgom'
+    member7:
+      name: 'Eloy'
+      surname: 'Jimenez Medina' 
+      githubUsername: 'eloyjm'
+    member8:
+      name: 'Álvaro'
+      surname: 'Vázquez Conejo' 
+      githubUsername: 'alvvc02'
+    member9:
+      name: 'Jaime'
+      surname: 'García García' 
+      githubUsername: 'Jaimegg177'
+    member10:
+      name: 'Antonio'
+      surname: 'Peláez Moreno' 
+      githubUsername: 'antoniopelaezmoreno'
+    member11:
+      name: 'Pablo'
+      surname: 'Pino Mateo' 
+      githubUsername: 'PabloPinMat'
+    member12:
+      name: 'Lucas'
+      surname: 'Antoñanzas del Villar' 
+      githubUsername: 'lucantdel'
+    member13:
+      name: 'Jesús'
+      surname: 'Solís Ortega' 
+      githubUsername: 'JesusSolisOrtega'
+    member14:
+      name: 'Gonzalo'
+      surname: 'Ribas Luna' 
+      githubUsername: 'Gonriblun'
+    member15:
+      name: 'Ignacio'
+      surname: 'González González' 
+      githubUsername: 'Ignaciocefis'
+    member16:
+      name: 'Raul Hernan'
+      surname: 'Merida Bascon' 
+      githubUsername: 'rauulhernaan'
+    member17:
+      name: 'Daniel'
+      surname: 'Cortés Fonseca' 
+      githubUsername: 'dancorfon'
+      
