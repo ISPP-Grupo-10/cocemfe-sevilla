@@ -139,3 +139,126 @@ class DocumentTestCase(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)  # Check if non-superuser gets redirected to '403.html' page
         self.assertTemplateUsed(response, '403.html')
+
+
+    def test_modify_pdf_add_professional(self):
+        # Verificar que se puede agregar un nuevo profesional al documento desde la vista de modificación
+
+        # Creamos un nuevo profesional
+        new_professional = Professional.objects.create(
+            first_name='Pedro',
+            last_name='González',
+            username='pedrogonzalez',
+            telephone_number='987654321',
+            license_number='Licencia del nuevo profesional',
+            organizations=self.organization
+        )
+
+        # Verificamos que el nuevo profesional se haya creado correctamente
+        self.assertIsNotNone(new_professional)
+
+        # Verificar que el documento tenga solo un profesional antes de la modificación
+        self.assertEqual(self.document.professionals.count(), 1)
+
+        # Obtener la URL para modificar el PDF
+        modify_pdf_url = reverse('update_pdf', args=[self.document.pk])
+
+        # Simular la modificación de datos del formulario para incluir al nuevo profesional
+        new_name = 'Documento modificado con nuevo profesional'
+        new_end_date = '2025-04-15'  # Nueva fecha de fin
+        new_professional_id = new_professional.id
+
+        # Realizar la solicitud POST con los datos modificados
+        response = self.client.post(modify_pdf_url, {
+            'name': new_name,
+            'end_date': new_end_date,
+            'professionals': [self.professional.id, new_professional_id],  # Incluimos ambos profesionales
+            # Puedes agregar más campos aquí según lo que permita el formulario
+        })
+
+        # Verificar que la redirección sea correcta
+        self.assertEqual(response.status_code, 302)  # Código 302 indica redirección
+
+        # Obtener el documento modificado desde la base de datos
+        modified_document = Document.objects.get(pk=self.document.pk)
+
+        # Verificar que los cambios se reflejan correctamente
+        self.assertEqual(modified_document.name, new_name)
+        self.assertEqual(str(modified_document.end_date), new_end_date)
+        self.assertEqual(modified_document.professionals.count(), 2)  # Verificamos que se han agregado ambos profesionales
+        self.assertIn(self.professional, modified_document.professionals.all())  # Verificamos que el primer profesional está incluido
+        self.assertIn(new_professional, modified_document.professionals.all())  # Verificamos que el nuevo profesional está incluido
+
+    def test_modify_pdf_with_invalid_end_date(self):
+        # Verificar que no se pueda modificar el documento con una fecha de fin inválida
+
+        # Obtener la URL para modificar el PDF
+        modify_pdf_url = reverse('update_pdf', args=[self.document.pk])
+
+        # Simular la modificación de datos del formulario con fecha de fin inválida
+        invalid_end_date = '2022-01-01'  # Fecha pasada, debe ser al menos la fecha actual o futura
+
+        # Realizar la solicitud POST con los datos modificados
+        response = self.client.post(modify_pdf_url, {
+            'name': self.document.name,
+            'end_date': invalid_end_date,
+            'professionals': [self.professional.id],
+        })
+
+        # Verificar que la página de modificación se vuelva a renderizar con errores
+        self.assertEqual(response.status_code, 200)
+
+        # Verificar que el documento no se ha modificado
+        modified_document = Document.objects.get(pk=self.document.pk)
+        self.assertNotEqual(modified_document.end_date, invalid_end_date)
+
+
+    def test_modify_pdf_with_valid_data(self):
+        # Verificar que se pueda modificar el documento con datos válidos
+
+        # Obtener la URL para modificar el PDF
+        modify_pdf_url = reverse('update_pdf', args=[self.document.pk])
+
+        # Simular la modificación de datos del formulario
+        new_name = 'Documento modificado'
+        new_end_date = '2025-04-01'  # Nueva fecha de fin válida
+
+        # Realizar la solicitud POST con los datos modificados
+        response = self.client.post(modify_pdf_url, {
+            'name': new_name,
+            'end_date': new_end_date,
+            'professionals': [self.professional.id],
+        })
+
+        # Verificar que la redirección sea correcta
+        self.assertEqual(response.status_code, 302)  # Código 302 indica redirección
+
+        # Obtener el documento modificado desde la base de datos
+        modified_document = Document.objects.get(pk=self.document.pk)
+
+        # Verificar que los cambios se reflejan correctamente
+        self.assertEqual(modified_document.name, new_name)
+        self.assertEqual(str(modified_document.end_date), new_end_date)
+
+    def test_delete_pdf(self):
+        # Verificar que se puede borrar un documento correctamente
+
+        # Obtener la URL para borrar el PDF
+        delete_pdf_url = reverse('delete_pdf', args=[self.document.pk])
+
+        # Obtener el número de documentos antes de la eliminación
+        initial_count = Document.objects.count()
+
+        # Realizar la solicitud POST para borrar el documento
+        response = self.client.post(delete_pdf_url)
+
+        # Verificar que la redirección sea correcta después de borrar el documento
+        self.assertRedirects(response, reverse('list_pdf'))
+
+        # Verificar que el número de documentos ha disminuido después de la eliminación
+        self.assertEqual(Document.objects.count(), initial_count - 1)
+
+        # Verificar que el documento ya no existe en la base de datos
+        with self.assertRaises(Document.DoesNotExist):
+            Document.objects.get(pk=self.document.pk)
+        
