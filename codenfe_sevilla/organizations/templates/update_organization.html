@@ -41,9 +41,7 @@
             width: 100%;
         }
     </style>
-</head>
 
-<body>
     <style>
         .center-box {
             width: 50%;
@@ -148,34 +146,50 @@
             /* Cambio de color al pasar el cursor */
         }
     </style>
+</head>
+
+<body>
     <div class="center-box">
-        <h2 class="text-center">Modificar Organización</h2>
-        <div class="card-body">
-            <form method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="id_name">Nombre:</label>
-                    {{ form.name }}
-                </div>
-                <div class="form-group">
-                    <label for="id_telephone_number">Número de Teléfono:</label>
-                    {{ form.telephone_number }}
-                </div>
-                <div class="form-group">
-                    <label for="id_address">Dirección:</label>
-                    {{ form.address }}
-                </div>
-                <div class="form-group">
-                    <label for="id_email">Correo Electrónico:</label>
-                    {{ form.email }}
-                </div>
-                <div class="form-group">
-                    <label for="id_zip_code">Código Postal:</label>
-                    {{ form.zip_code }}
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">Modificar</button>
-            </form>
-        </div>
+        <h2 class="form-heading">Modificar Organización</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_name">Nombre:</label>
+                {{ form.name }}
+                {% for error in form.name.errors %}
+                <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <label for="id_telephone_number">Número de Teléfono:</label>
+                {{ form.telephone_number }}
+                {% for error in form.telephone_number.errors %}
+                <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <label for="id_address">Dirección:</label>
+                {{ form.address }}
+                {% for error in form.address.errors %}
+                <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <label for="id_email">Correo Electrónico:</label>
+                {{ form.email }}
+                {% for error in form.email.errors %}
+                <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <label for="id_zip_code">Código Postal:</label>
+                {{ form.zip_code }}
+                {% for error in form.zip_code.errors %}
+                <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Modificar</button>
+        </form>
     </div>
 </body>
 

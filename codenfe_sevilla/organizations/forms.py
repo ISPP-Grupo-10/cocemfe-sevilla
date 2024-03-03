@@ -13,13 +13,15 @@ class OrganizationForm(forms.ModelForm):
         telephone_number = cleaned_data.get('telephone_number')
         email = cleaned_data.get('email')
         
-        if Organization.objects.filter(name=name).exists():
+        instance_pk = self.instance.pk if self.instance else None
+        
+        if Organization.objects.filter(name=name).exclude(pk=instance_pk).exists():
             self.add_error('name', "Este nombre ya está en uso.")
         
-        if Organization.objects.filter(telephone_number=telephone_number).exists():
+        if Organization.objects.filter(telephone_number=telephone_number).exclude(pk=instance_pk).exists():
             self.add_error('telephone_number', "Este número de teléfono ya está en uso.")
         
-        if Organization.objects.filter(email=email).exists():
+        if Organization.objects.filter(email=email).exclude(pk=instance_pk).exists():
             self.add_error('email', "Este email ya está en uso.")
         
         return cleaned_data
