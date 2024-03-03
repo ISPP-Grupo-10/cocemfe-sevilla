@@ -5,9 +5,8 @@ from .forms import PDFUploadForm
 from .models import Document
 from django.utils import timezone
 from django.contrib import messages
-from django.core.exceptions import ValidationError
-from django.core.validators import FileExtensionValidator
-# Create your views here.
+from chat_messages.models import ChatMessage
+from chat_messages.forms import MessageForm
 
 def upload_pdf(request):
     if request.user.is_superuser:
@@ -16,23 +15,20 @@ def upload_pdf(request):
             if form.is_valid():
                 end_date = form.cleaned_data['end_date']
                 pdf_file = form.cleaned_data['pdf_file']
-                try:
-                    FileExtensionValidator(allowed_extensions=['pdf'])(pdf_file)
-                except ValidationError as e:
-                    form.add_error('pdf_file', e)
-                    messages.error(request, "El archivo debe ser un PDF.")
-                else:
-                    if end_date > timezone.now().date():
+                if end_date > timezone.now().date():
+                    if pdf_file.name.endswith('.pdf'):
                         document = form.save(commit=False)
                         document.start_date = timezone.now().date()
-                        document.status = 'Abierto'
+                        document.status = False
                         professionals = form.cleaned_data['professionals']
                         document.save()
                         document.professionals.set(professionals)
                         document.save()
                         return redirect('list_pdf')
                     else:
-                        messages.error(request, "La fecha de finalización debe ser posterior a la fecha actual.")
+                        messages.error(request, "El archivo debe ser un PDF.")
+                else:
+                    messages.error(request, "La fecha de finalización debe ser posterior a la fecha actual.")
         else:
             form = PDFUploadForm()
         return render(request, 'upload_pdf.html', {'form': form})
@@ -82,28 +78,33 @@ def delete_pdf(request, pk):
 
 def list_pdf(request):
     documentos = Document.objects.all()
+    return render(request, "list_pdf.html", {'documentos': documentos})
 
-    name = request.GET.get('name')
-    status = request.GET.get('status')
-    start_date = request.GET.get('start_date')
-
-    if name:
-        documentos = documentos.filter(name__icontains=name)
-    if status:
-        documentos = documentos.filter(status=status)
-    if start_date:
-        try:
-            # Intenta convertir la entrada del filtro de fecha en un objeto de fecha
-            start_date = timezone.datetime.strptime(start_date, '%Y-%m-%d').date()
-        except ValueError:
-            # Si la entrada no es una fecha válida, muestra un mensaje de error
-            messages.error(request, "La fecha de inicio no es válida. Utilice el formato AAAA-MM-DD.")
-            return render(request, "list_pdf.html", {'documentos': documentos, 'Document': Document})
-
-        # Ahora puedes usar start_date en tus filtros
-        documentos = documentos.filter(start_date=start_date)
-
-    return render(request, "list_pdf.html", {'documentos': documentos, 'Document': Document})
+def load_comments(request, pk):
+    doc = get_object_or_404(Document, id=pk)
+    if request.user in doc.professionals.all() or request.user.is_staff:
+        comments = ChatMessage.objects.filter(document=doc)
+        return render(request, 'list_comments.html', {'doc': doc, 'chat_messages': comments})
+    else:
+        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
 
 
+@login_required
+def publish_comment(request, pk):
+    doc = get_object_or_404(Document, id=pk)
+
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.document = doc
+            comment.post_date = timezone.now()
+            comment.save()
+            return redirect('view_pdf_chat', pk=doc.id)
+    else:
+        form = MessageForm()
+
+    comments = ChatMessage.objects.filter(document=doc)
+    return render(request, 'list_comments.html', {'doc': doc, 'chat_messages': comments, 'form': form})
 
