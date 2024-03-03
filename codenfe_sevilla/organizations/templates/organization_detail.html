@@ -5,31 +5,134 @@
 {% block contenido %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalles de la Organización</title>
 </head>
+
 <body>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="text-center">Detalles de la Organización</h2>
-                    </div>
-                    <div class="card-body">
-                        <p><strong>Nombre:</strong> {{ organization.name }}</p>
-                        <p><strong>Número de Teléfono:</strong> {{ organization.telephone_number }}</p>
-                        <p><strong>Dirección:</strong> {{ organization.address }}</p>
-                        <p><strong>Correo Electrónico:</strong> {{ organization.email }}</p>
-                        <p><strong>Código Postal:</strong> {{ organization.zip_code }}</p>
-                    </div>
-                </div>
-            </div>
+    <style>
+        .center-box {
+            width: 50%;
+            /* Ancho del recuadro */
+            margin: 100px auto;
+            /* Margen automático para centrarlo horizontalmente y separación superior de 50px */
+            padding: 70px;
+            /* Espacio interior del recuadro */
+            border: 1px solid #ccc;
+            /* Borde del recuadro */
+            background-color: #e0f7fa;
+            /* Fondo celeste */
+            border-radius: 15px;
+            /* Esquinas redondeadas */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            /* Sombra suave */
+            position: relative;
+            /* Posición relativa para los elementos absolutos */
+        }
+
+        .form-heading {
+            position: absolute;
+            /* Posición absoluta para alinear el texto */
+            top: -40px;
+            /* Posiciona el texto arriba del recuadro */
+            left: 50%;
+            /* Lo alinea horizontalmente con el centro */
+            transform: translateX(-50%);
+            /* Ajusta el centrado horizontal */
+            text-align: center;
+            /* Alinea el texto al centro */
+            font-size: 28px;
+            /* Tamaño de fuente más pequeño */
+            color: rgb(26, 8, 77);
+            /* Color de fuente azul */
+        }
+
+        .form-group {
+            display: flex;
+            /* Utilizamos flexbox para organizar los elementos */
+            align-items: center;
+            /* Centramos verticalmente los elementos */
+            justify-content: space-between;
+            /* Espacio uniforme entre los elementos */
+            margin-bottom: 20px;
+            /* Ajustamos el margen inferior para agregar espacio */
+        }
+
+        label {
+            width: 30%;
+            /* Ancho para los nombres de los campos */
+            text-align: left;
+            /* Alineamos los nombres a la izquierda */
+        }
+
+        input[type="text"],
+        input[type="file"],
+        input[type="date"],
+        button {
+            border-radius: 25px;
+            /* Bordes redondeados para los inputs y botón */
+            border: 1px solid #ccc;
+            /* Borde ligero */
+            padding: 8px;
+            /* Espaciado interno */
+            width: calc(70% - 16px);
+            /* Ancho para los campos de texto y botón */
+            box-sizing: border-box;
+            /* Incluye el borde y el relleno en el ancho total */
+        }
+
+        .button-container {
+            position: absolute;
+            /* Posición absoluta para el contenedor del botón */
+            bottom: 20px;
+            /* Posiciona el contenedor 20px desde la parte inferior */
+            right: 20px;
+            /* Posiciona el contenedor 20px desde el lado derecho */
+        }
+
+        button {
+            width: auto;
+            /* Cambiar a ancho automático */
+            padding: 8px 35px;
+            /* Ajustar el relleno según sea necesario */
+            font-size: 14px;
+            /* Reducir el tamaño del texto */
+            border-radius: 10px;
+            /* Bordes redondeados para el botón */
+            border: 1px solid #ccc;
+            /* Borde ligero */
+            background-color: #1f085e;
+            /* Fondo verde */
+            color: white;
+            /* Texto blanco */
+            cursor: pointer;
+            /* Cursor de puntero */
+        }
+
+        button:hover {
+            background-color: #1f085e;
+            /* Cambio de color al pasar el cursor */
+        }
+    </style>
+    <div class="center-box">
+        <h2 class="text-center">Detalles de la Organización</h2>
+        <div class="card-body">
+            <p><strong>Nombre:</strong> {{ organization.name }}</p>
+            <p><strong>Número de Teléfono:</strong> {{ organization.telephone_number }}</p>
+            <p><strong>Dirección:</strong> {{ organization.address }}</p>
+            <p><strong>Correo Electrónico:</strong> {{ organization.email }}</p>
+            <p><strong>Código Postal:</strong> {{ organization.zip_code }}</p>
+        </div>
+        <div class="btn-group" role="group">
+            <a href="{% url 'organizations:update_organization' pk=organization.pk %}" class="btn btn-primary">Editar</a>
+            <a href="{% url 'organizations:delete_organization' pk=organization.pk %}" class="btn btn-primary">Eliminar</a>
         </div>
     </div>
 </body>
+
 </html>
 {% endblock %}

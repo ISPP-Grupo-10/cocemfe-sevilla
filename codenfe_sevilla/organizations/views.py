@@ -38,4 +38,4 @@ def delete_organization(request, pk):
 
 def organization_list(request):
     organizations = Organization.objects.all()
-    return render(request, 'list_organizations.html', {'organizations': organizations})
+    return render(request, 'organizations_list.html', {'organizations': organizations})
