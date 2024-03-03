@@ -2,11 +2,16 @@ from django.test import TestCase
 from django.urls import reverse
 from documents.models import Document
 from professionals.models import Professional
+from django.utils import timezone
 from organizations.models import Organization
+from django.test import RequestFactory
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 class DocumentTestCase(TestCase):
     def setUp(self):
         # Creamos una organización
+        self.user = Professional.objects.create_superuser(username='admin', password='admin')
+        self.pdf_file = SimpleUploadedFile("test.pdf", b"file_content", content_type="application/pdf")
         self.organization = Organization.objects.create(
             name='Mi Organización',
             telephone_number='123456789',
@@ -14,11 +19,12 @@ class DocumentTestCase(TestCase):
             email='info@miorganizacion.com',
             zip_code=12345
         )
-        
+
+
         # Creamos un profesional asignado a la organización
         self.professional = Professional.objects.create(
-            name='Juan',
-            surname='Pérez',
+            first_name='Juan',
+            last_name='Pérez',
             username='juanperez',
             telephone_number='987654321',
             license_number='Licencia del profesional',
@@ -35,6 +41,7 @@ class DocumentTestCase(TestCase):
         )
         self.document.professionals.add(self.professional)
 
+        
     def test_list_pdf_view(self):
         # Verificar que la vista list_pdf muestra correctamente el documento creado
         response = self.client.get(reverse('list_pdf'))
@@ -86,3 +93,49 @@ class DocumentTestCase(TestCase):
         response = self.client.get(reverse('list_pdf'), {'start_date': '2024-03-01'})
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.document.name)
+
+
+    def test_upload_pdf_valid_form(self):
+        self.client.login(username='admin', password='admin')
+        data = {
+            'start_date': '02/03/2024',  # Current date
+            'name': 'Documento de prueba',
+            'ubication': 'Ubicación de prueba',  # 'ubication' is a typo, should be 'location
+            'status': 'Abierto',  # 'status' is a typo, should be 'status
+            'end_date': '30/03/2024',
+            'pdf_file': self.pdf_file,
+            'professionals': [1],
+        }
+        url=reverse('upload_pdf')
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 302)  # Check if redirecting to 'list_pdf' page
+        self.assertEqual(Document.objects.count(), 2)  # Check if document is created
+        document = Document.objects.last()
+        self.assertEqual(document.start_date, timezone.now().date())  # Check if start_date is set to current date
+        self.assertEqual(document.status, 'Abierto')  # Check if status is set to 'Abierto'
+        self.assertEqual(list(document.professionals.values_list('id', flat=True)), [1])  # Check if professionals are set correctly
+        self.client.logout()
+
+    def test_upload_pdf_invalid_form(self):
+        self.client.login(username='admin', password='admin')
+        data = {
+            'start_date': timezone.now().date(),
+            'name': 'Documento de prueba',
+            'ubication': 'Ubicación de prueba',  
+            'status': 'Abierto',  
+            'end_date': '01/01/2021',
+            'pdf_file': self.pdf_file,
+            'professionals': [1],
+        }
+        url=reverse('upload_pdf')
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200)  # Check if form is not valid and returns to the same page
+        self.assertEqual(Document.objects.count(), 1)  # Check if document is not created
+        self.client.logout()
+    
+    def test_upload_pdf_not_superuser(self):
+        self.client.logout()
+        url=reverse('upload_pdf')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)  # Check if non-superuser gets redirected to '403.html' page
+        self.assertTemplateUsed(response, '403.html')

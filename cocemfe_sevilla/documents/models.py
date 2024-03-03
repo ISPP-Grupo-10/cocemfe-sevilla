@@ -1,5 +1,8 @@
 from django.db import models
 from professionals.models import Professional
+from django.core.validators import FileExtensionValidator
+from django.core.exceptions import ValidationError
+
 
 class Document(models.Model):
     STATUS = (
@@ -21,3 +24,4 @@ class Document(models.Model):
 
     def __str__(self):
         return self.name
+  
