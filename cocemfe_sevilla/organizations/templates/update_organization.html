@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Crear Organización{% endblock %}
+{% block title %}Modificar organización{% endblock %}
 {% block encabezado %}
 {% endblock %}
 {% block contenido %}
@@ -10,7 +10,38 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Nueva Organización</title>
+    <title>Modificar Organización</title>
+    <style>
+        /* Estilos adicionales aquí si es necesario */
+        .container {
+            margin-top: 20px;
+        }
+
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            width: 100%;
+        }
+    </style>
+
     <style>
         .center-box {
             width: 50%;
@@ -118,15 +149,8 @@
 </head>
 
 <body>
-    {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-danger" role="alert">
-        {{ message }}
-    </div>
-    {% endfor %}
-    {% endif %}
     <div class="center-box">
-        <h1 class="form-heading">NUEVA ORGANIZACIÓN</h1>
+        <h2 class="form-heading">Modificar Organización</h2>
         <form method="post">
             {% csrf_token %}
             <div class="form-group">
@@ -164,11 +188,10 @@
                 <span class="error">{{ error }}</span>
                 {% endfor %}
             </div>
-            <button type="submit" class="btn btn-primary btn-block">Crear</button>
+            <button type="submit" class="btn btn-primary btn-block">Modificar</button>
         </form>
-
     </div>
 </body>
 
 </html>
-{% endblock %}
+{% endblock %} 
