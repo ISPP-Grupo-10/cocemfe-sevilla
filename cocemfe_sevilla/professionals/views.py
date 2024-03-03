@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import DetailView, UpdateView
+from django.views.generic import DeleteView, DetailView, UpdateView
+
 from .models import Professional
 from .forms import ProfessionalForm
 
@@ -11,6 +12,9 @@ class EditUserView(View):
         professional = get_object_or_404(Professional, id=pk)
         form = ProfessionalForm(instance=professional)
         return render(request, 'professional_detail.html', {'form': form, 'professional': professional})
+
+    def professional_update_view(request, pk):
+        professional = get_object_or_404(Professional, pk=pk)
 
     def post(self, request, pk):
         professional = get_object_or_404(Professional, id=pk)
@@ -27,11 +31,11 @@ def professional_list(request):
 
     name_filter = request.GET.get('name', '')
     if name_filter:
-        professionals = professionals.filter(name__icontains=name_filter)
+        professionals = professionals.filter(first_name__icontains=name_filter)
 
     surname_filter = request.GET.get('surname', '')
     if surname_filter:
-        professionals = professionals.filter(surname__icontains=surname_filter)
+        professionals = professionals.filter(last_name__icontains=surname_filter)
 
     license_number_filter = request.GET.get('license_number', '')
     if license_number_filter:
@@ -48,3 +52,15 @@ def professional_list(request):
         'license_number_filter': license_number_filter,
         'organization_filter': organization_filter,
     })
+
+def delete_professional(request, id):
+    professional = get_object_or_404(Professional, id=id)
+    print(professional)
+
+    if request.method == 'POST':
+        professional.delete()
+
+    professionals = Professional.objects.all()
+
+    return render(request, 'professional_list.html', {'professionals': professionals})
+
