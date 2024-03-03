@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Crear Organización{% endblock %}
+{% block title %}Detalles{% endblock %}
 {% block encabezado %}
 {% endblock %}
 {% block contenido %}
@@ -10,7 +10,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Nueva Organización</title>
+    <title>Detalles de la Organización</title>
+</head>
+
+<body>
     <style>
         .center-box {
             width: 50%;
@@ -115,58 +118,19 @@
             /* Cambio de color al pasar el cursor */
         }
     </style>
-</head>
-
-<body>
-    {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-danger" role="alert">
-        {{ message }}
-    </div>
-    {% endfor %}
-    {% endif %}
     <div class="center-box">
-        <h1 class="form-heading">NUEVA ORGANIZACIÓN</h1>
-        <form method="post">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="id_name">Nombre:</label>
-                {{ form.name }}
-                {% for error in form.name.errors %}
-                <span class="error">{{ error }}</span>
-                {% endfor %}
-            </div>
-            <div class="form-group">
-                <label for="id_telephone_number">Número de Teléfono:</label>
-                {{ form.telephone_number }}
-                {% for error in form.telephone_number.errors %}
-                <span class="error">{{ error }}</span>
-                {% endfor %}
-            </div>
-            <div class="form-group">
-                <label for="id_address">Dirección:</label>
-                {{ form.address }}
-                {% for error in form.address.errors %}
-                <span class="error">{{ error }}</span>
-                {% endfor %}
-            </div>
-            <div class="form-group">
-                <label for="id_email">Correo Electrónico:</label>
-                {{ form.email }}
-                {% for error in form.email.errors %}
-                <span class="error">{{ error }}</span>
-                {% endfor %}
-            </div>
-            <div class="form-group">
-                <label for="id_zip_code">Código Postal:</label>
-                {{ form.zip_code }}
-                {% for error in form.zip_code.errors %}
-                <span class="error">{{ error }}</span>
-                {% endfor %}
-            </div>
-            <button type="submit" class="btn btn-primary btn-block">Crear</button>
-        </form>
-
+        <h2 class="text-center">Detalles de la Organización</h2>
+        <div class="card-body">
+            <p><strong>Nombre:</strong> {{ organization.name }}</p>
+            <p><strong>Número de Teléfono:</strong> {{ organization.telephone_number }}</p>
+            <p><strong>Dirección:</strong> {{ organization.address }}</p>
+            <p><strong>Correo Electrónico:</strong> {{ organization.email }}</p>
+            <p><strong>Código Postal:</strong> {{ organization.zip_code }}</p>
+        </div>
+        <div class="btn-group" role="group">
+            <a href="{% url 'organizations:update_organization' pk=organization.pk %}" class="btn btn-primary">Editar</a>
+            <a href="{% url 'organizations:delete_organization' pk=organization.pk %}" class="btn btn-primary">Eliminar</a>
+        </div>
     </div>
 </body>
 
