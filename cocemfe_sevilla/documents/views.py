@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import PDFUploadForm
 from .models import Document
@@ -6,6 +8,8 @@ from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 # Create your views here.
+from chat_messages.models import ChatMessage
+from chat_messages.forms import MessageForm
 
 def upload_pdf(request):
     if request.user.is_superuser:
@@ -104,4 +108,32 @@ def list_pdf(request):
     return render(request, "list_pdf.html", {'documentos': documentos, 'Document': Document})
 
 
+
+def load_comments(request, pk):
+    doc = get_object_or_404(Document, id=pk)
+    if request.user in doc.professionals.all() or request.user.is_staff:
+        comments = ChatMessage.objects.filter(document=doc)
+        return render(request, 'list_comments.html', {'doc': doc, 'chat_messages': comments})
+    else:
+        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
+
+
+@login_required
+def publish_comment(request, pk):
+    doc = get_object_or_404(Document, id=pk)
+
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.document = doc
+            comment.post_date = timezone.now()
+            comment.save()
+            return redirect('view_pdf_chat', pk=doc.id)
+    else:
+        form = MessageForm()
+
+    comments = ChatMessage.objects.filter(document=doc)
+    return render(request, 'list_comments.html', {'doc': doc, 'chat_messages': comments, 'form': form})
 
