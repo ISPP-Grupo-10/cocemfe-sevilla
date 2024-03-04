@@ -53,12 +53,14 @@
                             <th scope="col">Licencia</th>
                             <th scope="col">Organización</th>
                             <th scope="col">Acciones</th>
+
                         </tr>
                     </thead>
                     <tbody>
                         {% if professionals %}
                             {% for professional in professionals %}
                             <tr class="spaceUnder">
+
                                 <td>{{ professional.last_name }}, {{ professional.first_name }}</strong></td>
                                 <td>{{professional.username}}</td>
                                 <td>{{ professional.email }}</td>
@@ -74,6 +76,7 @@
                                         </form>
                                     </div>
                                 </td>
+                                {% endif %}
                             </tr>
                             {% endfor %}
                         {% else %}
