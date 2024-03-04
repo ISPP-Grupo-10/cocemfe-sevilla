@@ -33,15 +33,16 @@
                     {% for professional in professionals %}
                     <tr class="spaceUnder">
                         <td>{{ professional.last_name }}, {{ professional.first_name }}</strong></td>
-                        <td><a href="{% url 'professional_detail' pk=professional.id %}" style="color: rgb(0, 165, 153); text-decoration: underline;">{{ professional.username }}</a></strong></td>
+                        <td>{{professional.username}}</td>
                         <td>{{ professional.email }}</td>
                         <td>{{ professional.telephone_number }}</td>
                         <td>{{ professional.organizations }}</td>
                         <td>
                             <div class="btn-group" role="group">
+                                <a href="{% url 'professional_detail' pk=professional.id %}" class="btn btn-primary" style="border-radius: 0px; border-color: transparent; background-color: transparent;">&#9998;</a> <!-- Botón de lápiz -->
                                 <form method="post" action="{% url 'delete_professional' id=professional.id %}">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-primary" style="border-radius: 0px; border-color: transparent; background-color: transparent;">&#128465;</button>
+                                    <button type="submit" class="btn btn-primary" style="border-radius: 0px; border-color: transparent; background-color: transparent;">&#128465;</button> <!-- Botón de papelera -->
                                 </form>
                             </div>
                         </td>
