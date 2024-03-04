@@ -20,28 +20,28 @@
         <table class="table table-borderless text-center tabla-personalizada">
             <thead>
                 <tr>
-                    <th scope="col"><strong>Nombre</strong></th>
-                    <th scope="col"><strong>Usuario</strong></th>
-                    <th scope="col"><strong>Email</strong></th>
-                    <th scope="col"><strong>Teléfono</strong></th>
-                    <th scope="col"><strong>Organización</strong></th>
-                    <th scope="col"><strong>Acciones</strong></th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Usuario</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Teléfono</th>
+                    <th scope="col">Organización</th>
+                    <th scope="col">Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 {% if professionals %}
                     {% for professional in professionals %}
                     <tr class="spaceUnder">
-                        <td><strong>{{ professional.last_name }}, {{ professional.first_name }}</strong></td>
-                        <td><strong><a href="{% url 'professional_detail' pk=professional.id %}" style="color: rgb(0, 165, 153); text-decoration: underline;">{{ professional.username }}</a></strong></td>
-                        <td><strong>{{ professional.email }}</strong></td>
-                        <td><strong>{{ professional.telephone_number }}</strong></td>
-                        <td><strong>{{ professional.organizations }}</strong></td>
+                        <td>{{ professional.last_name }}, {{ professional.first_name }}</strong></td>
+                        <td><a href="{% url 'professional_detail' pk=professional.id %}" style="color: rgb(0, 165, 153); text-decoration: underline;">{{ professional.username }}</a></strong></td>
+                        <td>{{ professional.email }}</td>
+                        <td>{{ professional.telephone_number }}</td>
+                        <td>{{ professional.organizations }}</td>
                         <td>
                             <div class="btn-group" role="group">
                                 <form method="post" action="{% url 'delete_professional' id=professional.id %}">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-primary" style="border-radius: 5px;"><strong>Eliminar</strong></button>
+                                    <button type="submit" class="btn btn-primary" style="border-radius: 0px; border-color: transparent; background-color: transparent;">&#128465;</button>
                                 </form>
                             </div>
                         </td>
@@ -54,8 +54,8 @@
                 {% endif %}
             </tbody>
         </table>
-        <div class="d-flex justify-content-end">
-            <a href="#" class="btn btn-primary"><strong>Añadir usuario</strong></a>
+        <div class="d-flex justify-content-start"> <!-- Cambiado de 'end' a 'start' para alinear a la izquierda -->
+            <a href="#" class="btn btn-primary">Añadir usuario</a>
         </div>
     </div>
 </div>
