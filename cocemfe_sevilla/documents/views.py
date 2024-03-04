@@ -7,12 +7,14 @@ from django.utils import timezone
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
+from professionals.models import Professional
 # Create your views here.
 from chat_messages.models import ChatMessage
 from chat_messages.forms import MessageForm
 
 def upload_pdf(request):
     if request.user.is_superuser:
+        professionals = Professional.objects.filter(is_superuser=False)
         if request.method == 'POST':
             form = PDFUploadForm(request.POST, request.FILES)
             if form.is_valid():
@@ -37,7 +39,7 @@ def upload_pdf(request):
                         messages.error(request, "La fecha de finalización debe ser posterior a la fecha actual.")
         else:
             form = PDFUploadForm()
-        return render(request, 'upload_pdf.html', {'form': form})
+        return render(request, 'upload_pdf.html', {'form': form, 'superusers': professionals})
     else:
         return render(request, '403.html')
 
@@ -51,12 +53,12 @@ def view_pdf(request, pk):
 
 def view_pdf_admin(request, pk):
     pdf = get_object_or_404(Document, pk=pk)
-    # falta comprobar si el usuario es admin:
-    return render(request, 'view_pdf.html', {'pdf': pdf})
-    '''
+    if request.user.is_superuser:
+        return render(request, 'view_pdf.html', {'pdf': pdf})
+    
     else:
         return render(request, '403.html')
-    '''
+    
 
 def update_pdf(request,pk):
     document = get_object_or_404(Document, pk=pk)
