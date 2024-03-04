@@ -1,34 +1,45 @@
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import PDFUploadForm
 from .models import Document
 from django.utils import timezone
 from django.contrib import messages
+from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
+from professionals.models import Professional
 # Create your views here.
+from chat_messages.models import ChatMessage
+from chat_messages.forms import MessageForm
 
 def upload_pdf(request):
     if request.user.is_superuser:
+        professionals = Professional.objects.filter(is_superuser=False)
         if request.method == 'POST':
             form = PDFUploadForm(request.POST, request.FILES)
             if form.is_valid():
                 end_date = form.cleaned_data['end_date']
                 pdf_file = form.cleaned_data['pdf_file']
-                if end_date > timezone.now().date():
-                    if pdf_file.name.endswith('.pdf'):
+                try:
+                    FileExtensionValidator(allowed_extensions=['pdf'])(pdf_file)
+                except ValidationError as e:
+                    form.add_error('pdf_file', e)
+                    messages.error(request, "El archivo debe ser un PDF.")
+                else:
+                    if end_date > timezone.now().date():
                         document = form.save(commit=False)
                         document.start_date = timezone.now().date()
-                        document.status = False
+                        document.status = 'Abierto'
                         professionals = form.cleaned_data['professionals']
                         document.save()
                         document.professionals.set(professionals)
                         document.save()
                         return redirect('list_pdf')
                     else:
-                        messages.error(request, "El archivo debe ser un PDF.")
-                else:
-                    messages.error(request, "La fecha de finalización debe ser posterior a la fecha actual.")
+                        messages.error(request, "La fecha de finalización debe ser posterior a la fecha actual.")
         else:
             form = PDFUploadForm()
-        return render(request, 'upload_pdf.html', {'form': form})
+        return render(request, 'upload_pdf.html', {'form': form, 'superusers': professionals})
     else:
         return render(request, '403.html')
 
@@ -42,12 +53,12 @@ def view_pdf(request, pk):
 
 def view_pdf_admin(request, pk):
     pdf = get_object_or_404(Document, pk=pk)
-    # falta comprobar si el usuario es admin:
-    return render(request, 'view_pdf.html', {'pdf': pdf})
-    '''
+    if request.user.is_superuser:
+        return render(request, 'view_pdf.html', {'pdf': pdf})
+    
     else:
         return render(request, '403.html')
-    '''
+    
 
 def update_pdf(request,pk):
     document = get_object_or_404(Document, pk=pk)
@@ -72,8 +83,6 @@ def delete_pdf(request, pk):
     document = get_object_or_404(Document, pk=pk)
     document.delete()
     return redirect('list_pdf')   
-
-from django.core.exceptions import ValidationError
 
 def list_pdf(request):
     documentos = Document.objects.all()
@@ -101,4 +110,32 @@ def list_pdf(request):
     return render(request, "list_pdf.html", {'documentos': documentos, 'Document': Document})
 
 
+
+def load_comments(request, pk):
+    doc = get_object_or_404(Document, id=pk)
+    if request.user in doc.professionals.all() or request.user.is_staff:
+        comments = ChatMessage.objects.filter(document=doc)
+        return render(request, 'list_comments.html', {'doc': doc, 'chat_messages': comments})
+    else:
+        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
+
+
+@login_required
+def publish_comment(request, pk):
+    doc = get_object_or_404(Document, id=pk)
+
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.document = doc
+            comment.post_date = timezone.now()
+            comment.save()
+            return redirect('view_pdf_chat', pk=doc.id)
+    else:
+        form = MessageForm()
+
+    comments = ChatMessage.objects.filter(document=doc)
+    return render(request, 'list_comments.html', {'doc': doc, 'chat_messages': comments, 'form': form})
 

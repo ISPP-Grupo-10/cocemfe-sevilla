@@ -61,23 +61,23 @@
                 </div>
                 <div class="card-body">
                     <form id="searchForm" method="GET" action="{% url 'professional_list' %}" class="flex-form">
-                        <div class="form-group">
+                        <div class="form-group2">
                             <label for="name">Nombre:</label>
                             <input type="text" name="name" id="name" value="{{ name_filter }}" class="form-control" placeholder="Nombre">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group2">
                             <label for="surname">Apellidos:</label>
                             <input type="text" name="surname" id="surname" value="{{ surname_filter }}" class="form-control" placeholder="Apellidos">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group2">
                             <label for="license_number">Número de licencia:</label>
                             <input type="text" name="license_number" id="license_number" value="{{ license_number }}" class="form-control" placeholder="Número de licencia">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group2">
                             <label for="organization">Organización:</label>
                             <input type="text" name="organization" id="organization" value="{{ organization }}" class="form-control" placeholder="Organización">
                         </div>
-                        <div class="form-group mt-2 text-right" style="flex-direction: row;">
+                        <div class="form-group2 mt-2 text-right" style="flex-direction: row;">
                             <button type="submit" class="btn btn-primary">Buscar</button>
                             <a href="{% url 'professional_list' %}" class="btn btn-primary">Limpiar</a>
                         </div>

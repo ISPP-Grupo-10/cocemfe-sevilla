@@ -1,67 +1,65 @@
-/* Estilos generales */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
 }
-
-/* Contenedor principal */
-.contenedor-table-list {
-    border-radius: 10px;
-    background-color: rgba(0, 162, 152, 0.25);
+.contenedor-table{
+    border-radius: 10px; 
+    background-color: rgb(160, 226, 229); 
     padding: 10px;
-    margin-right: 25px;
-    margin-left: 25px;
+    margin: 0 auto;
+    width: 65%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }
-
-.contenedor-table-list, .card {
-    max-width: 100%;
-    overflow-x: hidden;
-}
-
-/* Estilos para los campos */
 .campo {
     background-color: white;
     border-radius: 10px;
     font-size: large;
 }
-
-/* Estilos para el grupo de formularios */
 .form-group {
     display: flex; /* Utilizamos flexbox para organizar los elementos */
     align-items: center; /* Centramos verticalmente los elementos */
     justify-content: space-between; /* Espacio uniforme entre los elementos */
     margin-bottom: 20px; /* Ajustamos el margen inferior para agregar espacio */
+    width: 120%;
 }
-
-/* Estilos para los inputs de texto y selects */
-.form-group input[type="text"],
+.form-group input[type="text"] {
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-radius: 12px; /* Ajusta según tus preferencias */
+    width: 120%; /* Ajusta según tus necesidades */
+    box-sizing: border-box; /* Incluye el padding y el border en el ancho total */
+    font-weight: bold;
+}
+.form-group input[type="email"] {
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-radius: 12px; /* Ajusta según tus preferencias */
+  width: 120%; /* Ajusta según tus necesidades */
+  box-sizing: border-box; /* Incluye el padding y el border en el ancho total */
+  font-weight: bold;
+}
 select {
     border: 1px solid #ccc;
     padding: 8px;
     border-radius: 12px; /* Ajusta según tus preferencias */
-    width: 100%; /* Ajusta según tus necesidades */
+    width: 140%; /* Ajusta según tus necesidades */
     box-sizing: border-box; /* Incluye el padding y el border en el ancho total */
     font-weight: bold;
 }
-
-/* Estilos para los títulos */
-.title-style {
+.title-style{
     color: rgb(47, 87, 159);
     padding: 15px;
-    font-size: 24px;
+    font-size: 24px; 
     font-weight: bold;
     margin-left: 15%;
 }
-
-/* Estilos para las etiquetas */
-.label-style {
-    color: rgb(47, 87, 159);
+.label-style{
+    color: rgb(47, 87, 159); 
     font-weight: bold;
     font-size: 18px;
     white-space: nowrap;
 }
-
-/* Estilos para los botones */
 .btn {
     display: inline-block;
     font-weight: 400;
@@ -74,46 +72,68 @@ select {
     line-height: 1.5;
     border-radius: 0.25rem;
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-
-/* Estilos específicos para la clase btn-primary */
-.btn-primary {
+  }
+  
+  /* Estilos específicos para la clase btn-primary */
+  .btn-primary {
     color: #fff;
-    background-color: rgb(47, 87, 159);
+    background-color: rgb(47, 87, 159); /* Cambiar al verde feote deseado */
     border-color: rgb(47, 87, 159);
-}
-
-.btn-primary:hover {
+    margin-top: 10px;
+    
+  }
+  .btn-primary:hover {
     color: #fff;
-    background-color: rgb(52, 98, 182);
-    border-color: rgb(52, 98, 182);
-}
-
-/* Estilos para un botón activo */
-.btn-primary:active {
+    background-color: rgb(52, 98, 182); /* Cambiar al verde feote deseado al hacer clic */
+    border-color: rgb(52, 98, 182); /* Cambiar al verde feote deseado al pasar el ratón */
+  }
+  
+  /* Estilos para un botón activo */
+  .btn-primary:active {
     color: #fff;
-    background-color: rgb(48, 107, 217);
-    border-color: rgb(48, 107, 217);
-}
-
-/* Estilos para un botón deshabilitado */
-.btn-primary:disabled {
+    background-color: rgb(48, 107, 217); /* Cambiar al verde feote deseado al hacer clic */
+    border-color: rgb(48, 107, 217); /* Cambiar al verde feote deseado al hacer clic */
+  }
+  
+  /* Estilos para un botón deshabilitado */
+  .btn-primary:disabled {
     color: #fff;
-    background-color: rgb(37, 66, 120);
-    border-color: rgb(37, 66, 120);
-}
-
-/* Estilos para la imagen en medio */
-.imagen-media {
-    width: 15%;
-    position: absolute;
-    top: 28%;
-    left: 65%;
-    transform: translateX(-50%);
+    background-color: rgb(37, 66, 120); /* Cambiar al verde feote deseado para el botón deshabilitado */
+    border-color: rgb(37, 66, 120); /* Cambiar al verde feote deseado para el botón deshabilitado */
+  }
+  .imagen-media {
+    width: 15vw; /* Ajusta el ancho según sea necesario */
+    position: relative; /* Permite posicionar la imagen de forma absoluta dentro del contenedor */
+    top: 0; /* Ajusta la posición superior según sea necesario */
+    left: 50%;
+    top: 12%;
+    transform: translateX(-50%); /* Ajusta para centrar correctamente la imagen */
     border-radius: 10px;
+    height: auto;
+  }
+  .card-body2{
+    width: 100%;
+    padding-left: 10px;
+  }
+  .registration-form{
+    width: 100%;
+  }
+  .izquierda{
+    margin-left: 20px;
+    width: 110%;
+  }
+  .contenedor-table-list {
+    border-radius: 10px;
+    background-color: rgba(0, 162, 152, 0.25);
+    padding: 10px;
+    margin-right: 25px;
+    margin-left: 25px;
 }
 
-/* Estilos para la tabla personalizada */
+.contenedor-table-list, .card {
+    max-width: 100%;
+    overflow-x: hidden;
+}
 .tabla-personalizada {
     border-collapse: separate;
     border-spacing: 0 15px;
@@ -139,12 +159,16 @@ td:last-child {
     border-bottom-right-radius: 10px;
 }
 
-.form-group label {
+.form-group2 label {
     font-weight: bold;
     margin-bottom: 5px;
 }
 
-.form-group {
+.form-group2 {
     margin-bottom: 15px;
     flex-direction: column;
+}
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
 }
