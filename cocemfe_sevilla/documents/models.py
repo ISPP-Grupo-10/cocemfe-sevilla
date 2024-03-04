@@ -6,12 +6,10 @@ from django.core.exceptions import ValidationError
 
 class Document(models.Model):
     STATUS = (
-        ('Abierto', 'Abierto'),
-        ('Cerrado', 'Cerrado'),
+        ('Aportaciones', 'Aportaciones'),
+        ('Votaciones', 'Votaciones'),
         ('En revisión', 'En revisión'),
         ('Revisado', 'Revisado'),
-        ('Aprobado', 'Aprobado'),
-        ('Rechazado', 'Rechazado'),
         )
 
     name = models.CharField(max_length=255)
@@ -19,7 +17,7 @@ class Document(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     ubication = models.CharField(max_length=100, null=True, blank=True)
-    status = models.CharField(max_length=40, choices=STATUS, default='Cerrado')
+    status = models.CharField(max_length=40, choices=STATUS, default='Aportaciones')
     professionals = models.ManyToManyField(Professional, related_name='document_professionals')
 
     def __str__(self):
