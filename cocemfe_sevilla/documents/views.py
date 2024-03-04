@@ -43,6 +43,7 @@ def upload_pdf(request):
     else:
         return render(request, '403.html')
 
+
 def view_pdf(request, pk):
     pdf = get_object_or_404(Document, pk=pk)
     professional=request.user
