@@ -105,8 +105,10 @@
             <div class="form-group">
                 <label><b>Añade revisores:</b></label><br>
                 {% for professional in form.professionals.field.queryset %}
-                    <input type="checkbox" id="id_professional_{{ professional.id }}" name="professionals" value="{{ professional.id }}">
-                    <label for="id_professional_{{ professional.id }}">{{ professional.name }}</label><br>
+                    {% if professional in superusers %}
+                        <input type="checkbox" id="id_professional_{{ professional.id }}" name="professionals" value="{{ professional.id }}">
+                        <label for="id_professional_{{ professional.id }}">{{ professional.username }}</label><br>
+                    {% endif %}
                 {% endfor %}
             </div>
 
