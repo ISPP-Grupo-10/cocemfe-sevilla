@@ -68,7 +68,9 @@
                             <th scope="col">Fecha de Subida</th>
                             <th scope="col">Fecha de Cierre</th>
                             <th scope="col">Estado</th>
+                            {% if request.user.is_superuser %}
                             <th scope="col">Opciones</th>
+                            {% endif %}
                         </tr>
                     </thead>
                     <tbody>
@@ -88,10 +90,12 @@
                                     {% endfor %}
                                 </td>
                                 <td>
+                                    {% if request.user.is_superuser %}
                                     <div class="btn-group" role="group">
                                         <a href="{% url 'update_pdf' pk=doc.pk %}" class="btn btn-primary" style="border-radius: 0px; border-color: transparent; background-color: transparent;">&#9998;</a>
                                         <a href="{% url 'delete_pdf' pk=doc.pk %}" class="btn btn-primary" style="border-radius: 0px; border-color: transparent; background-color: transparent;">&#128465;</a> 
                                     </div>
+                                    {% endif %}
                                 </td>
                             </tr>
                             {% endfor %}
@@ -102,9 +106,11 @@
                         {% endif %}
                     </tbody>
                 </table>
+                {% if request.user.is_superuser %}
                 <div class="text-right mb-2">
                     <a href="{% url 'upload_pdf' %}" class="btn btn-primary">Subir documento</a>
                 </div>
+                {% endif %}
             </div>
         </div>
     </div>

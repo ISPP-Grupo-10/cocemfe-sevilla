@@ -18,7 +18,9 @@
                             <th scope="col"><strong>Teléfono</strong></th>
                             <th scope="col"><strong>Número de licencia</strong></th>
                             <th scope="col"><strong>Organización</strong></th>
+                            {% if request.user.is_superuser %}
                             <th scope="col"><strong>Acciones</strong></th>
+                            {% endif %}
                         </tr>
                     </thead>
                     <tbody>
@@ -31,6 +33,7 @@
                                 <td><strong>{{ professional.license_number }}</strong></td>
                                 <td><strong>{{ professional.organizations }}</strong></td>
 
+                                {% if request.user.is_superuser %}
                                 <td>
                                     <div class="btn-group" role="group">
                                         <a href="{% url 'professional_detail' pk=professional.id %}" class="btn btn-primary" style="border-radius: 5px; margin-right: 10px;"><strong>Ver</strong></a>
@@ -40,6 +43,7 @@
                                         </form>
                                     </div>
                                 </td>
+                                {% endif %}
                             </tr>
                             {% endfor %}
                         {% else %}
