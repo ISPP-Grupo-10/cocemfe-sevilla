@@ -34,7 +34,9 @@
                             <th scope="col">Fecha de Subida</th>
                             <th scope="col">Fecha de Cierre</th>
                             <th scope="col">Estado</th>
+                            {% if request.user.is_superuser %}
                             <th scope="col">Opciones</th>
+                            {% endif %}
                         </tr>
                     </thead>
                     <tbody>
@@ -53,12 +55,14 @@
                                         {% endif %}
                                     {% endfor %}
                                 </td>
+                                {% if request.user.is_superuser %}
                                 <td>
                                     <div class="btn-group" role="group">
                                         <a href="{% url 'update_pdf' pk=doc.pk %}" class="btn btn-primary">Editar</a>
                                         <a href="{% url 'delete_pdf' pk=doc.pk %}" class="btn btn-primary">Eliminar</a>
                                     </div>
                                 </td>
+                                {% endif %}
                             </tr>
                             {% endfor %}
                         {% else %}
