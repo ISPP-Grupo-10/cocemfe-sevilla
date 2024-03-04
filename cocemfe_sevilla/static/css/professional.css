@@ -1,3 +1,7 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
 .contenedor-table{
     border-radius: 10px; 
     background-color: rgb(160, 226, 229); 
@@ -118,3 +122,53 @@ select {
     margin-left: 20px;
     width: 110%;
   }
+  .contenedor-table-list {
+    border-radius: 10px;
+    background-color: rgba(0, 162, 152, 0.25);
+    padding: 10px;
+    margin-right: 25px;
+    margin-left: 25px;
+}
+
+.contenedor-table-list, .card {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+.tabla-personalizada {
+    border-collapse: separate;
+    border-spacing: 0 15px;
+}
+
+.tabla-personalizada th {
+    font-size: large;
+}
+
+.tabla-personalizada td {
+    background-color: white;
+    font-size: large;
+}
+
+/* Estilos para las esquinas redondeadas de la tabla */
+td:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+td:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.form-group2 label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-group2 {
+    margin-bottom: 15px;
+    flex-direction: column;
+}
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}

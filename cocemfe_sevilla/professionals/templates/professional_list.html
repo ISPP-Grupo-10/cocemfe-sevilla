@@ -2,63 +2,89 @@
 {% load static %}
 {% block contenido %}
 
-<link rel="stylesheet" href="{% static 'css/list_pdf.css' %}"/>
-<h2 class="text-center">Profesionales</h2>
+<link rel="stylesheet" href="{% static 'css/professional.css' %}"/>
 
-<div style="margin-left: 60px;"> 
-    <div> 
-        <form method="get" action="{% url 'professional_list' %}" class="d-flex">
-            <label for="name" style="font-weight: bold; color: rgb(0, 0, 0);"><i class="fa fa-search" aria-hidden="true"></i></label>
-            <input type="text" name="name" value="{{ name_filter }}" placeholder=" Buscar por Nombre" style="border: 2px solid rgb(0, 165, 153); border-radius: 5px; padding: 5px; margin: 5px;">
-            <button type="submit" class="btn btn-primary" style="background-color: transparent; border: none;">&#128269;</button>
-        </form>
-    </div>
-</div>
- 
-<div style="margin-left: 40px; margin-right: 40px;"> 
-    <div class="contenedor-table">
-        <table class="table table-borderless text-center tabla-personalizada">
-            <thead>
-                <tr>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Usuario</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Teléfono</th>
-                    <th scope="col">Organización</th>
-                    <th scope="col">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% if professionals %}
-                    {% for professional in professionals %}
-                    <tr class="spaceUnder">
-                        <td>{{ professional.last_name }}, {{ professional.first_name }}</strong></td>
-                        <td>{{professional.username}}</td>
-                        <td>{{ professional.email }}</td>
-                        <td>{{ professional.telephone_number }}</td>
-                        <td>{{ professional.organizations }}</td>
-                        <td>
-                            <div class="btn-group" role="group">
-                                <a href="{% url 'professional_detail' pk=professional.id %}" class="btn btn-primary" style="border-radius: 0px; border-color: transparent; background-color: transparent;">&#9998;</a> <!-- Botón de lápiz -->
-                                <form method="post" action="{% url 'delete_professional' id=professional.id %}">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-primary" style="border-radius: 0px; border-color: transparent; background-color: transparent;">&#128465;</button> <!-- Botón de papelera -->
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                {% else %}
-                    <tr>
-                        <td colspan="5" class="text-center">No hay usuarios que mostrar.</td>
-                    </tr>
-                {% endif %}
-            </tbody>
-        </table>
-        <div class="d-flex justify-content-start"> 
-            <a href="#" class="btn btn-primary">Añadir usuario</a>
+<div class="container-fluid">
+    <h2 class="title-style">Profesionales</h2>
+
+    <div class="row">
+        <div class="col-md-10">
+            <div class="contenedor-table-list">
+                <table class="table table-borderless text-center tabla-personalizada">
+                    <thead>
+                        <tr>
+                            <th scope="col"><strong>Usuario</strong></th>
+                            <th scope="col"><strong>Email</strong></th>
+                            <th scope="col"><strong>Teléfono</strong></th>
+                            <th scope="col"><strong>Número de licencia</strong></th>
+                            <th scope="col"><strong>Organización</strong></th>
+                            <th scope="col"><strong>Acciones</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if professionals %}
+                            {% for professional in professionals %}
+                            <tr class="spaceUnder">
+                                <td><strong> {{ professional.last_name }}, {{ professional.first_name }}</strong></td>
+                                <td><strong>{{ professional.email }}</strong></td>
+                                <td><strong>{{ professional.telephone_number }}</strong></td>
+                                <td><strong>{{ professional.license_number }}</strong></td>
+                                <td><strong>{{ professional.organizations }}</strong></td>
+
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <a href="{% url 'professional_detail' pk=professional.id %}" class="btn btn-primary" style="border-radius: 5px; margin-right: 10px;"><strong>Ver</strong></a>
+                                        <form method="post" action="{% url 'delete_professional' id=professional.id %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-primary" style="border-radius: 5px;"><strong>Eliminar</strong></button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center"><strong>No hay usuarios que mostrar.</strong></td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+                <div class="d-flex justify-content-end">
+                    <a href="#" class="btn btn-primary"><strong>Añadir usuario</strong></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2" style="padding-right: 0;">
+            <div class="card" style="margin-right: 12px;">
+                <div class="card-header">
+                    Filtros
+                </div>
+                <div class="card-body">
+                    <form id="searchForm" method="GET" action="{% url 'professional_list' %}" class="flex-form">
+                        <div class="form-group2">
+                            <label for="name">Nombre:</label>
+                            <input type="text" name="name" id="name" value="{{ name_filter }}" class="form-control" placeholder="Nombre">
+                        </div>
+                        <div class="form-group2">
+                            <label for="surname">Apellidos:</label>
+                            <input type="text" name="surname" id="surname" value="{{ surname_filter }}" class="form-control" placeholder="Apellidos">
+                        </div>
+                        <div class="form-group2">
+                            <label for="license_number">Número de licencia:</label>
+                            <input type="text" name="license_number" id="license_number" value="{{ license_number }}" class="form-control" placeholder="Número de licencia">
+                        </div>
+                        <div class="form-group2">
+                            <label for="organization">Organización:</label>
+                            <input type="text" name="organization" id="organization" value="{{ organization }}" class="form-control" placeholder="Organización">
+                        </div>
+                        <div class="form-group2 mt-2 text-right" style="flex-direction: row;">
+                            <button type="submit" class="btn btn-primary">Buscar</button>
+                            <a href="{% url 'professional_list' %}" class="btn btn-primary">Limpiar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
 {% endblock %}
