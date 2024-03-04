@@ -90,6 +90,14 @@
             <label for="users"><b>Profesionales:</b></label>
             {{ form.professionals }}
         </div>
+        <div class="form-group">
+            <label for="status"><b>Estado:</b></label>
+            <select name="status" id="status">
+                {% for status in document.STATUS %}
+                    <option value="{{ status.0 }}" {% if document.status == status.0 %} selected {% endif %}>{{ status.1 }}</option>
+                {% endfor %}
+            </select>
+        </div>        
         <div class="button-container">
             <button type="submit">Guardar Cambios</button>
         </div>
