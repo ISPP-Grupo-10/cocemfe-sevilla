@@ -5,48 +5,58 @@
 <link rel="stylesheet" href="{% static 'css/list_pdf.css' %}"/>
 <h2 class="text-center">Profesionales</h2>
 
-  <form method="get" action="{% url 'professional_list' %}">
-    <label for="name">Name:</label>
-    <input type="text" name="name" value="{{ name_filter }}" placeholder="Enter name">
-  </form>
-
-<div class="contenedor-table">
-    <table class="table table-borderless text-center tabla-personalizada">
-        <thead>
-            <tr>
-                <th scope="col"><strong>Usuario</strong></th>
-                <th scope="col"><strong>Email</strong></th>
-                <th scope="col"><strong>Teléfono</strong></th>
-                <th scope="col"><strong>Acciones</strong></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% if professionals %}
-                {% for professional in professionals %}
-                <tr class="spaceUnder">
-                    <td><strong> {{ professional.last_name }}, {{ professional.first_name }}</strong></td>
-                    <td><strong>{{ professional.email }}</strong></td>
-                    <td><strong>{{ professional.telephone_number }}</strong></td>
-                    <td>
-                        <div class="btn-group" role="group">
-                            <a href="{% url 'professional_detail' pk=professional.id %}" class="btn btn-primary" style="border-radius: 5px; margin-right: 10px;"><strong>Ver</strong></a>
-                            <form method="post" action="{% url 'delete_professional' id=professional.id %}">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-primary" style="border-radius: 5px;"><strong>Eliminar</strong></button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            {% else %}
+<div style="margin-left: 60px;"> 
+    <div> 
+        <form method="get" action="{% url 'professional_list' %}" class="d-flex">
+            <label for="name" style="font-weight: bold; color: rgb(0, 0, 0);"><i class="fa fa-search" aria-hidden="true"></i></label>
+            <input type="text" name="name" value="{{ name_filter }}" placeholder=" Buscar por Nombre" style="border: 2px solid rgb(0, 165, 153); border-radius: 5px; padding: 5px; margin: 5px;">
+            <button type="submit" class="btn btn-primary" style="background-color: transparent; border: none;">&#128269;</button>
+        </form>
+    </div>
+</div>
+ 
+<div style="margin-left: 40px; margin-right: 40px;"> 
+    <div class="contenedor-table">
+        <table class="table table-borderless text-center tabla-personalizada">
+            <thead>
                 <tr>
-                    <td colspan="5" class="text-center">No hay usuarios que mostrar.</td>
+                    <th scope="col"><strong>Nombre</strong></th>
+                    <th scope="col"><strong>Usuario</strong></th>
+                    <th scope="col"><strong>Email</strong></th>
+                    <th scope="col"><strong>Teléfono</strong></th>
+                    <th scope="col"><strong>Organización</strong></th>
+                    <th scope="col"><strong>Acciones</strong></th>
                 </tr>
-            {% endif %}
-        </tbody>
-    </table>
-    <div class="d-flex justify-content-end">
-        <a href="#" class="btn btn-primary"><strong>Añadir usuario</strong></a>
+            </thead>
+            <tbody>
+                {% if professionals %}
+                    {% for professional in professionals %}
+                    <tr class="spaceUnder">
+                        <td><strong>{{ professional.last_name }}, {{ professional.first_name }}</strong></td>
+                        <td><strong><a href="{% url 'professional_detail' pk=professional.id %}" style="color: rgb(0, 165, 153); text-decoration: underline;">{{ professional.username }}</a></strong></td>
+                        <td><strong>{{ professional.email }}</strong></td>
+                        <td><strong>{{ professional.telephone_number }}</strong></td>
+                        <td><strong>{{ professional.organizations }}</strong></td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <form method="post" action="{% url 'delete_professional' id=professional.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary" style="border-radius: 5px;"><strong>Eliminar</strong></button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center">No hay usuarios que mostrar.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-end">
+            <a href="#" class="btn btn-primary"><strong>Añadir usuario</strong></a>
+        </div>
     </div>
 </div>
 
