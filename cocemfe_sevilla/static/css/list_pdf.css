@@ -1,9 +1,9 @@
-.contenedor-table{
+.contenedor-table {
     border-radius: 10px; 
     background-color: rgba(0, 162, 152, 0.25);
     padding: 10px;
-    margin-right: 25px;
-    margin-left: 25px;
+    margin: 0 auto; /* Esto centrará horizontalmente el contenedor */
+    max-width: 45000px; /* Puedes ajustar el ancho máximo según tus necesidades */
 }
 
 .tabla-personalizada th{
@@ -29,4 +29,14 @@ td:last-child {
     border-collapse: separate;
     border-spacing: 0 15px;
 }
-  
+
+#toggleFiltersBtn {
+    margin-bottom: 10px;
+}
+
+#filtersContainer {
+    margin-bottom: 10px;
+    background-color: rgba(255, 255, 255, 0.8); 
+    padding: 10px;
+    border-radius: 5px;
+}

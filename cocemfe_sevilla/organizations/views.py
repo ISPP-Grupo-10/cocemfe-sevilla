@@ -15,6 +15,7 @@ def create_organization(request):
 
 def get_organizations(request):
     pass
+
 def organization_options(request):
     return render(request, 'organization_options.html')
 

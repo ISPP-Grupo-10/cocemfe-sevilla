@@ -7,8 +7,7 @@
         border-radius: 10px;
         background-color: rgba(0, 162, 152, 0.25);
         padding: 10px;
-        margin-right: 25px;
-        margin-left: 25px;
+        margin: 0 25px; /* Se aplica el margen a ambos lados */
     }
 
     .tabla-personalizada th {
@@ -57,7 +56,7 @@
         }, 20000);
     </script>
     {% endif %}
-    <div class="row">
+    <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="contenedor-table">
                 <table class="table table-borderless text-center tabla-personalizada">
@@ -66,6 +65,7 @@
                             <th scope="col">Nombre</th>
                             <th scope="col">Teléfono</th>
                             <th scope="col">Email</th>
+                            <th scope="col">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -79,25 +79,24 @@
                                 <td>{{ org.email }}</td>
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <a href="{% url 'organizations:update_organization' pk=org.pk %}" class="btn btn-primary">Editar</a>
-                                        <a href="{% url 'organizations:delete_organization' pk=org.pk %}" class="btn btn-primary">Eliminar</a>
+                                        <a href="{% url 'organizations:update_organization' pk=org.pk %}" class="btn btn-primary" style="border-radius: 0px; border-color: transparent; background-color: transparent;">&#9998;</a>
+                                        <a href="{% url 'organizations:delete_organization' pk=org.pk %}" class="btn btn-primary" style="border-radius: 0px; border-color: transparent; background-color: transparent;">&#128465;</a> 
                                     </div>
                                 </td>
                             </tr>
                             {% endfor %}
                         {% else %}
                             <tr>
-                                <td colspan="5" class="text-center">No hay organizaciones que mostrar</td>
+                                <td colspan="4" class="text-center">No hay organizaciones que mostrar</td>
                             </tr>
                         {% endif %}
                     </tbody>
                 </table>
                 <div class="text-right mb-2">
-                    <a href="{% url 'organizations:create_organization' %}" class="btn btn-primary">Crear una organizacion</a>
+                    <a href="{% url 'organizations:create_organization' %}" class="btn btn-primary">Añadir organización</a>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 {% endblock %}
