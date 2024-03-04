@@ -24,65 +24,18 @@
         }, 20000);
     </script>
     {% endif %}
-    <div class="row">
-        <div class="col-md-10">
+    
+    <div style="margin-left: 106px;">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+        <button id="toggleFiltersBtn" class="btn btn-primary mb-2">
+            <i class="bi bi-filter" style="color: white;"></i> 
+        </button>
+    </div>
+    
+    <div class="row justify-content-center">
+        <div class="col-md-11"> 
             <div class="contenedor-table">
-                <table class="table table-borderless text-center tabla-personalizada">
-                    <thead>
-                        <tr>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Fecha de Subida</th>
-                            <th scope="col">Fecha de Cierre</th>
-                            <th scope="col">Estado</th>
-                            {% if request.user.is_superuser %}
-                            <th scope="col">Opciones</th>
-                            {% endif %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% if documentos %}
-                            {% for doc in documentos %}
-                            <tr class="spaceUnder">
-                                <td>
-                                    <a href="{% url 'view_pdf_admin' doc.id %}" style="color: black;"> {{ doc.name }} </a>
-                                </td>
-                                <td>{{ doc.start_date }}</td>
-                                <td>{{ doc.end_date }}</td>
-                                <td>
-                                    {% for status_value, status_display in doc.STATUS %}
-                                        {% if doc.status == status_value %}
-                                            {{ status_display }}
-                                        {% endif %}
-                                    {% endfor %}
-                                </td>
-                                {% if request.user.is_superuser %}
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <a href="{% url 'update_pdf' pk=doc.pk %}" class="btn btn-primary">Editar</a>
-                                        <a href="{% url 'delete_pdf' pk=doc.pk %}" class="btn btn-primary">Eliminar</a>
-                                    </div>
-                                </td>
-                                {% endif %}
-                            </tr>
-                            {% endfor %}
-                        {% else %}
-                            <tr>
-                                <td colspan="5" class="text-center">No hay documentos que mostrar</td>
-                            </tr>
-                        {% endif %}
-                    </tbody>
-                </table>
-                {% if request.user.is_superuser %}
-                <div class="text-right mb-2">
-                    <a href="{% url 'upload_pdf' %}" class="btn btn-primary">Subir documento</a>
-                </div>
-                {% endif %}
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="card">
-                <div class="card-header">Filtros</div>
-                <div class="card-body">
+                <div id="filtersContainer" style="display: none;">
                     <form id="searchForm" method="GET" action="{% url 'list_pdf' %}">
                         <div class="form-group">
                             <label for="name">Nombre:</label>
@@ -107,10 +60,70 @@
                         </div>
                     </form>
                 </div>
+                
+                <table class="table table-borderless text-center tabla-personalizada">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Fecha de Subida</th>
+                            <th scope="col">Fecha de Cierre</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if documentos %}
+                            {% for doc in documentos %}
+                            <tr class="spaceUnder">
+                                <td>
+                                    <a href="{% url 'view_pdf_admin' doc.id %}" style="color: black;"> {{ doc.name }} </a>
+                                </td>
+                                <td>{{ doc.start_date }}</td>
+                                <td>{{ doc.end_date }}</td>
+                                <td>
+                                    {% for status_value, status_display in doc.STATUS %}
+                                        {% if doc.status == status_value %}
+                                            {{ status_display }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <a href="{% url 'update_pdf' pk=doc.pk %}" class="btn btn-primary" style="border-radius: 0px; border-color: transparent; background-color: transparent;">&#9998;</a>
+                                        <a href="{% url 'delete_pdf' pk=doc.pk %}" class="btn btn-primary" style="border-radius: 0px; border-color: transparent; background-color: transparent;">&#128465;</a> 
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center">No hay documentos que mostrar</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+                <div class="text-right mb-2">
+                    <a href="{% url 'upload_pdf' %}" class="btn btn-primary">Subir documento</a>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <link rel="stylesheet" href="{% static 'css/list_pdf.css' %}"/>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var toggleFiltersBtn = document.getElementById('toggleFiltersBtn');
+    var filtersContainer = document.getElementById('filtersContainer');
+
+    toggleFiltersBtn.addEventListener('click', function() {
+        if (filtersContainer.style.display === 'none' || filtersContainer.style.display === '') {
+            filtersContainer.style.display = 'block';
+        } else {
+            filtersContainer.style.display = 'none';
+        }
+    });
+});
+</script>
 {% endblock %}
