@@ -26,7 +26,7 @@ def upload_pdf(request):
                     form.add_error('pdf_file', e)
                     messages.error(request, "El archivo debe ser un PDF.")
                 else:
-                    if suggestion_end_date > timezone.now().date():
+                    if suggestion_end_date > timezone.now() :
                         document = form.save(commit=False)
                         document.suggestion_start_date = timezone.now().date()
                         document.status = 'Abierto'
@@ -72,7 +72,7 @@ def update_pdf(request,pk):
                 for professional in professionals:
                     if professional.is_superuser:
                         messages.error(request, "Un administrador no puede ser seleccionado.")
-                if suggestion_end_date > timezone.now().date():
+                if suggestion_end_date > timezone.now():
                     form.save()
                     document.professionals.set(professionals)
                     return redirect('list_pdf')
