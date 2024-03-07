@@ -5,97 +5,103 @@
 
 <link rel="stylesheet" href="{% static 'css/list_pdf.css' %}"/>
 
-<h2 class="text-center">Profesionales</h2>
-
-<div class="container-fluid">
-    <div class="row justify-content-center">
-        <div class="col-md-10"> 
-            <div class="contenedor-table">
-                <div class="dropdown">
-                    <button class="btn btn-primary mb-2" type="button" id="toggleFiltersBtn">
-                        <i class="bi bi-filter" style="color: white;"></i> Filtros
-                    </button>
-                    <div id="filtersContainer" class="dropdown-menu" style="display: none;">
-                        <div class="card-body">
-                            <form id="searchForm" method="GET" action="{% url 'professional_list' %}" class="flex-form">
-                                <div class="form-group2">
-                                    <label for="name">Nombre:</label>
-                                    <input type="text" name="name" id="name" value="{{ name_filter }}" class="form-control" placeholder="Nombre">
-                                </div>
-                                <div class="form-group2">
-                                    <label for="surname">Apellidos:</label>
-                                    <input type="text" name="surname" id="surname" value="{{ surname_filter }}" class="form-control" placeholder="Apellidos">
-                                </div>
-                                <div class="form-group2">
-                                    <label for="license_number">Número de licencia:</label>
-                                    <input type="text" name="license_number" id="license_number" value="{{ license_number }}" class="form-control" placeholder="Número de licencia">
-                                </div>
-                                <div class="form-group2">
-                                    <label for="organization">Organización:</label>
-                                    <input type="text" name="organization" id="organization" value="{{ organization }}" class="form-control" placeholder="Organización">
-                                </div>
-                                <div class="form-group2 mt-2 text-right" style="flex-direction: row;">
-                                    <button type="submit" class="btn btn-primary">Buscar</button>
-                                    <a href="{% url 'professional_list' %}" class="btn btn-primary">Limpiar</a>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                
-                <table class="table table-borderless text-center tabla-personalizada">
-                    <thead>
-                        <tr>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Usuario</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Teléfono</th>
-                            <th scope="col">Licencia</th>
-                            <th scope="col">Organización</th>
-                            {% if request.user.is_superuser %}
-                            <th scope="col">Acciones</th>
-                            {% endif %}
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% if professionals %}
-                            {% for professional in professionals %}
-                            <tr class="spaceUnder">
-
-                                <td>{{ professional.last_name }}, {{ professional.first_name }}</strong></td>
-                                <td>{{professional.username}}</td>
-                                <td>{{ professional.email }}</td>
-                                <td>{{ professional.telephone_number }}</td>
-                                <td>{{ professional.license_number }}</td>
-                                <td>{{ professional.organizations }}</td>
-                                {% if request.user.is_superuser %}
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <a href="{% url 'professional_detail' pk=professional.id %}" class="btn btn-primary" style="border-radius: 0px; border-color: transparent; background-color: transparent;">&#9998;</a> 
-                                        <form method="post" action="{% url 'delete_professional' id=professional.id %}">
-                                            {% csrf_token %}
-                                            <button type="submit" class="btn btn-primary" style="border-radius: 0px; border-color: transparent; background-color: transparent;">&#128465;</button> 
-                                        </form>
-                                    </div>
-                                </td>
-                                {% endif %}
-                               
-                            </tr>
-                            {% endfor %}
-                        {% else %}
-                            <tr>
-                                <td colspan="5" class="text-center">No hay usuarios que mostrar.</td>
-                            </tr>
-                        {% endif %}
-                    </tbody>
-                </table>
-                <div class="d-flex justify-content-start"> 
-                    <a href="#" class="btn btn-primary">Añadir usuario</a>
-                </div>
-            </div>
-        </div>
+<div class="flex flex-col w-full min-h-screen bg-white">
+  <div class="border-b dark:border-gray-700">
+    <div class="container px-4 py-4 sm:py-6 lg:py-8">
+      <div class="space-y-2">
+        <h1 class="text-2xl font-bold text-[#00bfa5]">Profesionales</h1>
+        <p class="text-[#00bfa5] dark:text-gray-400">Lista de profesionales registrados</p>
+      </div>
+      <!-- Añadido un espacio más grande entre el buscador y la tabla -->
+      
     </div>
+  </div>
+  <div class="flex-1 overflow-y-auto">
+    <div class="container flex flex-col gap-4 px-4 py-6 sm:gap-6">
+      <div class="w-full space-y-4">
+        <div class="w-full max-w-lg space-y-1">
+          <label
+            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-[#00bfa5]"
+            for="search"
+          >
+            Búsqueda
+          </label>
+          <input
+            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            id="search"
+            placeholder="Buscar por nombre o email"
+          />
+        </div>
+      </div>
+      <div class="mt-8"></div>
+      <div class="w-full">
+        <div class="relative w-full overflow-auto">
+          <table class="w-full caption-bottom text-sm">
+            <thead class="[&amp;_tr]:border-b">
+              <tr class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
+                  Nombre
+                </th>
+                <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
+                  Email
+                </th>
+                <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
+                  Teléfono
+                </th>
+                <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
+                  Número de licencia
+                </th>
+                <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
+                  Organización
+                </th>
+                {% if request.user.is_superuser %}
+                <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
+                  Acciones
+                </th>
+                {% endif %}
+              </tr>
+            </thead>
+            <tbody class="[&amp;_tr:last-child]:border-0">
+              {% if professionals %}
+                {% for professional in professionals %}
+                  <tr class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                    <td class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 font-semibold text-[#00bfa5]">
+                      {{ professional.last_name }}, {{ professional.first_name }}
+                    </td>
+                    <td class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">{{ professional.email }}</td>
+                    <td class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">{{ professional.telephone_number }}</td>
+                    <td class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">{{ professional.license_number }}</td>
+                    <td class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">{{ professional.organizations }}</td>
+                    {% if request.user.is_superuser %}
+                    <td class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">
+                      <div class="flex space-x-2">
+                        <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 text-[#00bfa5]">
+                          Editar
+                        </button>
+                        <form method="post" action="{% url 'delete_professional' id=professional.id %}">
+                          {% csrf_token %}
+                          <button type="submit" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 text-[#00bfa5]">
+                            Eliminar
+                          </button>
+                        </form>
+                      </div>
+                    </td>
+                    {% endif %}
+                  </tr>
+                  <!-- Aquí agregamos una línea entre cada profesional -->
+                  <tr class="border-b border-gray-200"></tr>
+                {% endfor %}
+              {% else %}
+                <tr>
+                  <td colspan="5" class="p-4 text-center">No hay usuarios que mostrar.</td>
+                </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
