@@ -80,8 +80,8 @@
                                 <td>
                                     <a href="{% url 'view_pdf_admin' doc.id %}" style="color: black;"> {{ doc.name }} </a>
                                 </td>
-                                <td>{{ doc.start_date }}</td>
-                                <td>{{ doc.end_date }}</td>
+                                <td>{{ doc.suggestion_start_date}}</td>
+                                <td>{{ doc.suggestion_end_date}}</td>
                                 <td>
                                     {% for status_value, status_display in doc.STATUS %}
                                         {% if doc.status == status_value %}
