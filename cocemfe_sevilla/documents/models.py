@@ -8,18 +8,16 @@ import datetime
 
 class Document(models.Model):
     STATUS = (
-        ('Abierto', 'Abierto'),
-        ('Cerrado', 'Cerrado'),
+        ('Aportaciones', 'Aportaciones'),
+        ('Votaciones', 'Votaciones'),
         ('En revisión', 'En revisión'),
         ('Revisado', 'Revisado'),
-        ('Aprobado', 'Aprobado'),
-        ('Rechazado', 'Rechazado'),
         )
 
     name = models.CharField(max_length=255)
     pdf_file = models.FileField(upload_to='pdfs/', null=True, blank=True)
     ubication = models.CharField(max_length=100, null=True, blank=True)
-    status = models.CharField(max_length=40, choices=STATUS, default='Cerrado')
+    status = models.CharField(max_length=40, choices=STATUS, default='Aportaciones')
     professionals = models.ManyToManyField(Professional, related_name='document_professionals')
     suggestion_start_date  = models.DateTimeField(null=True, blank=True)
     suggestion_end_date = models.DateTimeField(null=True, blank=True)
