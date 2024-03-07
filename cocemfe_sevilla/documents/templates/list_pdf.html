@@ -106,10 +106,15 @@
                         {% endif %}
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row fixed-bottom mb-2 ml-2">
+        <div class="col-md-11">
+            <div class="text-left">
                 {% if request.user.is_superuser %}
-                <div class="text-right mb-2">
                     <a href="{% url 'upload_pdf' %}" class="btn btn-primary">Subir documento</a>
-                </div>
                 {% endif %}
             </div>
         </div>
