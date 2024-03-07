@@ -3,10 +3,16 @@ from django.contrib.auth.models import AbstractUser
 from .validators import validate_password_strength
 from organizations.models import Organization
 from django.apps import apps
+from django.core.validators import RegexValidator
 
 
 class Professional(AbstractUser):
-    telephone_number = models.CharField(max_length=15)
+    phone_number_validator = RegexValidator(
+        regex=r'^\d{9}$',  
+        message='El número de teléfono debe tener exactamente 9 dígitos.',
+        code='invalid_phone_number'
+    )
+    telephone_number = models.CharField(max_length=9, validators=[phone_number_validator])
     license_number = models.CharField(max_length=20)
     organizations = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='professionals', null=True)
     email = models.EmailField(blank=True, null=True)
