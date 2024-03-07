@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Organization
+from django.contrib.auth.decorators import login_required
 from .forms import OrganizationForm
 
-# Create your views here.
+@login_required
 def create_organization(request):
     if request.method == 'POST':
         form = OrganizationForm(request.POST)
@@ -13,16 +14,20 @@ def create_organization(request):
         form = OrganizationForm()
     return render(request, 'create_organization.html', {'form': form})
 
+@login_required
 def get_organizations(request):
     pass
 
+@login_required
 def organization_options(request):
     return render(request, 'organization_options.html')
 
+@login_required
 def get_organization(request, pk):
     organization = get_object_or_404(Organization, pk=pk)
     return render(request, 'organization_detail.html', {'organization': organization})
 
+@login_required
 def update_organization(request, pk):
     organization = get_object_or_404(Organization, pk=pk)
     if request.method == 'POST':
@@ -34,11 +39,13 @@ def update_organization(request, pk):
         form = OrganizationForm(instance=organization)
     return render(request, 'update_organization.html', {'form': form})
 
+@login_required
 def delete_organization(request, pk):
     organization = get_object_or_404(Organization, pk=pk)
     organization.delete()
     return redirect('organizations:organization_list')
 
+@login_required
 def organization_list(request):
     organizations = Organization.objects.all()
     return render(request, 'organizations_list.html', {'organizations': organizations})

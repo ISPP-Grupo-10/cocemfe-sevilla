@@ -1,12 +1,30 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import DeleteView, DetailView, UpdateView
 from django.contrib import messages
-
+from django.contrib.auth import logout, login, authenticate
 from .models import Professional
+from django.contrib.auth.decorators import login_required
 from .forms import ProfessionalForm
 
+def custom_login(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        username = get_object_or_404(Professional, email = email).username
+        print(username)
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('/')
+        else:
+            error_message = "Nombre de usuario o contraseña incorrectos."
+            return render(request, 'registration/login.html', {'error_message': error_message})
+    else:
+        return render(request, 'registration/login.html')
+
+def custom_logout(request):
+    logout(request)
+    return redirect('/')
 
 class EditUserView(View):
     def get(self, request, pk):
@@ -27,7 +45,7 @@ class EditUserView(View):
         else:
             return render(request, 'professional_detail.html', {'form': form, 'professional': professional})
 
-
+@login_required
 def professional_list(request):
     professionals = Professional.objects.all()
 
@@ -55,6 +73,7 @@ def professional_list(request):
         'organization_filter': organization_filter,
     })
 
+@login_required
 def delete_professional(request, id):
     professional = get_object_or_404(Professional, id=id)
     professionals = Professional.objects.all()

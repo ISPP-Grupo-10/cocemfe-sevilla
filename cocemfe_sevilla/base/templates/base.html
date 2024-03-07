@@ -1,37 +1,45 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>{% block title %}{% endblock %}</title>
-  <meta name="viewport" content="width=device-width; initial-scale=1.0"/>
-  {% load bootstrap5 %}
-  {% bootstrap_css %}
-  {% bootstrap_javascript %}
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width; initial-scale=1.0" />
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
 
 </head>
-<body>
-<style>
-    a {
-        color: white;
-        text-decoration: none;
-        margin: 0 10px;
-    }
-</style>
 
-<!-- Grey with black text -->
+<body>
+    <style>
+        a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+    </style>
+
+    <!-- Grey with black text -->
     <nav class="navbar bg-body-tertiary">
-            <div class="d-flex justify-content-center" style="width: 20%; height: 100%;">
-                <img src="https://www.cocemfe.es/wp-content/uploads/thegem-logos/logo_afb4a0816f68e0c0dc0425488429ff40_2x.png" alt="Descripción de la imagen" style="width: 200px; height: auto;">
+        <div class="d-flex justify-content-center" style="width: 20%; height: 100%;">
+            <img src="https://www.cocemfe.es/wp-content/uploads/thegem-logos/logo_afb4a0816f68e0c0dc0425488429ff40_2x.png"
+                alt="Descripción de la imagen" style="width: 200px; height: auto;">
+        </div>
+        <div
+            style="background-color: #00A599; width: 80%; height: 60px; display: flex; align-items: center; justify-content: space-between;">
+            <div>
+                <a class="navbar-brand" href="/documents">Documentos</a>
+                <a class="navbar-brand" href="/professionals">Usuarios</a>
+                <a class="navbar-brand" href="{% url "organizations:organization_list" %}">Organizaciones</a>
             </div>
-            <div style="background-color: #00A599; width: 80%; height: 60px; display: flex; align-items: center; justify-content: space-between;">
-                <div>
-                    <a class="navbar-brand" href="/documents">Documentos</a>
-                    <a class="navbar-brand" href="/professionals">Usuarios</a>
-                    <a class="navbar-brand" href="{% url "organizations:organization_list" %}">Organizaciones</a>
-                </div>
-                <div>
-                    <a class="navbar-brand" href="#">Cerrar sesión</a>
-                </div>
+            <div>
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'logout' %}"><span class="icon icon-person"></span> Cerrar Sesión</a></li>
+                {% else %}
+                <li><a href="{% url 'login' %}"><span class="icon icon-person"></span> Iniciar Sesión</a></li>
+                {% endif %}
             </div>
+        </div>
     </nav>
     {% block encabezado %}
     {% endblock %}
@@ -43,4 +51,5 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
+
 </html>
