@@ -26,6 +26,34 @@
             <!-- Aquí puedes colocar el contenido de los comentarios -->
             <h3>Comentarios</h3>
         </div>
+
+        {% if pdf.status == 'Aportaciones' %}
+        <div class="comment-form-container">
+            <!-- Formulario para enviar comentarios -->
+            <form method="post" action="">
+                {% csrf_token %}
+                <div class="comment-field">
+                    <label for="title">Título del comentario:</label>
+                    <input type="text" id="title" name="title" placeholder="Título del comentario">
+                </div>
+                <div class="comment-field">
+                    <label for="relevance">Relevancia:</label>
+                    <select id="relevance" name="relevance">
+                        <option value="muy">Muy importante</option>
+                        <option value="importante">Importante</option>
+                        <option value="poco">Poco importante</option>
+                    </select>
+                </div>
+                <div class="comment-field">
+                    <label for="justification">Cuerpo del comentario:</label>
+                    <textarea id="justification" name="justification" placeholder="Cuerpo del comentario"></textarea>
+                </div>
+            
+                <button type="submit">Enviar comentario</button>
+            </form>
+        </div>
+        {% endif %}
+        
     </div>
     {% if request.user.is_staff or request.user in pdf.professionals.all %}
     <a href="{% url 'view_pdf_chat' pk=pdf.pk %}">
@@ -39,4 +67,8 @@
     {% endif %}
 
 </div>
+
+
 {% endblock %}
+
+
