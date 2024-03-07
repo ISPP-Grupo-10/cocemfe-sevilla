@@ -18,6 +18,7 @@ def upload_pdf(request):
             form = PDFUploadForm(request.POST, request.FILES)
             if form.is_valid():
                 suggestion_end_date = form.cleaned_data['suggestion_end_date']
+                voting_end_date = form.cleaned_data['voting_end_date']
                 pdf_file = form.cleaned_data['pdf_file']
                 try:
                     FileExtensionValidator(allowed_extensions=['pdf'])(pdf_file)
@@ -27,8 +28,11 @@ def upload_pdf(request):
                 else:
                     if suggestion_end_date > timezone.now() :
                         document = form.save(commit=False)
-                        document.suggestion_start_date = timezone.now().date()
-                        document.status = 'Abierto'
+                        document.suggestion_start_date = timezone.now()
+                        document.status = 'Aportaciones'
+                        document.voting_start_date = suggestion_end_date
+                        document.suggestion_end_date = suggestion_end_date
+                        document.voting_end_date = voting_end_date
                         professionals = form.cleaned_data['professionals']
                         document.save()
                         document.professionals.set(professionals)
@@ -66,6 +70,7 @@ def update_pdf(request,pk):
             form = PDFUploadForm(request.POST, instance=document)
             if form.is_valid():
                 suggestion_end_date = form.cleaned_data['suggestion_end_date']
+                voting_end_date = form.cleaned_data['voting_end_date']
                 professionals = form.cleaned_data['professionals']
                 for professional in professionals:
                     if professional.is_superuser:
@@ -73,6 +78,9 @@ def update_pdf(request,pk):
                 if suggestion_end_date > timezone.now():
                     form.save()
                     document.professionals.set(professionals)
+                    document.suggestion_end_date = suggestion_end_date
+                    document.voting_end_date = voting_end_date
+                    document.voting_start_date = suggestion_end_date
                     return redirect('list_pdf')
                 else:
                     messages.error(request, "La fecha de finalización debe ser posterior a la fecha actual.")
