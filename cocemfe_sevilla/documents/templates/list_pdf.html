@@ -51,8 +51,8 @@
                             </select>
                         </div>                        
                         <div class="form-group">
-                            <label for="start_date">Fecha de Subida:</label>
-                            <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request.GET.start_date }}">
+                            <label for="suggestion_start_date">Fecha de Subida:</label>
+                            <input type="date" name="suggestion_start_date" id="suggestion_start_date" class="form-control" value="{{ request.GET.suggestion_start_date }}">
                         </div>
                         <div class="form-group mt-2 text-right">
                             <button type="submit" class="btn btn-primary">Buscar</button>
@@ -65,8 +65,10 @@
                     <thead>
                         <tr>
                             <th scope="col">Nombre</th>
-                            <th scope="col">Fecha de Subida</th>
-                            <th scope="col">Fecha de Cierre</th>
+                            {%if doc.status == Aportaciones%}
+                                <th scope="col">Fecha de Apertura de Sugerencias</th>
+                                <th scope="col">Fecha de Cierre de Sugerencias</th>
+                            {% endif %}
                             <th scope="col">Estado</th>
                             {% if request.user.is_superuser %}
                             <th scope="col">Opciones</th>
@@ -80,8 +82,8 @@
                                 <td>
                                     <a href="{% url 'view_pdf_admin' doc.id %}" style="color: black;"> {{ doc.name }} </a>
                                 </td>
-                                <td>{{ doc.start_date }}</td>
-                                <td>{{ doc.end_date }}</td>
+                                <td>{{ doc.suggestion_start_date}}</td>
+                                <td>{{ doc.suggestion_end_date}}</td>
                                 <td>
                                     {% for status_value, status_display in doc.STATUS %}
                                         {% if doc.status == status_value %}

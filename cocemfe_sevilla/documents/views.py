@@ -17,7 +17,8 @@ def upload_pdf(request):
         if request.method == 'POST':
             form = PDFUploadForm(request.POST, request.FILES)
             if form.is_valid():
-                end_date = form.cleaned_data['end_date']
+                suggestion_end_date = form.cleaned_data['suggestion_end_date']
+                voting_end_date = form.cleaned_data['voting_end_date']
                 pdf_file = form.cleaned_data['pdf_file']
                 try:
                     FileExtensionValidator(allowed_extensions=['pdf'])(pdf_file)
@@ -25,10 +26,13 @@ def upload_pdf(request):
                     form.add_error('pdf_file', e)
                     messages.error(request, "El archivo debe ser un PDF.")
                 else:
-                    if end_date > timezone.now().date():
+                    if suggestion_end_date > timezone.now() :
                         document = form.save(commit=False)
-                        document.start_date = timezone.now().date()
-                        document.status = 'Abierto'
+                        document.suggestion_start_date = timezone.now()
+                        document.status = 'Aportaciones'
+                        document.voting_start_date = suggestion_end_date
+                        document.suggestion_end_date = suggestion_end_date
+                        document.voting_end_date = voting_end_date
                         professionals = form.cleaned_data['professionals']
                         document.save()
                         document.professionals.set(professionals)
@@ -65,14 +69,18 @@ def update_pdf(request,pk):
         if request.method == 'POST':
             form = PDFUploadForm(request.POST, instance=document)
             if form.is_valid():
-                end_date = form.cleaned_data['end_date']
+                suggestion_end_date = form.cleaned_data['suggestion_end_date']
+                voting_end_date = form.cleaned_data['voting_end_date']
                 professionals = form.cleaned_data['professionals']
                 for professional in professionals:
                     if professional.is_superuser:
                         messages.error(request, "Un administrador no puede ser seleccionado.")
-                if end_date > timezone.now().date():
+                if suggestion_end_date > timezone.now():
                     form.save()
                     document.professionals.set(professionals)
+                    document.suggestion_end_date = suggestion_end_date
+                    document.voting_end_date = voting_end_date
+                    document.voting_start_date = suggestion_end_date
                     return redirect('list_pdf')
                 else:
                     messages.error(request, "La fecha de finalización debe ser posterior a la fecha actual.")
@@ -98,23 +106,23 @@ def list_pdf(request):
 
     name = request.GET.get('name')
     status = request.GET.get('status')
-    start_date = request.GET.get('start_date')
+    suggestion_start_date = request.GET.get('suggestion_start_date')
 
     if name:
         documentos = documentos.filter(name__icontains=name)
     if status:
         documentos = documentos.filter(status=status)
-    if start_date:
+    if suggestion_start_date:
         try:
             # Intenta convertir la entrada del filtro de fecha en un objeto de fecha
-            start_date = timezone.datetime.strptime(start_date, '%Y-%m-%d').date()
+            suggestion_start_date = timezone.datetime.strptime(suggestion_start_date, '%Y-%m-%d').date()
         except ValueError:
             # Si la entrada no es una fecha válida, muestra un mensaje de error
             messages.error(request, "La fecha de inicio no es válida. Utilice el formato AAAA-MM-DD.")
             return render(request, "list_pdf.html", {'documentos': documentos, 'Document': Document})
 
-        # Ahora puedes usar start_date en tus filtros
-        documentos = documentos.filter(start_date=start_date)
+        # Ahora puedes usar suggestion_start_date en tus filtros
+        documentos = documentos.filter(suggestion_start_date=suggestion_start_date)
 
     return render(request, "list_pdf.html", {'documentos': documentos, 'Document': Document})
 

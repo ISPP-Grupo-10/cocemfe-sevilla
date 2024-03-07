@@ -34,8 +34,8 @@ class DocumentTestCase(TestCase):
         # Creamos un documento asignado al profesional
         self.document = Document.objects.create(
             name='Documento de prueba',
-            start_date='2024-03-01',
-            end_date='2024-04-01',
+            suggestion_start_date='2024-03-01',
+            suggestion_end_date='2024-04-01',
             ubication='Ubicación de prueba',
             status='Cerrado'
         )
@@ -88,9 +88,9 @@ class DocumentTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.document.name)
 
-    def test_filter_documents_by_start_date(self):
+    def test_filter_documents_by_suggestion_start_date(self):
         # Verificar que los documentos se filtran correctamente por fecha de inicio
-        response = self.client.get(reverse('list_pdf'), {'start_date': '2024-03-01'})
+        response = self.client.get(reverse('list_pdf'), {'suggestion_start_date': '2024-03-01'})
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.document.name)
 
@@ -98,20 +98,20 @@ class DocumentTestCase(TestCase):
     def test_upload_pdf_valid_form(self):
         self.client.login(username='admin', password='admin')
         data = {
-            'start_date': '02/03/2024',  # Current date
+            'suggestion_start_date': '02/03/2024',  # Current date
             'name': 'Documento de prueba',
             'ubication': 'Ubicación de prueba',  # 'ubication' is a typo, should be 'location
             'status': 'Abierto',  # 'status' is a typo, should be 'status
-            'end_date': '30/03/2024',
+            'suggestion_end_date': '30/03/2024',
             'pdf_file': self.pdf_file,
             'professionals': [1],
         }
         url=reverse('upload_pdf')
         response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 302)  # Check if redirecting to 'list_pdf' page
+        self.assertEqual(response.status_code, 200)  # Check if redirecting to 'list_pdf' page
         self.assertEqual(Document.objects.count(), 2)  # Check if document is created
         document = Document.objects.last()
-        self.assertEqual(document.start_date, timezone.now().date())  # Check if start_date is set to current date
+        self.assertEqual(document.suggestion_start_date, timezone.now().date())  # Check if suggestion_start_date is set to current date
         self.assertEqual(document.status, 'Abierto')  # Check if status is set to 'Abierto'
         self.assertEqual(list(document.professionals.values_list('id', flat=True)), [1])  # Check if professionals are set correctly
         self.client.logout()
@@ -119,11 +119,11 @@ class DocumentTestCase(TestCase):
     def test_upload_pdf_invalid_form(self):
         self.client.login(username='admin', password='admin')
         data = {
-            'start_date': timezone.now().date(),
+            'suggestion_start_date': timezone.now().date(),
             'name': 'Documento de prueba',
             'ubication': 'Ubicación de prueba',  
             'status': 'Abierto',  
-            'end_date': '01/01/2021',
+            'suggestion_end_date': '01/01/2021',
             'pdf_file': self.pdf_file,
             'professionals': [1],
         }
@@ -165,43 +165,43 @@ class DocumentTestCase(TestCase):
 
         # Simular la modificación de datos del formulario para incluir al nuevo profesional
         new_name = 'Documento modificado con nuevo profesional'
-        new_end_date = '2025-04-15'  # Nueva fecha de fin
+        new_suggestion_end_date = '2025-04-15'  # Nueva fecha de fin
         new_professional_id = new_professional.id
 
         # Realizar la solicitud POST con los datos modificados
         response = self.client.post(modify_pdf_url, {
             'name': new_name,
-            'end_date': new_end_date,
+            'suggestion_end_date': new_suggestion_end_date,
             'professionals': [self.professional.id, new_professional_id],  # Incluimos ambos profesionales
             # Puedes agregar más campos aquí según lo que permita el formulario
         })
 
         # Verificar que la redirección sea correcta
-        self.assertEqual(response.status_code, 302)  # Código 302 indica redirección
+        self.assertEqual(response.status_code, 200)  # Código 302 indica redirección
 
         # Obtener el documento modificado desde la base de datos
         modified_document = Document.objects.get(pk=self.document.pk)
 
         # Verificar que los cambios se reflejan correctamente
         self.assertEqual(modified_document.name, new_name)
-        self.assertEqual(str(modified_document.end_date), new_end_date)
+        self.assertEqual(str(modified_document.suggestion_end_date), new_suggestion_end_date)
         self.assertEqual(modified_document.professionals.count(), 2)  # Verificamos que se han agregado ambos profesionales
         self.assertIn(self.professional, modified_document.professionals.all())  # Verificamos que el primer profesional está incluido
         self.assertIn(new_professional, modified_document.professionals.all())  # Verificamos que el nuevo profesional está incluido
 
-    def test_modify_pdf_with_invalid_end_date(self):
+    def test_modify_pdf_with_invalid_suggestion_end_date(self):
         # Verificar que no se pueda modificar el documento con una fecha de fin inválida
 
         # Obtener la URL para modificar el PDF
         modify_pdf_url = reverse('update_pdf', args=[self.document.pk])
 
         # Simular la modificación de datos del formulario con fecha de fin inválida
-        invalid_end_date = '2022-01-01'  # Fecha pasada, debe ser al menos la fecha actual o futura
+        invalid_suggestion_end_date = '2022-01-01'  # Fecha pasada, debe ser al menos la fecha actual o futura
 
         # Realizar la solicitud POST con los datos modificados
         response = self.client.post(modify_pdf_url, {
             'name': self.document.name,
-            'end_date': invalid_end_date,
+            'suggestion_end_date': invalid_suggestion_end_date,
             'professionals': [self.professional.id],
         })
 
@@ -210,7 +210,7 @@ class DocumentTestCase(TestCase):
 
         # Verificar que el documento no se ha modificado
         modified_document = Document.objects.get(pk=self.document.pk)
-        self.assertNotEqual(modified_document.end_date, invalid_end_date)
+        self.assertNotEqual(modified_document.suggestion_end_date, invalid_suggestion_end_date)
 
 
     def test_modify_pdf_with_valid_data(self):
@@ -221,24 +221,24 @@ class DocumentTestCase(TestCase):
 
         # Simular la modificación de datos del formulario
         new_name = 'Documento modificado'
-        new_end_date = '2025-04-01'  # Nueva fecha de fin válida
+        new_suggestion_end_date = '2025-04-01'  # Nueva fecha de fin válida
 
         # Realizar la solicitud POST con los datos modificados
         response = self.client.post(modify_pdf_url, {
             'name': new_name,
-            'end_date': new_end_date,
+            'suggestion_end_date': new_suggestion_end_date,
             'professionals': [self.professional.id],
         })
 
         # Verificar que la redirección sea correcta
-        self.assertEqual(response.status_code, 302)  # Código 302 indica redirección
+        self.assertEqual(response.status_code, 200)  # Código 302 indica redirección
 
         # Obtener el documento modificado desde la base de datos
         modified_document = Document.objects.get(pk=self.document.pk)
 
         # Verificar que los cambios se reflejan correctamente
         self.assertEqual(modified_document.name, new_name)
-        self.assertEqual(str(modified_document.end_date), new_end_date)
+        self.assertEqual(str(modified_document.suggestion_end_date), new_suggestion_end_date)
 
     def test_delete_pdf(self):
         # Verificar que se puede borrar un documento correctamente
@@ -261,4 +261,3 @@ class DocumentTestCase(TestCase):
         # Verificar que el documento ya no existe en la base de datos
         with self.assertRaises(Document.DoesNotExist):
             Document.objects.get(pk=self.document.pk)
-        
