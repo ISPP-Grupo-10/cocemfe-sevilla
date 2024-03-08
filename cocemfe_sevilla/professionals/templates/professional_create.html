@@ -1,18 +1,22 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Professional</title>
+</head>
+<body>
 
-{% block content %}
   <h2>Create Professional</h2>
-  <form method="post" action="{% url 'create_professional' %}" enctype="multipart/form-data">
+
+  <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.username }}
-    {{ form.first_name }}
-    {{ form.last_name }}
-    {{ form.email }}
-    {{ form.telephone_number }}
-    {{ form.license_number }}
-    {{ form.organizations }}
-    {{ form.profile_picture }}
-    <button type="submit">Create</button>
+    {{ form.as_p }}
+    <button type="submit">Create Professional</button>
   </form>
-{% endblock %}
+
+</body>
+</html>
+
 
