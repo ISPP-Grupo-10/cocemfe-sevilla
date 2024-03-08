@@ -8,12 +8,14 @@ from .models import Professional
 class ProfessionalForm(forms.ModelForm):
     class Meta:
         model = Professional
-        fields = ['username','first_name', 'last_name', 'telephone_number', 'license_number', 'organizations', 'email', 'profile_picture']
+        fields = ['username', 'first_name', 'last_name', 'password', 'telephone_number', 'license_number', 'organizations', 'email', 'profile_picture']
 
+    def __init__(self, *args, **kwargs):
+        user_is_staff = kwargs.pop('user_is_staff', True)
+        super(ProfessionalForm, self).__init__(*args, **kwargs)
 
-    def clean(self):
-        cleaned_data = super().clean()
-        return cleaned_data
+        if not user_is_staff:
+            self.fields.pop('username', 'first_name', 'last_name', 'license_number', 'organizations', 'profile_picture')
     
 class ProfessionalCreationForm(forms.ModelForm):
     class Meta:
