@@ -2,8 +2,9 @@
 import uuid
 
 from django.contrib.auth import get_user_model
-from django.test import TestCase, Client
+from django.test import RequestFactory, TestCase, Client
 from django.urls import reverse
+from professionals.views import create_professional
 from professionals.models import Professional
 from professionals.forms import ProfessionalCreationForm, ProfessionalForm
 from organizations.models import Organization
@@ -220,13 +221,15 @@ class ProfessionalCreationTest(TestCase):
 
     def test_create_professional_view_POST_success(self):
         professionals_before = Professional.objects.count()
-        response = self.client.post(self.create_professional_url, self.valid_form_data)
+        request = RequestFactory().post('/create_professional/', data=self.valid_form_data)
+        response = create_professional(request, self.valid_form_data)
         self.assertEqual(response.status_code, 200)
         professionals_after = Professional.objects.count()
         self.assertEqual(professionals_after, professionals_before + 1)
 
     def test_create_professional_view_POST_failure(self):
-        response = self.client.post(self.create_professional_url, self.invalid_form_data)
+        request = RequestFactory().post('/create_professional/', data=self.invalid_form_data)
+        response = create_professional(request, self.invalid_form_data)
         professionals_before = Professional.objects.count()
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'professional_create.html')

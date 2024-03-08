@@ -12,7 +12,6 @@ from django.views.decorators.csrf import csrf_protect
 
 @method_decorator(user_passes_test(lambda u: u.is_authenticated and (u.is_staff or u.is_superuser)), name='dispatch')
 def create_professional(request):
-    print("Entering create_professional view")
     if request.method == 'POST':
         form = ProfessionalCreationForm(request.POST, request.FILES)
         if form.is_valid():
@@ -24,7 +23,6 @@ def create_professional(request):
     else:
         form = ProfessionalCreationForm()
 
-    print("Rendering create_professional.html with form")
     return render(request, 'professional_create.html', {'form': form})
 
 
