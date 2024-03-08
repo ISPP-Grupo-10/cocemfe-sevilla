@@ -23,7 +23,7 @@ class ProfessionalCreationForm(forms.ModelForm):
     telephone_number = forms.CharField(max_length=9, validators=[Professional.phone_number_validator])
     license_number = forms.CharField(max_length=20)
     organizations = forms.ModelChoiceField(queryset=Organization.objects.all())
-    profile_picture = forms.ImageField()
+    profile_picture = forms.ImageField(required=False)
 
     def save(self, commit=True):
         user = super().save(commit=False)
