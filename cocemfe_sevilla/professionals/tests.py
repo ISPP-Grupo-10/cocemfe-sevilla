@@ -9,6 +9,7 @@ from professionals.models import Professional
 from professionals.forms import ProfessionalCreationForm, ProfessionalForm
 from organizations.models import Organization
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.contrib.auth.models import User
 
 class ProfessionalModelTest(TestCase):
     def setUp(self):
@@ -244,3 +245,144 @@ class ProfessionalCreationTest(TestCase):
     def test_invalid_professional_creation_form(self):
         form = ProfessionalCreationForm(data=self.invalid_form_data)
         self.assertFalse(form.is_valid())
+
+
+class EditUserViewTest(TestCase):
+    def setUp(self):
+        # Crear un usuario de prueba con privilegios de staff para la prueba
+        self.staff_user = get_user_model().objects.create_user(username='staffuser', password='password', is_staff=True)
+        self.client = Client()
+
+    def test_edit_user_view_staff(self):
+        # Simular la autenticación del usuario con privilegios de staff
+        self.client.login(username='staffuser', password='password')
+
+        # Crear un profesional de prueba
+        professional = Professional.objects.create(username='testuser', first_name='John', last_name='Doe', password='password', telephone_number='123456789', license_number='ABC123', organizations=None, email='test@example.com')
+
+        # Obtener la URL de la vista de edición
+        url = reverse('professional_detail', kwargs={'pk': professional.id})
+
+        # Enviar una solicitud GET a la vista
+        response = self.client.get(url)
+
+        # Verificar que la respuesta es 200 (OK)
+        self.assertEqual(response.status_code, 200)
+
+        # Verificar que el formulario se renderiza correctamente
+        self.assertContains(response, 'Editar Usuario')
+
+        # Enviar una solicitud POST para editar el profesional
+        updated_data = {
+            'username': 'updateduser',
+            'first_name': 'Updated',
+            'last_name': 'User',
+            'password': 'newpassword',
+            'telephone_number': '987654321',
+            'license_number': 'XYZ456',
+            'organizations': None,
+            'email': 'updated@example.com',
+        }
+
+        response = self.client.post(url, updated_data, follow=True)
+
+        # Verificar que la redirección fue exitosa
+        self.assertRedirects(response, reverse('professional_list') + '?message=Profesional+editado&status=Success')
+
+        # Obtener el profesional actualizado desde la base de datos
+        updated_professional = Professional.objects.get(id=professional.id)
+
+        # Verificar que los datos fueron actualizados correctamente
+        self.assertEqual(updated_professional.username, 'updateduser')
+        self.assertEqual(updated_professional.first_name, 'Updated')
+        self.assertEqual(updated_professional.last_name, 'User')
+        self.assertEqual(updated_professional.telephone_number, '987654321')
+        self.assertEqual(updated_professional.license_number, 'XYZ456')
+        self.assertEqual(updated_professional.email, 'updated@example.com')
+
+    def test_edit_user_view_non_staff(self):
+        # Crear un usuario de prueba sin privilegios de staff para la prueba
+        non_staff_user = get_user_model().objects.create_user(username='nonstaffuser', password='password', is_staff=False)
+        self.client.login(username='nonstaffuser', password='password')
+
+        # Crear un profesional de prueba
+        professional = Professional.objects.create(username='testuser', first_name='John', last_name='Doe', password='password', telephone_number='123456789', license_number='ABC123', organizations=None, email='test@example.com')
+
+        # Obtener la URL de la vista de edición
+        url = reverse('professional_detail', kwargs={'pk': professional.id})
+
+        # Enviar una solicitud GET a la vista
+        response = self.client.get(url)
+
+        # Verificar que la respuesta es 200 (OK)
+        self.assertEqual(response.status_code, 200)
+
+        # Verificar que el formulario no contiene campos específicos de staff
+        self.assertNotContains(response, 'username')
+        self.assertNotContains(response, 'first_name')
+        self.assertNotContains(response, 'last_name')
+        self.assertNotContains(response, 'license_number')
+        self.assertNotContains(response, 'organizations')
+        self.assertNotContains(response, 'profile_picture')
+
+        # Enviar una solicitud POST con datos de actualización
+        updated_data = {
+            'telephone_number': '987654321',
+            'email': 'updated@example.com',
+        }
+
+        response = self.client.post(url, updated_data, follow=True)
+
+        # Verificar que la redirección fue exitosa
+        self.assertRedirects(response, reverse('professional_list') + '?message=Profesional+editado&status=Success')
+
+        # Obtener el profesional actualizado desde la base de datos
+        updated_professional = Professional.objects.get(id=professional.id)
+
+        # Verificar que los datos fueron actualizados correctamente
+        self.assertEqual(updated_professional.telephone_number, '987654321')
+        self.assertEqual(updated_professional.email, 'updated@example.com')
+
+    def test_edit_user_view_unauthenticated(self):
+        # Crear un profesional de prueba
+        professional = Professional.objects.create(username='testuser', first_name='John', last_name='Doe', password='password', telephone_number='123456789', license_number='ABC123', organizations=None, email='test@example.com')
+
+        # Obtener la URL de la vista de edición
+        url = reverse('professional_detail', kwargs={'pk': professional.id})
+
+        # Enviar una solicitud GET a la vista sin autenticación
+        response = self.client.get(url)
+
+        # Verificar que la respuesta es 302 (redirección a la página de inicio de sesión)
+        self.assertEqual(response.status_code, 302)
+        # Verificar que el usuario es redirigido a la página de inicio de sesión
+        self.assertRedirects(response, '/accounts/login/')
+
+    def test_edit_user_view_invalid_data(self):
+        # Simular la autenticación del usuario con privilegios de staff
+        self.client.login(username='staffuser', password='password')
+
+        # Crear un profesional de prueba
+        professional = Professional.objects.create(username='testuser', first_name='John', last_name='Doe', password='password', telephone_number='123456789', license_number='ABC123', organizations=None, email='test@example.com')
+
+        # Obtener la URL de la vista de edición
+        url = reverse('professional_detail', kwargs={'pk': professional.id})
+
+        # Enviar una solicitud POST con datos inválidos
+        invalid_data = {
+            'telephone_number': 'invalid_phone_number',
+            'email': 'invalidemail',
+        }
+
+        response = self.client.post(url, invalid_data)
+
+        # Verificar que la respuesta es 200 (OK) porque el formulario es inválido
+        self.assertEqual(response.status_code, 200)
+        # Verificar que el formulario contiene mensajes de error
+        self.assertContains(response, 'Enter a valid phone number.')
+        self.assertContains(response, 'Enter a valid email address.')
+
+        # Verificar que los datos no se han actualizado en la base de datos
+        updated_professional = Professional.objects.get(id=professional.id)
+        self.assertNotEqual(updated_professional.telephone_number, 'invalid_phone_number')
+        self.assertNotEqual(updated_professional.email, 'invalidemail')

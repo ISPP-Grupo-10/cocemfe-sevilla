@@ -9,7 +9,7 @@ class ProfessionalForm(forms.ModelForm):
     class Meta:
         model = Professional
         fields = ['username', 'first_name', 'last_name', 'password', 'telephone_number', 'license_number', 'organizations', 'email', 'profile_picture']
-
+    profile_picture = forms.ImageField(required=False)
     def __init__(self, *args, **kwargs):
         user_is_staff = kwargs.pop('user_is_staff', True)
         super(ProfessionalForm, self).__init__(*args, **kwargs)
