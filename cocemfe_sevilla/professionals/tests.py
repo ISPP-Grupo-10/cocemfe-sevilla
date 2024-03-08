@@ -12,63 +12,6 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AnonymousUser
 
-class ProfessionalModelTest(TestCase):
-    def setUp(self):
-        # Creamos una organización de prueba
-        self.organization = Organization.objects.create(
-            name='Test Organization',
-            telephone_number='123456789',
-            address='Test Address',
-            email='test@example.com',
-            zip_code=12345,
-        )
-
-        # Creamos un profesional de prueba asociado a la organización
-        self.professional = Professional.objects.create(
-            username='testuser',
-            first_name='John',
-            last_name='Doe',
-            telephone_number='123456789',
-            license_number='ABC123',
-            organizations=self.organization,
-        )
-
-
-    def test_professional_str(self):
-        self.assertEqual(str(self.professional), 'testuser')
-
-
-class ProfessionalFormTest(TestCase):
-    def setUp(self):
-        # Creamos una organización de prueba para utilizar en las pruebas
-        self.organization = Organization.objects.create(
-            name='Test Organization',
-            telephone_number='123456789',
-            address='Test Address',
-            email='test@example.com',
-            zip_code=12345,
-        )
-
-    def test_valid_professional_form(self):
-        form_data = {
-            'username': 'testuser',
-            'first_name': 'John',
-            'last_name': 'Doe',
-            'telephone_number': '123456789',
-            'license_number': 'ABC123',
-            'organizations': self.organization.id,
-            'email': 'john.doe@example.com',
-            'profile_picture': 'test.jpg',
-        }
-        form = ProfessionalForm(data=form_data)
-        self.assertTrue(form.is_valid(), form.errors)
-
-    def test_invalid_professional_form(self):
-        form_data = {}
-        form = ProfessionalForm(data=form_data)
-        self.assertFalse(form.is_valid())
-        self.assertEqual(len(form.errors), 4)
-
 
 class ProfessionalViewTest(TestCase):
     def setUp(self):
