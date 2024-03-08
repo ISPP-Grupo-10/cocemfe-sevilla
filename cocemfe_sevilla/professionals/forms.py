@@ -24,7 +24,7 @@ class ProfessionalForm(forms.ModelForm):
     
 class ProfessionalCreationForm(forms.ModelForm):
     class Meta:
-        model = get_user_model()
+        model = Professional
         fields = ['username', 'first_name', 'last_name', 'email']
 
     telephone_number = forms.CharField(max_length=9, validators=[Professional.phone_number_validator])
@@ -33,27 +33,17 @@ class ProfessionalCreationForm(forms.ModelForm):
     profile_picture = forms.ImageField(required=False)
 
     def save(self, commit=True):
-        user = super().save(commit=False)
-        
-        # Genera una contraseña aleatoria
+        professional = super().save(commit=False)
+
+        # Generar una contraseña aleatoria
         password = ''.join(random.choices(string.ascii_letters + string.digits, k=12))
-        user.set_password(password)
+        professional.set_password(password)
 
         if commit:
-            user.save()
+            professional.save()
 
-            professional = Professional.objects.create(
-                user=user,
-                telephone_number=self.cleaned_data['telephone_number'],
-                license_number=self.cleaned_data['license_number'],
-                organizations=self.cleaned_data['organizations'],
-                profile_picture=self.cleaned_data['profile_picture']
-            )
+        return professional
 
-            return professional 
-
-        return user
-    
     def clean(self):
         cleaned_data = super().clean()
         return cleaned_data
