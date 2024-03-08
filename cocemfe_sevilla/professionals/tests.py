@@ -1,10 +1,11 @@
 # tests.py
 
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.urls import reverse
 from professionals.models import Professional
-from professionals.forms import ProfessionalForm
+from professionals.forms import ProfessionalCreationForm, ProfessionalForm
 from organizations.models import Organization
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 class ProfessionalModelTest(TestCase):
     def setUp(self):
@@ -45,6 +46,7 @@ class ProfessionalFormTest(TestCase):
 
     def test_valid_professional_form(self):
         form_data = {
+            'username': 'testuser',
             'first_name': 'John',
             'last_name': 'Doe',
             'telephone_number': '123456789',
@@ -60,7 +62,7 @@ class ProfessionalFormTest(TestCase):
         form_data = {}
         form = ProfessionalForm(data=form_data)
         self.assertFalse(form.is_valid())
-        self.assertEqual(len(form.errors), 3)
+        self.assertEqual(len(form.errors), 4)
 
 
 class ProfessionalViewTest(TestCase):
@@ -158,3 +160,61 @@ class ProfessionalListTestCase(TestCase):
         response = self.client.get(reverse('professional_list') + '?organization=Test Organization')
         self.assertIn(self.professional1, response.context['professionals'])
         self.assertIn(self.professional2, response.context['professionals'])
+
+class ProfessionalCreationTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.create_professional_url = reverse('create_professional')
+        
+        # Crear una organización con zip_code
+        self.organization = Organization.objects.create(
+            name='Test Organization',
+            zip_code='12345'  # Proporciona un valor para el campo zip_code
+        )
+        
+        # Datos válidos para el formulario
+        self.valid_form_data = {
+            'username': 'testuser',
+            'first_name': 'Test',
+            'last_name': 'User',
+            'email': 'testuser@example.com',
+            'telephone_number': '123456789',
+            'license_number': 'ABC123',
+            'organizations': self.organization.id,
+            'profile_picture': SimpleUploadedFile("test_image.jpg", b"file_content", content_type="image/jpeg"),
+        }
+
+        # Datos inválidos para el formulario
+        self.invalid_form_data = {
+            'username': '',  # Nombre de usuario vacío
+            'first_name': 'Test',
+            'last_name': 'User',
+            'email': 'invalid_email',  # Correo electrónico inválido
+            'telephone_number': '12345',  # Número de teléfono demasiado corto
+            'license_number': '',  # Número de licencia vacío
+            'organizations': '',  # Organización no seleccionada
+            'profile_picture': SimpleUploadedFile("test_image.txt", b"file_content", content_type="text/plain"),  # Tipo de archivo incorrecto
+        }
+
+    def test_create_professional_view_POST_success(self):
+        response = self.client.post(self.create_professional_url, self.valid_form_data)
+
+        self.assertRedirects(response, reverse('create_professional'))
+        self.assertContains(response, 'Profesional creado exitosamente.')
+
+    def test_create_professional_view_POST_failure(self):
+        response = self.client.post(self.create_professional_url, self.invalid_form_data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'professional_create.html')
+        self.assertIsInstance(response.context['form'], ProfessionalCreationForm)
+        self.assertContains(response, 'Error al crear el profesional. Por favor, corrija los errores en el formulario.')
+
+    def test_valid_professional_creation_form(self):
+        form = ProfessionalCreationForm(data=self.valid_form_data, files={'profile_picture': self.valid_form_data['profile_picture']})
+
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_professional_creation_form(self):
+        form = ProfessionalCreationForm(data=self.invalid_form_data)
+        self.assertFalse(form.is_valid())

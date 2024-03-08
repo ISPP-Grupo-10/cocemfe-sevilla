@@ -1,12 +1,27 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import DeleteView, DetailView, UpdateView
 from django.contrib import messages
 
 from .models import Professional
-from .forms import ProfessionalForm
+from .forms import ProfessionalCreationForm, ProfessionalForm
 
+def create_professional(request):
+    print("Entering create_professional view")
+    if request.method == 'POST':
+        form = ProfessionalCreationForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profesional creado exitosamente.')
+            return redirect(reverse('professional_list'))
+        else:
+            messages.error(request, 'Error al crear el profesional. Por favor, corrija los errores en el formulario.')
+    else:
+        form = ProfessionalCreationForm()
+
+    print("Rendering create_professional.html with form")
+    return render(request, 'professional_create.html', {'form': form})
 
 class EditUserView(View):
     def get(self, request, pk):
