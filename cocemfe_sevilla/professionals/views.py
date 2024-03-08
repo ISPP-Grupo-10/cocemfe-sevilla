@@ -32,17 +32,22 @@ def edit_user_view(request, pk):
     professional = get_object_or_404(Professional, id=pk)
 
     if not (request.user.is_staff or request.user.is_superuser):
-        form = ProfessionalForm(user_is_staff=False, initial={'password': professional.password, 'email': professional.email, 'telefono': professional.telefono})
+        form = ProfessionalForm(user_is_staff=False, initial={'password': professional.password, 'email': professional.email, 'telephone_number': professional.telephone_number})
     else:
         form = ProfessionalForm(user_is_staff=True, instance=professional)
 
     if request.method == 'POST':
-        form = ProfessionalForm(request.POST, request.FILES, instance=professional, user_is_staff=request.user.is_staff)
+        form_data = request.POST.copy()
+        if not request.user.is_staff:
+
+            form_data['organizations'] = request.user.organizations.id
+        form = ProfessionalForm(form_data, request.FILES, instance=professional, user_is_staff=request.user.is_staff)
         if form.is_valid():
             form.save()
             return redirect('/professionals/?message=Profesional editado&status=Success')
 
     return render(request, template_name, {'form': form, 'professional': professional})
+
 
 
 def professional_list(request):

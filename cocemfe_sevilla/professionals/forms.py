@@ -15,7 +15,12 @@ class ProfessionalForm(forms.ModelForm):
         super(ProfessionalForm, self).__init__(*args, **kwargs)
 
         if not user_is_staff:
-            self.fields.pop('username', 'first_name', 'last_name', 'license_number', 'organizations', 'profile_picture')
+            self.fields.pop('username')
+            self.fields.pop('first_name')
+            self.fields.pop('last_name')
+            self.fields.pop('license_number')
+            self.fields.pop('organizations')
+            self.fields.pop('profile_picture')
     
 class ProfessionalCreationForm(forms.ModelForm):
     class Meta:
