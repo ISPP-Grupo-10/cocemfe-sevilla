@@ -10,7 +10,6 @@ def custom_login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         username = get_object_or_404(Professional, email = email).username
-        print(username)
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         if user is not None:
