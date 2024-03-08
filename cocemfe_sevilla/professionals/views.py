@@ -55,6 +55,7 @@ def edit_user_view(request, pk):
 def professional_list(request):
     professionals = Professional.objects.all()
 
+    professionals = professionals.filter(is_staff=True)
     name_filter = request.GET.get('name', '')
     if name_filter:
         professionals = professionals.filter(first_name__icontains=name_filter)

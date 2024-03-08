@@ -53,6 +53,7 @@ class ProfessionalListTestCase(TestCase):
             telephone_number='123456789',
             address='Test Address',
             email='test@example.com',
+            is_staff=True,
             zip_code=12345,
         )
 
@@ -63,7 +64,8 @@ class ProfessionalListTestCase(TestCase):
             last_name='Doe',
             telephone_number='123456789',
             license_number='12345',
-            organizations=self.organization
+            organizations=self.organization,
+            is_staff = True
         )
 
         self.professional2 = Professional.objects.create(
@@ -73,6 +75,7 @@ class ProfessionalListTestCase(TestCase):
             last_name='Smith',
             telephone_number='987654321',
             license_number='67890',
+            is_staff=True,
             organizations=self.organization
         )
 
