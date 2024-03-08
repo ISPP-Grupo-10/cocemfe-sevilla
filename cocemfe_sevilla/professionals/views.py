@@ -6,7 +6,10 @@ from django.contrib import messages
 
 from .models import Professional
 from .forms import ProfessionalCreationForm, ProfessionalForm
+from django.contrib.auth.decorators import login_required, staff_member_required
 
+#solo adiministradores deben poder acceder a create_professional
+@staff_member_required
 def create_professional(request):
     print("Entering create_professional view")
     if request.method == 'POST':
@@ -23,6 +26,7 @@ def create_professional(request):
     print("Rendering create_professional.html with form")
     return render(request, 'professional_create.html', {'form': form})
 
+@staff_member_required
 class EditUserView(View):
     def get(self, request, pk):
         professional = get_object_or_404(Professional, id=pk)
@@ -70,6 +74,7 @@ def professional_list(request):
         'organization_filter': organization_filter,
     })
 
+@staff_member_required
 def delete_professional(request, id):
     professional = get_object_or_404(Professional, id=id)
     professionals = Professional.objects.all()
