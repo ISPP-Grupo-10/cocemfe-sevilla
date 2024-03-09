@@ -15,10 +15,6 @@ def create_organization(request):
     return render(request, 'create_organization.html', {'form': form})
 
 @login_required
-def get_organizations(request):
-    pass
-
-@login_required
 def organization_options(request):
     return render(request, 'organization_options.html')
 

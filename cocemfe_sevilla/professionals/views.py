@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib import messages
 from django.contrib.auth import logout, login, authenticate
-from .models import Professional
+from .models import Professional, Request
 from django.contrib.auth.decorators import login_required
-from .forms import ProfessionalForm
+from .forms import ProfessionalForm, RequestCreateForm, RequestUpdateForm
 
 def custom_login(request):
     if request.method == 'POST':
@@ -89,3 +89,29 @@ def delete_professional(request, id):
 
     return render(request, 'professional_list.html', {'professionals': professionals})
 
+def create_request(request):
+    if request.method == 'POST':
+        form = RequestCreateForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, 'registration/login.html') 
+    else:
+        form = RequestCreateForm()
+    return render(request, 'create_request.html', {'form': form})
+
+@login_required
+def update_request(request, pk):
+    db_request = get_object_or_404(Request, pk=pk)
+    if request.method == 'POST':
+        form = RequestUpdateForm(request.POST, instance=db_request)
+        if form.is_valid():
+            form.save()
+            return redirect('professionals:request_list') 
+    else:
+        form = RequestUpdateForm(instance=db_request)
+    return render(request, 'update_request.html', {'form': form, 'email':db_request.email , 'description': db_request.description})
+
+@login_required
+def request_list(request):
+    requests = Request.objects.all()
+    return render(request, 'list_requests.html', {'requests': requests})

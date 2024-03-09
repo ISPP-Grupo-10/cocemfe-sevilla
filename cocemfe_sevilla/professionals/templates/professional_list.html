@@ -17,7 +17,7 @@
                     </button>
                     <div id="filtersContainer" class="dropdown-menu" style="display: none;">
                         <div class="card-body">
-                            <form id="searchForm" method="GET" action="{% url 'professional_list' %}" class="flex-form">
+                            <form id="searchForm" method="GET" action="{% url "professionals:professional_list" %}" class="flex-form">
                                 <div class="form-group2">
                                     <label for="name">Nombre:</label>
                                     <input type="text" name="name" id="name" value="{{ name_filter }}" class="form-control" placeholder="Nombre">
@@ -36,7 +36,7 @@
                                 </div>
                                 <div class="form-group2 mt-2 text-right" style="flex-direction: row;">
                                     <button type="submit" class="btn btn-primary">Buscar</button>
-                                    <a href="{% url 'professional_list' %}" class="btn btn-primary">Limpiar</a>
+                                    <a href="{% url "professionals:professional_list" %}" class="btn btn-primary">Limpiar</a>
                                 </div>
                             </form>
                         </div>
@@ -72,8 +72,8 @@
                                 {% if request.user.is_superuser %}
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <a href="{% url 'professional_detail' pk=professional.id %}" class="btn btn-primary" style="border-radius: 0px; border-color: transparent; background-color: transparent;">&#9998;</a> 
-                                        <form method="post" action="{% url 'delete_professional' id=professional.id %}">
+                                        <a href="{% url 'professionals:professional_detail' pk=professional.id %}" class="btn btn-primary" style="border-radius: 0px; border-color: transparent; background-color: transparent;">&#9998;</a> 
+                                        <form method="post" action="{% url 'professionals:delete_professional' id=professional.id %}">
                                             {% csrf_token %}
                                             <button type="submit" class="btn btn-primary" style="border-radius: 0px; border-color: transparent; background-color: transparent;">&#128465;</button> 
                                         </form>

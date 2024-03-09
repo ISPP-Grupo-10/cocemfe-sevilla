@@ -31,12 +31,15 @@
                 <a class="navbar-brand" href="/documents">Documentos</a>
                 <a class="navbar-brand" href="/professionals">Usuarios</a>
                 <a class="navbar-brand" href="{% url "organizations:organization_list" %}">Organizaciones</a>
+                {% if user.is_authenticated and user.is_staff %}
+                    <a class="navbar-brand" href="{% url "professionals:request_list" %}">Solicitudes</a>
+                {% endif %}
             </div>
             <div>
                 {% if user.is_authenticated %}
-                <li><a href="{% url 'logout' %}"><span class="icon icon-person"></span> Cerrar Sesión</a></li>
+                <li><a href="{% url "professionals:logout" %}"><span class="icon icon-person"></span> Cerrar Sesión</a></li>
                 {% else %}
-                <li><a href="{% url 'login' %}"><span class="icon icon-person"></span> Iniciar Sesión</a></li>
+                <li><a href="{% url "professionals:login" %}"><span class="icon icon-person"></span> Iniciar Sesión</a></li>
                 {% endif %}
             </div>
         </div>

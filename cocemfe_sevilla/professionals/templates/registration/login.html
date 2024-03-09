@@ -13,7 +13,7 @@
                         {{ error_message }}
                     </div>
                     {% endif %}
-                    <form action="{% url 'login' %}" method="post">
+                    <form action="{% url 'professionals:login' %}" method="post">
                         {% csrf_token %}
                         <div class="form-group">
                             <label for="email">Correo electrónico:</label>
@@ -28,6 +28,11 @@
                         </div>
                     </form>
                     <p class="text-center">¿No tienes una cuenta? Envía un mensaje al administrador</p>
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <a href="/professionals/requests/create" class="btn btn-success btn-block">Crear una nueva solicitud</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
