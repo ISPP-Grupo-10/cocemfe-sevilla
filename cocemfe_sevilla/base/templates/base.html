@@ -6,6 +6,8 @@
   {% load bootstrap5 %}
   {% bootstrap_css %}
   {% bootstrap_javascript %}
+  {% load static %}
+
 
 </head>
 <body>
@@ -41,9 +43,9 @@
 <!-- Grey with black text -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid d-flex justify-content-around">
-        <div class="d-flex justify-content-center ms-2" style="width: 200px; height: 100%;">
+        <div class="d-flex justify-content-center ms-2" style="width: 250px; height: 200%;">
             <a href="/">
-                <img src="https://www.cocemfe.es/wp-content/uploads/thegem-logos/logo_afb4a0816f68e0c0dc0425488429ff40_2x.png" alt="Descripción de la imagen" style="width: 150px; height: auto;">
+                <img src="{% static 'logo_sevilla.png' %}" alt="Descripción de la imagen" style="width: 250px; height: auto;">
             </a>
         </div>
 
