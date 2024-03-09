@@ -29,9 +29,9 @@
             style="background-color: #00A599; width: 80%; height: 60px; display: flex; align-items: center; justify-content: space-between;">
             <div>
                 <a class="navbar-brand" href="/documents">Documentos</a>
-                <a class="navbar-brand" href="/professionals">Usuarios</a>
-                <a class="navbar-brand" href="{% url "organizations:organization_list" %}">Organizaciones</a>
                 {% if user.is_authenticated and user.is_staff %}
+                    <a class="navbar-brand" href="{% url "professionals:professional_list" %}">Usuarios</a>
+                    <a class="navbar-brand" href="{% url "organizations:organization_list" %}">Organizaciones</a>
                     <a class="navbar-brand" href="{% url "professionals:request_list" %}">Solicitudes</a>
                 {% endif %}
             </div>
