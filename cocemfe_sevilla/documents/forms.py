@@ -6,12 +6,13 @@ class PDFUploadForm(forms.ModelForm):
     professionals = forms.ModelMultipleChoiceField(
         queryset=Professional.objects.filter(is_superuser=False),
         widget=forms.CheckboxSelectMultiple,
-        required=False  # Permite que no se seleccione ningún profesional
+        required=False
     )
 
     class Meta:
         model = Document
-        fields = ['name', 'pdf_file', 'end_date', 'ubication', 'status', 'professionals'] 
+        fields = ['name', 'ubication', 'end_date', 'pdf_file', 'professionals', 'status'] 
         widgets = {
-            'end_date': forms.DateInput(attrs={'type': 'date'})
+            'end_date': forms.DateInput(attrs={'type': 'date'}),
+            'status': forms.Select(choices=Document.STATUS),
         }

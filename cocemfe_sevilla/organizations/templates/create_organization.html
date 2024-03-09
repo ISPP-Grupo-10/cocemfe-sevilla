@@ -66,6 +66,8 @@
             font-weight: 400;
             height: 43px;
             cursor: pointer;
+            background-color: rgba(0, 162, 151, 0.842); /* Color del botón "Crear" */
+
         }
 
         .btn-block:hover {
@@ -116,7 +118,7 @@
                     <div class="row justify-content-between text-left">
                         <div class="form-group col-12 flex-column d-flex mb-4">
                             <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                                <i class="fas fa-user"></i> Nombre:<span class="text-danger"> *</span>
+                                <i class="fas fa-user"></i> Nombre<span class="text-danger"> *</span>
                             </label>
                             {{ form.name }}
                             {% for error in form.name.errors %}
@@ -127,7 +129,7 @@
                     <div class="row justify-content-between text-left">
                         <div class="form-group col-sm-6 flex-column d-flex mb-4">
                             <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                                <i class="fas fa-phone"></i> Número de Teléfono:<span class="text-danger"> *</span>
+                                <i class="fas fa-phone"></i> Teléfono<span class="text-danger"> *</span>
                             </label>
                             {{ form.telephone_number }}
                             {% for error in form.telephone_number.errors %}
@@ -147,7 +149,7 @@
                     <div class="row justify-content-between text-left">
                         <div class="form-group col-sm-6 flex-column d-flex mb-4">
                             <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                                <i class="fas fa-envelope"></i> Correo electrónico:<span class="text-danger"> *</span>
+                                <i class="fas fa-envelope"></i> Correo electrónico<span class="text-danger"> *</span>
                             </label>
                             {{ form.email }}
                             {% for error in form.email.errors %}
@@ -156,7 +158,7 @@
                         </div>
                         <div class="form-group col-sm-6 flex-column d-flex mb-4">
                             <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                                <i class="fas fa-mail-bulk"></i> Código Postal:<span class="text-danger"> *</span>
+                                <i class="fas fa-mail-bulk"></i> Código Postal<span class="text-danger"> *</span>
                             </label>
                             {{ form.zip_code }}
                             {% for error in form.zip_code.errors %}
@@ -168,7 +170,7 @@
                         <div class="form-group col-sm-6">
                             <div class="row justify-content-start">
                                 <div class="form-group col-sm-6 text-left"> 
-                                    <button type="submit" class="btn-block btn-primary">Crear</button>
+                                    <button type="submit" class="btn-block">Crear</button>
                                 </div>
                             </div>
                         </div>

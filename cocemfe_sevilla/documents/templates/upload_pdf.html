@@ -10,72 +10,91 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-ZAElWN6PqB8kyByGWGdIV6yB/wWw+2sBOnTgCZlb5B5KZl3IFIKo3sggs2pihGzwCwPbLjBOvDT6xg6lL7sR7Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
         <title>Subir Documentos</title>
         <style>
-            .center-box {
-                width: 50%;
-                margin: 100px auto;
-                padding: 70px;
-                border: 1px solid #ccc;
-                background-color: #e0f7fa;
-                border-radius: 15px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                position: relative;
+            body {
+                color: #000;
+                overflow-x: hidden;
+                height: 100%;
+                background-repeat: no-repeat;
+                background-size: 100% 100%;
             }
-    
-            .form-heading {
-                position: absolute;
-                top: -40px;
-                left: 50%;
-                transform: translateX(-50%);
-                text-align: center;
-                font-size: 28px;
-                color: rgb(26, 8, 77);
+        
+            .card {
+                padding: 30px 40px;
+                margin-top: 60px;
+                margin-bottom: 60px;
+                border: none !important;
+                box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.2);
             }
-    
-            .form-group {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                margin-bottom: 20px;
+        
+            .blue-text {
+                color: #00BCD4;
             }
-    
-            label {
-                width: 30%;
-                text-align: left;
+        
+            .form-control-label {
+                margin-bottom: 0;
             }
-    
-            input[type="text"],
-            input[type="file"],
-            input[type="date"],
+        
+            input,
+            textarea,
             button {
-                border-radius: 25px;
-                border: 1px solid #ccc;
-                padding: 8px;
-                width: calc(70% - 16px);
+                padding: 8px 15px;
+                border-radius: 5px !important;
+                margin: 5px 0px;
                 box-sizing: border-box;
-            }
-    
-            .button-container {
-                position: absolute;
-                bottom: 20px;
-                right: 20px;
-            }
-    
-            button {
-                width: auto;
-                padding: 8px 35px;
-                font-size: 14px;
-                border-radius: 10px;
                 border: 1px solid #ccc;
-                background-color: #1f085e;
-                color: white;
-                cursor: pointer;
+                font-size: 18px !important;
+                font-weight: 300;
             }
-    
-            button:hover {
-                background-color: #1f085e;
+        
+            input:focus,
+            textarea:focus {
+                -moz-box-shadow: none !important;
+                -webkit-box-shadow: none !important;
+                box-shadow: none !important;
+                border: 3px solid #00BCD4;
+                outline-width: 0;
+                font-weight: 400;
+            }
+        
+            .btn-block {
+                text-transform: uppercase;
+                font-size: 15px !important;
+                font-weight: 400;
+                height: 43px;
+                cursor: pointer;
+                background-color: rgba(0, 162, 151, 0.842); /* Color del botón "Crear" */
+                color: white;
+                border: none;
+            }
+        
+            .btn-block:hover {
+                color: #fff !important;
+            }
+        
+            button:focus {
+                -moz-box-shadow: none !important;
+                -webkit-box-shadow: none !important;
+                box-shadow: none !important;
+                outline-width: 0;
+            }
+        
+            .form-container {
+                padding: 20px;
+                border: 50px solid rgba(0, 165, 153, 0.3);
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 165, 153, 0.3);
+            }
+        
+            /* Hacer el formulario más estrecho */
+            .col-xl-7,
+            .col-lg-8,
+            .col-md-9,
+            .col-11 {
+                max-width: 600px; /* Ajusta el ancho según tus necesidades */
             }
         </style>
     </head>
@@ -88,48 +107,94 @@
                 </div>
             {% endfor %}
         {% endif %}
-        <div class="center-box">
-            <h1 class="form-heading">NUEVO DOCUMENTO</h1>
-    
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-    
-                <div class="form-group">
-                    <label for="id_name"><b>Nombre:</b></label>
-                    <input type="text" name="name" id="id_name">
+        <div class="container-fluid px-1 py-5 mx-auto text-center">
+            <h1 class="form-heading mb-4" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                Nuevo Documento
+            </h1>
+            <div class="row d-flex justify-content-center">
+                <div class="col-xl-7 col-lg-8 col-md-9 col-11 text-center card form-container">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row justify-content-between text-left">
+                            <div class="form-group col-12 flex-column d-flex mb-4">
+                                <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                    <i class="fas fa-user"></i> Nombre<span class="text-danger"> *</span>
+                                </label>
+                                {{ form.name }}
+                                {% for error in form.name.errors %}
+                                    <span class="error">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row justify-content-between text-left">
+                            <div class="form-group col-sm-6 flex-column d-flex mb-4">
+                                <label for="id_ubicacion" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                    <i class="fas fa-map-marker-alt"></i> Ubicación<span class="text-danger"> *</span>
+                                </label>
+                                {{ form.ubication }}
+                                {% for error in form.ubication.errors %}
+                                    <span class="error">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            <div class="form-group col-sm-6 flex-column d-flex mb-4">
+                                <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                    <i class="far fa-calendar-alt"></i> Fecha de cierre<span class="text-danger"> *</span>
+                                </label>
+                                {{ form.end_date }}
+                                {% for error in form.end_date.errors %}
+                                    <span class="error">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row justify-content-between text-left">
+                            <div class="form-group col-12 flex-column d-flex mb-4">
+                                <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                    <i class="fas fa-file-pdf"></i> Seleccione un archivo<span class="text-danger"> *</span>
+                                </label>
+                                {{ form.pdf_file }}
+                                {% for error in form.pdf_file.errors %}
+                                    <span class="error">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="form-group col-12 flex-column d-flex mb-4">
+                            <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                <i class="fas fa-info-circle"></i> Seleccione un estado<span class="text-danger"> *</span>
+                            </label>
+                            {{ form.status }}
+                            {% for error in form.status.errors %}
+                                <span class="error">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="row justify-content-between text-left">
+                            <div class="form-group col-12 flex-column d-flex mb-4">
+                                <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                    <i class="fas fa-users"></i> Seleccione los revisores<span class="text-danger"> *</span>
+                                </label>
+                                {% for professional in form.professionals.field.queryset %}
+                                    {% if professional in professionals_not_superuser %}
+                                        <input type="checkbox" id="id_professional_{{ professional.id }}" name="professionals" value="{{ professional.id }}">
+                                        <label for="id_professional_{{ professional.id }}">{{ professional.username }}</label><br>
+                                    {% endif %}
+                                {% endfor %}
+                                {% for error in form.professionals.errors %}
+                                    <span class="error">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row justify-content-start">
+                            <div class="form-group col-sm-6">
+                                <div class="row justify-content-start">
+                                    <div class="form-group col-sm-6 text-left"> 
+                                        <button type="submit" class="btn-block">Crear</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-    
-                <div class="form-group">
-                    <label for="id_ubication"><b>Ubicación:</b></label>
-                    <input type="text" name="ubication" id="id_ubication">
-                </div>
-    
-                <div class="form-group">
-                    <label for="id_pdf_file"><b>Seleccione un archivo:</b></label>
-                    <input type="file" name="pdf_file" id="id_pdf_file">
-                </div>
-    
-                <div class="form-group">
-                    <label for="id_end_date"><b>Fecha de cierre:</b></label>
-                    <input type="date" name="end_date" id="id_end_date">
-                </div>
-    
-                <div class="form-group">
-                    <label><b>Añade revisores:</b></label><br>
-                    {% for professional in form.professionals.field.queryset %}
-                        {% if professional in professionals_not_superuser %}
-                            <input type="checkbox" id="id_professional_{{ professional.id }}" name="professionals" value="{{ professional.id }}">
-                            <label for="id_professional_{{ professional.id }}">{{ professional.username }}</label><br>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-    
-                <div class="button-container">
-                    <button type="submit">Crear</button>
-                </div>
-            </form>
+            </div>
         </div>
-    
     </body>
     
     </html>

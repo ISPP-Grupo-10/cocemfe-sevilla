@@ -11,13 +11,13 @@ from professionals.models import Professional
 from chat_messages.models import ChatMessage
 from chat_messages.forms import MessageForm
 
+
 def upload_pdf(request):
     if request.user.is_superuser:
         professionals = Professional.objects.filter(is_superuser=False)
         if request.method == 'POST':
             form = PDFUploadForm(request.POST, request.FILES)
             if form.is_valid():
-                end_date = form.cleaned_data['end_date']
                 pdf_file = form.cleaned_data['pdf_file']
                 try:
                     FileExtensionValidator(allowed_extensions=['pdf'])(pdf_file)
@@ -25,22 +25,27 @@ def upload_pdf(request):
                     form.add_error('pdf_file', e)
                     messages.error(request, "El archivo debe ser un PDF.")
                 else:
+                    end_date = form.cleaned_data['end_date']
                     if end_date > timezone.now().date():
                         document = form.save(commit=False)
                         document.start_date = timezone.now().date()
-                        document.status = 'Abierto'
-                        professionals = form.cleaned_data['professionals']
                         document.save()
-                        document.professionals.set(professionals)
-                        document.save()
+                        form.save_m2m()  # Para guardar las relaciones ManyToMany
+                        messages.success(request, "Documento creado exitosamente.")
                         return redirect('list_pdf')
                     else:
                         messages.error(request, "La fecha de finalización debe ser posterior a la fecha actual.")
+            else:
+                for field, errors in form.errors.items():
+                    for error in errors:
+                        messages.error(request, f"Error en el campo {field}: {error}")
+                messages.error(request, "El formulario no es válido. Por favor, corrige los errores.")
         else:
-            form = PDFUploadForm()
+            form = PDFUploadForm()  # Asegúrate de que el formulario contenga todos los campos necesarios
         return render(request, 'upload_pdf.html', {'form': form, 'professionals_not_superuser': professionals})
     else:
         return render(request, '403.html')
+
 
 def view_pdf(request, pk):
     pdf = get_object_or_404(Document, pk=pk)
