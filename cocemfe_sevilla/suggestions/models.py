@@ -3,14 +3,14 @@ from documents.models import Document
 from professionals.models import Professional
 
 class Suggestion(models.Model):
-    RELEVANCE_CHOICES = (
-        ('urgente', 'Urgente'),
-        ('importante', 'Importante'),
-        ('poco', 'Poco importante'),
+    RELEVANCE = (
+        ('Muy importante', 'Muy importante'),
+        ('Importante', 'Importante'),
+        ('Poco importante', 'Poco importante'),
     )
     main = models.CharField(max_length=255)
     justification = models.TextField()
-    relevance = models.CharField(max_length=20, choices=RELEVANCE_CHOICES)
+    relevance = models.CharField(max_length=20, choices=RELEVANCE)
     section = models.CharField(max_length=10)
     page = models.IntegerField()
     date = models.DateField()
