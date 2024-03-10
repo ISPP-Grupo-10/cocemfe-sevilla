@@ -128,20 +128,31 @@
                         </div>
                         <div class="row justify-content-between text-left">
                             <div class="form-group col-sm-6 flex-column d-flex mb-4">
-                                <label for="id_ubicacion" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                                    <i class="fas fa-map-marker-alt"></i> Ubicación<span class="text-danger"> *</span>
+                                <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                    <i class="far fa-calendar-alt"></i> Cierre de aportaciones<span class="text-danger"> *</span>
                                 </label>
-                                {{ form.ubication }}
-                                {% for error in form.ubication.errors %}
+                                {{ form.suggestion_end_date }}
+                                {% for error in form.suggestion_end_date.errors %}
                                     <span class="error">{{ error }}</span>
                                 {% endfor %}
                             </div>
                             <div class="form-group col-sm-6 flex-column d-flex mb-4">
                                 <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                                    <i class="far fa-calendar-alt"></i> Fecha de cierre<span class="text-danger"> *</span>
+                                    <i class="far fa-calendar-alt"></i> Cierre de votaciones<span class="text-danger"> *</span>
                                 </label>
-                                {{ form.end_date }}
-                                {% for error in form.end_date.errors %}
+                                {{ form.voting_end_date }}
+                                {% for error in form.voting_end_date.errors %}
+                                    <span class="error">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row justify-content-between text-left">
+                            <div class="form-group col-12 flex-column d-flex mb-4">
+                                <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                    <i class="fas fa-map-marker-alt"></i> Ubicación<span class="text-danger"> *</span>
+                                </label>
+                                {{ form.ubication }}
+                                {% for error in form.ubication.errors %}
                                     <span class="error">{{ error }}</span>
                                 {% endfor %}
                             </div>
@@ -169,7 +180,7 @@
                         <div class="row justify-content-between text-left">
                             <div class="form-group col-12 flex-column d-flex mb-4">
                                 <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                                    <i class="fas fa-users"></i> Seleccione los revisores<span class="text-danger"> *</span>
+                                    <i class="fas fa-users"></i> Seleccione los revisores<span class="text-danger"> </span>
                                 </label>
                                 {% for professional in form.professionals.field.queryset %}
                                     {% if professional in professionals_not_superuser %}
