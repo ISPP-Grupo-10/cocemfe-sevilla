@@ -112,7 +112,7 @@ class DocumentTestCase(TestCase):
         self.assertEqual(Document.objects.count(), 2)  # Check if document is created
         document = Document.objects.last()
         self.assertEqual(document.suggestion_start_date, timezone.now().date())  # Check if suggestion_start_date is set to current date
-        self.assertEqual(document.status, 'Abierto')  # Check if status is set to 'Abierto'
+        self.assertEqual(document.status, 'Borrador')  # Check if status is set to 'Borrador'
         self.assertEqual(list(document.professionals.values_list('id', flat=True)), [1])  # Check if professionals are set correctly
         self.client.logout()
 

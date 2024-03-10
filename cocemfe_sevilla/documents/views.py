@@ -29,7 +29,7 @@ def upload_pdf(request):
                     if suggestion_end_date > timezone.now() :
                         document = form.save(commit=False)
                         document.suggestion_start_date = timezone.now()
-                        document.status = 'Aportaciones'
+                        document.status = 'Borrador'
                         document.voting_start_date = suggestion_end_date
                         document.suggestion_end_date = suggestion_end_date
                         document.voting_end_date = voting_end_date
