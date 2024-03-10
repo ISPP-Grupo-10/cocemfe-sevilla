@@ -53,7 +53,7 @@
 /* Estilos para el formulario de comentarios */
 
 .comment-form-container {
-    width: 100%;
+    width: 65%;
     padding-left: 10px;
     background-color: #fff; /* Color de fondo blanco */
     border-radius: 10px; /* Bordes redondeados */
@@ -92,6 +92,36 @@ button[type="submit"] {
 
 button[type="submit"]:hover {
     background-color: #0056b3; /* Color de fondo más oscuro al pasar el cursor */
+}
+
+/* Estilo para los comentario */
+
+.comments-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.comment-box {
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    color: #333333;
+    font-weight: bold;
+}
+
+.comment-content p {
+    margin: 0;
+    color: black;
+    font-weight: bold;
 }
 
 /* Ajusta los colores de fondo y texto para cada estado */
