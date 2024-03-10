@@ -17,3 +17,4 @@ class PDFUploadForm(forms.ModelForm):
             'voting_end_date': forms.DateInput(attrs={'type': 'date'}),
             'status': forms.Select(choices=Document.STATUS),
         }
+
