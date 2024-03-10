@@ -11,6 +11,7 @@ from professionals.models import Professional
 from chat_messages.models import ChatMessage
 from chat_messages.forms import MessageForm
 
+
 def upload_pdf(request):
     if request.user.is_superuser:
         professionals = Professional.objects.filter(is_superuser=False)
@@ -47,6 +48,7 @@ def upload_pdf(request):
         return render(request, 'upload_pdf.html', {'form': form, 'professionals_not_superuser': professionals})
     else:
         return render(request, '403.html')
+
 
 def view_pdf(request, pk):
     pdf = get_object_or_404(Document, pk=pk)
