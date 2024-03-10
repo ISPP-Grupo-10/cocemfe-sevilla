@@ -6,33 +6,68 @@
   {% load bootstrap5 %}
   {% bootstrap_css %}
   {% bootstrap_javascript %}
+  {% load static %}
+
 
 </head>
 <body>
 <style>
     a {
-        color: white;
+        color: #1e2125!important;
         text-decoration: none;
         margin: 0 10px;
+        font-weight: 500;
+    }
+
+    .navbar {
+        background-color: #c4e4e1!important;
+    }
+
+    .nav-link:hover {
+        background-color: #a3bfbd;
+        border-radius: 10px;
+    }
+
+    .btn-orange {
+        background-color: transparent;
+        border: 2px solid orange;
+        color: #222529;
+    }
+
+    .btn-orange:hover {
+        background-color: orange;
+        color: white;
     }
 </style>
 
 <!-- Grey with black text -->
-    <nav class="navbar bg-body-tertiary">
-            <div class="d-flex justify-content-center" style="width: 20%; height: 100%;">
-                <img src="https://www.cocemfe.es/wp-content/uploads/thegem-logos/logo_afb4a0816f68e0c0dc0425488429ff40_2x.png" alt="Descripción de la imagen" style="width: 200px; height: auto;">
-            </div>
-            <div style="background-color: #00A599; width: 80%; height: 60px; display: flex; align-items: center; justify-content: space-between;">
-                <div>
-                    <a class="navbar-brand" href="/documents">Documentos</a>
-                    <a class="navbar-brand" href="/professionals">Usuarios</a>
-                    <a class="navbar-brand" href="{% url "organizations:organization_list" %}">Organizaciones</a>
-                </div>
-                <div>
-                    <a class="navbar-brand" href="#">Cerrar sesión</a>
-                </div>
-            </div>
-    </nav>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid d-flex justify-content-around">
+        <div class="d-flex justify-content-center ms-2" style="width: 250px; height: 200%;">
+            <a href="/">
+                <img src="{% static 'logo_sevilla.png' %}" alt="Descripción de la imagen" style="width: 250px; height: auto;">
+            </a>
+        </div>
+
+        <div class="collapse navbar-collapse d-flex justify-content-center" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/documents">Documentos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/professionals">Profesionales</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url "organizations:organization_list" %}">Organizaciones</a>
+                </li>
+            </ul>
+        </div>
+        <div class="d-flex justify-content-end" style="width: 200px; height: 100%;">
+            <button class="btn btn-orange me-5" type="button">Perfil</button>
+        </div>
+    </div>
+</nav>
+
     {% block encabezado %}
     {% endblock %}
     {% block contenido %}
