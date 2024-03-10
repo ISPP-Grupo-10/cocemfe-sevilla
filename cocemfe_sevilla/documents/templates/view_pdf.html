@@ -2,6 +2,29 @@
 {% load static %}
 
 {% block contenido %}
+{% if messages %}
+    <div class="container mt-3">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                {% for message in messages %}
+                    <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-danger{% endif %}" role="alert">
+                        <small>{{ message }}</small><br>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        setTimeout(function() {
+            var errorMessage = document.querySelector('.alert');
+            errorMessage.style.display = 'none';
+        }, 20000);
+    </script>
+{% endif %}
+
+
+
 <link rel="stylesheet" type="text/css" href="{% static 'css/view_pdf.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/chat.css' %}">
 <h2 class="text-center">Detalles de documento</h2>
@@ -15,7 +38,7 @@
     <div class="row">
         {% if pdf.pdf_file %}
         <div class="doc-visualizer">
-            <iframe src="{{ pdf.pdf_file.url }}"></iframe>
+            <iframe name="pdf_file" src="{{ pdf.pdf_file.url }}"></iframe>
         </div>
         {% else %}
         <div class="doc-visualizer">
@@ -25,30 +48,76 @@
         <div class="doc-comments">
             <!-- Aquí puedes colocar el contenido de los comentarios -->
             <h3>Comentarios</h3>
+            <div class="comments-container">
+                {% for suggestion in page_obj %}
+                    <div class="comment-box">
+                        <div class="comment-header">
+                            <span>{{ suggestion.professional }}</span>
+                            <span>{{ suggestion.date }}</span>
+                        </div>
+                        <div class="comment-content">
+                            <p style="font-size: 19px;">{{ suggestion.main }}</p>
+                            <p style="color: #4b4a4a;">{{ suggestion.justification }}</p>
+                            <!-- Agrega más contenido si es necesario -->
+                        </div>
+                    </div>
+                {% empty %}
+                    <b>No hay comentarios</b>
+                {% endfor %}
+            </div>
+            <div class="pagination">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <b><a style="color: black; text-decoration: none;" href="?page=1">&laquo; Primera</a></b>
+                        <b><a style="color: black; text-decoration: none;" href="?page={{ page_obj.previous_page_number }}">Anterior</a></b>
+                    {% endif %}
+        
+                    <span class="current">
+                        <br>
+                        <b>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.</b>
+                    </span>
+        
+                    {% if page_obj.has_next %}
+                        <b><a style="color: black; text-decoration: none;" href="?page={{ page_obj.next_page_number }}">Siguiente</a></b>
+                        <b><a style="color: black; text-decoration: none;" href="?page={{ page_obj.paginator.num_pages }}">Última &raquo;</a></b>
+                    {% endif %}
+                </span>
+            </div>
         </div>
+        
 
         {% if pdf.status == 'Aportaciones' %}
         <div class="comment-form-container">
             <!-- Formulario para enviar comentarios -->
-            <form method="post" action="">
+            <form method="post" action="{% url 'create_suggestion' document_id=pdf.pk %}">
                 {% csrf_token %}
                 <div class="comment-field">
-                    <label for="title">Título del comentario:</label>
-                    <input type="text" id="title" name="title" placeholder="Título del comentario">
+                    <label for="main">Título del comentario:</label>
+                    <input type="text" id="main" name="main" placeholder="Título del comentario" required>
                 </div>
                 <div class="comment-field">
                     <label for="relevance">Relevancia:</label>
-                    <select id="relevance" name="relevance">
-                        <option value="muy">Muy importante</option>
+                    <select id="relevance" name="relevance" required>
+                        <option value="urgente">Muy importante</option>
                         <option value="importante">Importante</option>
                         <option value="poco">Poco importante</option>
                     </select>
                 </div>
                 <div class="comment-field">
                     <label for="justification">Cuerpo del comentario:</label>
-                    <textarea id="justification" name="justification" placeholder="Cuerpo del comentario"></textarea>
+                    <textarea id="justification" name="justification" placeholder="Cuerpo del comentario" required></textarea>
+                </div>
+
+                <div class="comment-field">
+                    <label for="section">Sección:</label>
+                    <textarea id="section" name="section" placeholder="Sección" required></textarea>
                 </div>
             
+                <div class="comment-field">
+                    <label for="page">Pagina:</label><br>
+                    <input type="number" id="page" name="page" required>
+                </div>
+
                 <button type="submit">Enviar comentario</button>
             </form>
         </div>
@@ -67,7 +136,6 @@
     {% endif %}
 
 </div>
-
 
 {% endblock %}
 
