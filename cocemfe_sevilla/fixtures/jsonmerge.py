@@ -8,7 +8,7 @@ fixtures_dir = 'fixtures'
 files = os.listdir(fixtures_dir)
 
 # Filtrar solo los archivos JSON que no sean sample_data.json
-json_files = [os.path.join(fixtures_dir, file) for file in files if file.endswith('.json') and file != 'sample_data.json']
+json_files = [os.path.join(fixtures_dir, file) for file in files if file.endswith('.json') and file != 'data.json']
 
 # Leer y combinar los datos de los archivos JSON
 combined_data = []

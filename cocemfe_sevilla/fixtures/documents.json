@@ -139,7 +139,7 @@
       "pk": 10,
       "fields": {
         "name": "Plan de Accesibilidad Osuna",
-        "pdf_file": "",
+        "pdf_file": "pdfs/Plan-de-Accesibilidad-Osuna.pdf",
         "ubication": "Osuna",
         "status": "Revisado",
         "professionals": [1, 2, 4, 5, 6, 7, 8, 9, 10, 11],
