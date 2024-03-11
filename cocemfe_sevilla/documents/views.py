@@ -62,6 +62,7 @@ def view_pdf_admin(request, pk):
         return render(request, 'view_pdf.html', {'pdf': pdf})    
     else:
         return render(request, '403.html')
+
     
 
 def update_pdf(request,pk):
