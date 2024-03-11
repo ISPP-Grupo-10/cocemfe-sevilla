@@ -19,28 +19,20 @@ def upload_pdf(request):
             form = PDFUploadForm(request.POST, request.FILES)
             if form.is_valid():
                 suggestion_end_date = form.cleaned_data['suggestion_end_date']
-                voting_end_date = form.cleaned_data['voting_end_date']
-                pdf_file = form.cleaned_data['pdf_file']
-                try:
-                    FileExtensionValidator(allowed_extensions=['pdf'])(pdf_file)
-                except ValidationError as e:
-                    form.add_error('pdf_file', e)
-                    messages.error(request, "El archivo debe ser un PDF.")
-                else:
-                    if suggestion_end_date > timezone.now() :
-                        document = form.save(commit=False)
-                        document.suggestion_start_date = timezone.now()
-                        document.status = 'Borrador'
-                        document.voting_start_date = suggestion_end_date
-                        document.suggestion_end_date = suggestion_end_date
-                        document.voting_end_date = voting_end_date
-                        professionals = form.cleaned_data['professionals']
-                        document.save()
-                        document.professionals.set(professionals)
-                        document.save()
-                        return redirect('list_pdf')
-                    else:
-                        messages.error(request, "La fecha de finalización debe ser posterior a la fecha actual.")
+                suggestion_start_date = form.cleaned_data['suggestion_start_date']
+                
+                document = form.save(commit=False)
+                document.voting_start_date = suggestion_end_date
+                if suggestion_start_date and suggestion_start_date.date() == timezone.now().date():
+                    document.status = 'Aportaciones'
+                if suggestion_end_date and suggestion_end_date.date() == timezone.now().date():
+                    document.status = 'Votaciones'
+                professionals = form.cleaned_data['professionals']
+                document.save()
+                document.professionals.set(professionals)
+                document.save()
+                return redirect('list_pdf')
+               
         else:
             form = PDFUploadForm()
         return render(request, 'upload_pdf.html', {'form': form, 'professionals_not_superuser': professionals})
@@ -59,7 +51,25 @@ def view_pdf(request, pk):
 def view_pdf_admin(request, pk):
     pdf = get_object_or_404(Document, pk=pk)
     if request.user.is_superuser:
-        return render(request, 'view_pdf.html', {'pdf': pdf})    
+        if pdf.status == 'Borrador':
+            if pdf.suggestion_start_date and pdf.suggestion_end_date and pdf.professionals.all():
+                mensaje = None
+            else:
+                mensaje = "Debe indicar las fechas de inicio y fin de sugerencia y seleccionar al menos un profesional."
+                
+            return render(request, 'view_pdf.html', {'pdf': pdf, 'mensaje': mensaje})
+        else:
+            return render(request, 'view_pdf.html', {'pdf': pdf})
+    elif request.user in pdf.professionals.all():
+        if pdf.status == 'Borrador':
+            if pdf.suggestion_start_date and pdf.suggestion_end_date and pdf.professionals.all():
+                mensaje = None
+            else:
+                mensaje = "Debe indicar las fechas de inicio y fin de sugerencia y seleccionar al menos un profesional."
+            return render(request, 'view_pdf.html', {'pdf': pdf, 'mensaje': mensaje})
+        else:
+            #Aquí iría la lógica para otros estados
+            return render(request, 'view_pdf.html', {'pdf': pdf})
     else:
         return render(request, '403.html')
     
