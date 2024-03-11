@@ -23,9 +23,11 @@
             <input type="text" class="form-control form-control-xs" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" style="width: 200px;">
           </div>
         </div>
+        {% if request.user.is_superuser %}
         <div>
           <a href="{% url 'organizations:create_organization' %}" class="btn btn-orange">+ Añadir organización</a>
         </div>
+        {% endif %}
       </div>
       <div class="mt-8"></div>
       <div class="w-full">
@@ -42,9 +44,11 @@
                 <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
                   Email
                 </th>
+                {% if request.user.is_superuser %}
                 <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
                   Acciones
                 </th>
+                {% endif %}
               </tr>
             </thead>
             <tbody class="[&amp;_tr:last-child]:border-0">
@@ -61,6 +65,7 @@
                     </td>
                     <td class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">{{ org.telephone_number }}</td>
                     <td class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">{{ org.email }}</td>
+                    {% if request.user.is_superuser %}
                     <td class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">
                       <div class="d-flex space-x-2">
                         <a href="{% url 'organizations:update_organization' pk=org.pk %}" class="btn btn-outline-primary mx-2">
@@ -75,6 +80,7 @@
                         </a>
                       </div>
                     </td>
+                    {% endif %}
                   </tr>
                 {% endfor %}
               {% else %}

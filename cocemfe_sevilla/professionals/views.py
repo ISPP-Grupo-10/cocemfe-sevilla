@@ -54,7 +54,7 @@ class EditUserView(View):
 
 @user_passes_test(is_admin)
 def professional_list(request):
-    professionals = Professional.objects.all()
+    professionals = Professional.objects.filter(is_superuser=False)
 
     name_filter = request.GET.get('name', '')
     if name_filter:
@@ -83,7 +83,7 @@ def professional_list(request):
 @user_passes_test(is_admin)
 def delete_professional(request, id):
     professional = get_object_or_404(Professional, id=id)
-    professionals = Professional.objects.all()
+    professionals = Professional.objects.filter(is_superuser=False)
 
     if request.method == 'POST':
         if request.user.is_superuser:
