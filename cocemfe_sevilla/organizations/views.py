@@ -4,14 +4,17 @@ from .forms import OrganizationForm
 
 # Create your views here.
 def create_organization(request):
-    if request.method == 'POST':
-        form = OrganizationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('organizations:organization_list')  
+    if request.user.is_superuser:
+        if request.method == 'POST':
+            form = OrganizationForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('organizations:organization_list')  
+        else:
+            form = OrganizationForm()
+        return render(request, 'create_organization.html', {'form': form})
     else:
-        form = OrganizationForm()
-    return render(request, 'create_organization.html', {'form': form})
+        return render(request, '403.html')
 
 def get_organizations(request):
     pass
@@ -25,19 +28,26 @@ def get_organization(request, pk):
 
 def update_organization(request, pk):
     organization = get_object_or_404(Organization, pk=pk)
-    if request.method == 'POST':
-        form = OrganizationForm(request.POST, instance=organization)
-        if form.is_valid():
-            form.save()
-            return redirect('organizations:organization_list') 
+    if request.user.is_superuser:
+        if request.method == 'POST':
+            form = OrganizationForm(request.POST, instance=organization)
+            if form.is_valid():
+                form.save()
+                return redirect('organizations:organization_list') 
+        else:
+            form = OrganizationForm(instance=organization)
+        return render(request, 'update_organization.html', {'form': form})
     else:
-        form = OrganizationForm(instance=organization)
-    return render(request, 'update_organization.html', {'form': form})
+        return render(request, '403.html')
+
 
 def delete_organization(request, pk):
     organization = get_object_or_404(Organization, pk=pk)
-    organization.delete()
-    return redirect('organizations:organization_list')
+    if request.user.is_superuser:
+        organization.delete()
+        return redirect('organizations:organization_list')
+    else:
+        return render(request, '403.html')
 
 def organization_list(request):
     organizations = Organization.objects.all()
