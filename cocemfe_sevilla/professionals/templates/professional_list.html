@@ -24,9 +24,11 @@
             <input type="text" class="form-control form-control-xs" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" style="width: 200px;">
           </div>
         </div>
+        {% if request.user.is_superuser %}
         <div>
           <a href="{% url 'upload_pdf' %}" class="btn btn-orange">+ Añadir profesional</a>
         </div>
+        {% endif %}
       </div>
       <div class="mt-8"></div>
       <div class="w-full">
