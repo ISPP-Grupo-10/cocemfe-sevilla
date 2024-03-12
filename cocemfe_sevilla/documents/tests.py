@@ -165,7 +165,7 @@ class DocumentTestCase(TestCase):
             'status': 'Borrador',            
             'suggestion_end_date': new_suggestion_end_date,
             'voting_end_date':new_voting_end_date,
-            'professionals': [self.professional.id, new_professional_id], 
+            'professionals': [self.professional.id, new_professional_id]
         })
 
         self.assertEqual(response.status_code, 302) 
@@ -201,10 +201,13 @@ class DocumentTestCase(TestCase):
 
 
         invalid_suggestion_end_date = timezone.now().date() - timedelta(days=15)  
-
+        new_voting_end_date = timezone.now().date() + timedelta(days=65) 
+        
         response = self.client.post(modify_pdf_url, {
             'name': self.document.name,
+            'status': 'Borrador',            
             'suggestion_end_date': invalid_suggestion_end_date,
+            'voting_end_date':new_voting_end_date,
             'professionals': [self.professional.id],
         })
 
@@ -213,7 +216,7 @@ class DocumentTestCase(TestCase):
         modified_document = Document.objects.get(pk=self.document.pk)
         self.assertNotEqual(modified_document.suggestion_end_date, invalid_suggestion_end_date)
 
-        self.assertFormError(response, 'form', 'suggestion_end_date', ('La fecha de fin de sugerencia no puede ser anterior a la fecha de inicio.'))
+        self.assertFormError(response, 'form', 'suggestion_end_date', ('La fecha de fin de sugerencia no puede ser anterior a la fecha actual.'))
 
     
     def test_modify_pdf_with_valid_data(self):
