@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'corsheaders',
     "chat_messages",
     "documents",
     "professionals",
@@ -47,28 +46,22 @@ INSTALLED_APPS = [
     "votings",
     "organizations",
     "bootstrap5",
-    "base"
+    "base",
 ]
 X_FRAME_OPTIONS = 'SAMEORIGIN'
-
-CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:8000",
-    "http://localhost:8000",
-    # Agrega otros dominios permitidos si es necesario
-]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
 ROOT_URLCONF = "cocemfe_sevilla.urls"
+
 
 TEMPLATES = [
     {

@@ -37,9 +37,11 @@
     </div>
     <div class="row">
         {% if pdf.pdf_file %}
+        
         <div class="doc-visualizer">
             <iframe name="pdfViewer" id="pdfViewer" src="{{ pdf.pdf_file.url }}"></iframe>
-        </div>
+        </div> 
+
         {% else %}
         <div class="doc-visualizer">
             <p>No hay archivo adjunto.</p>
@@ -136,31 +138,75 @@
     {% endif %}
 
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+<script>
+  // Especificar la ruta del script del trabajador
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
+</script>
+
+<script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+
 <script>
     function goToSuggestionPage(pageNumber, pdfUrl, section) {
-        var iframe = document.getElementById('pdfViewer');
-        
-        iframe.src = pdfUrl
+        // Cargar el PDF usando PDF.js
+        pdfjsLib.getDocument(pdfUrl).promise.then(function(pdfDoc_) {
+            var pdfDoc = pdfDoc_;
+            var numPages = pdfDoc.numPages;
+            var newObject = document.createElement('iframe');
+            
+            // Función para subrayar el texto en una página
+            console.log(pdfDoc.getPage(pageNumber));
+            function highlightText(pageNumber) {
+                pdfDoc.getPage(pageNumber).then(function(page) {
+                    // Obtener dimensiones del iframe
+                    var iframe = document.getElementById('pdfViewer');
+                    var iframeRect = iframe.getBoundingClientRect();
 
+                    // Obtener contenido de la página
+                    return page.getTextContent().then(function(textContent) {
+                        // Recorrer los items del contenido de texto
+                        textContent.items.forEach(function(textItem) {
+                            // Obtener el texto del item
+                            var text = textItem.str;
+                            // Si el texto coincide con la sección, resaltarlo
+                            if (text.includes(section)) {
+                                // Resaltar el texto
+                                var div = document.createElement('div');
+                                div.style.position = 'absolute';
 
-        // Verifica si se encuentra el iframe
-        if (iframe) {
-            // Construye la nueva URL de la página del PDF
-            var pdfUrl = iframe.src;
-            var newUrl = pdfUrl + '#page=' + pageNumber;
-            // Establece la nueva URL del iframe
-            iframe.src = newUrl;
+                                // Coordenadas relativas al iframe
+                                var left = textItem.transform[4] - iframeRect.left;
+                                var top = textItem.transform[5] - textItem.height - iframeRect.top;
 
-            //Subrayar el texto de la seccion
-            var documentIfram = iframe.contentDocument || iframe.contentWindow.document;
+                                div.style.left = left + 'px';
+                                div.style.top = top + 'px';
+                                div.style.width = textItem.width + 'px';
+                                div.style.height = textItem.height + 'px';
+                                div.style.backgroundColor = 'yellow'; // Cambiar el color del resaltado según necesites
+                                div.style.opacity = '0.5'; // Ajustar la opacidad según sea necesario
+                                document.body.appendChild(div);
+                            }
+                        });
+                    });
+                });
+            }
+            
+            // Clonar los atributos del objeto actual
+            newObject.setAttribute('src', pdfUrl + '#page=' + pageNumber);
+            newObject.setAttribute('id', 'pdfViewer');
+            newObject.setAttribute('width', '600');
+            newObject.setAttribute('height', '400');
 
-            console.log(documentIfram)
-            var elemento = documentIfram.getElementById('numPages')
-            console.log(elemento)
- 
-        }
+            // Reemplazar el objeto actual con el nuevo objeto
+            var currentObject = document.getElementById('pdfViewer');
+            currentObject.parentNode.replaceChild(newObject, currentObject);
+            
+            // Subrayar el texto en la página especificada
+            highlightText(pageNumber);
+        });
     }
 </script>
+
 
 
 {% endblock %}
