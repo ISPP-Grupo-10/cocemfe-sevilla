@@ -17,6 +17,8 @@ class Professional(AbstractUser):
     organizations = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='professionals', null=True)
     email = models.EmailField(blank=True, null=True)
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+    terms_accepted = models.BooleanField(default=False)
+    
 #    access_documents = models.ManyToManyField(Document, related_name='professionals', blank=True)
 
     def __str__(self):
