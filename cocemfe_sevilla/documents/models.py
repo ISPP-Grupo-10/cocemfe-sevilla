@@ -31,12 +31,12 @@ class Document(models.Model):
     def clean(self):
             if self.suggestion_start_date and self.suggestion_end_date:
                 if self.suggestion_start_date > self.suggestion_end_date:
-                    raise ValidationError({'suggestion_end_date': _('La fecha de fin de sugerencia no puede ser anterior a la fecha de inicio.')})
+                    raise ValidationError({'suggestion_end_date': ('La fecha de fin de sugerencia no puede ser anterior a la fecha de inicio.')})
                 elif self.suggestion_start_date == self.suggestion_end_date:
-                    raise ValidationError({'suggestion_end_date': _('La fecha de fin de sugerencia no puede ser igual que la fecha de inicio.')})
+                    raise ValidationError({'suggestion_end_date': ('La fecha de fin de sugerencia no puede ser igual que la fecha de inicio.')})
 
             if self.voting_start_date and self.voting_end_date:
                 if self.voting_start_date > self.voting_end_date:
-                    raise ValidationError({'voting_end_date': _('La fecha de fin de votación no puede ser anterior a la fecha de inicio.')})
+                    raise ValidationError({'voting_end_date': ('La fecha de fin de votación no puede ser anterior a la fecha de inicio.')})
                 elif self.voting_start_date == self.voting_end_date:
-                    raise ValidationError({'voting_end_date': _('La fecha de fin de votación no puede ser igual que la fecha de inicio.')})
+                    raise ValidationError({'voting_end_date': ('La fecha de fin de votación no puede ser igual que la fecha de inicio.')})

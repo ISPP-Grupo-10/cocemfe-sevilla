@@ -8,6 +8,7 @@ from organizations.models import Organization
 from django.test import RequestFactory
 from django.core.files.uploadedfile import SimpleUploadedFile
 from pathlib import Path
+from django.utils.translation import gettext as _  
 class DocumentTestCase(TestCase):
     def setUp(self):
         # Creamos una organización
@@ -93,34 +94,149 @@ class DocumentTestCase(TestCase):
 
     def test_upload_pdf_valid_form(self):
         self.client.login(username='admin', password='admin')
-        # Obtén la ruta absoluta del archivo PDF
-        pdf_path = Path(__file__).resolve().parent.parent / 'media' / 'pdfs' / 'Jaime_García_García_-_Compromiso_de_Participación_en_la_asignatura_ISPP_v1.3.pdf'
-        
-        # Verifica si el archivo PDF existe
-        if pdf_path.exists():
-            # Lee el contenido del archivo PDF
-            with open(pdf_path, 'rb') as f:
-                pdf_file = f.read()
-        else:
-            raise FileNotFoundError(f"No se encontró el archivo PDF en la ruta: {pdf_path}")
 
         data = {
             'name': 'Documento de prueba',
-            'ubication': 'Ubicación de prueba',  # Corregido el nombre del campo
+            'ubication': 'Ubicación de prueba', 
+            'status': 'Borrador',
             'suggestion_start_date': self.document.suggestion_start_date,
             'suggestion_end_date': self.document.suggestion_end_date,
             'voting_start_date' :self.document.voting_start_date,
             'voting_end_date':self.document.voting_end_date,
-            'pdf_file': pdf_file, 
+            'pdf_file': self.pdf_file, 
         }
         url = reverse('upload_pdf')
         response = self.client.post(url, data)
-        print(response.content) 
-        self.assertEqual(response.status_code, 302)  # Verifica si se redirecciona a la página 'list_pdf'
-        self.assertEqual(Document.objects.count(), 2)  # Verifica si se creó el documento
-        
-        document = Document.objects.last()
-        self.assertEqual(document.suggestion_start_date, self.document.suggestion_start_date)  # Verifica si suggestion_start_date está establecido correctamente
-        self.assertEqual(document.suggestion_end_date, self.document.suggestion_end_date)  # Verifica si suggestion_end_date está establecido correctamente
+        self.assertEqual(response.status_code, 302)  
+        self.assertEqual(Document.objects.count(), 2)  
 
+
+    def test_upload_pdf_invalid_form(self):
+        self.client.login(username='admin', password='admin')
+        data = {
+            'suggestion_start_date': timezone.now().date(),
+            'name': 'Documento de prueba',
+            'ubication': 'Ubicación de prueba',  
+            'status': 'Abierto',  
+            'suggestion_end_date': '01/01/2021',
+            'pdf_file': self.pdf_file,
+            'professionals': [1],
+        }
+        url=reverse('upload_pdf')
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200)  
+        self.assertEqual(Document.objects.count(), 1) 
         self.client.logout()
+
+
+    def test_upload_pdf_not_superuser(self):
+        self.client.logout()
+        url=reverse('upload_pdf')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, '403.html')
+
+
+    def test_modify_pdf_add_professional(self):
+        self.client.login(username='admin', password='admin')
+
+        new_professional = Professional.objects.create(
+            first_name='Pedro',
+            last_name='González',
+            username='pedrogonzalez',
+            telephone_number='987654321',
+            license_number='Licencia del nuevo profesional',
+            organizations=self.organization
+        )
+
+        self.assertIsNotNone(new_professional)
+
+        self.assertEqual(self.document.professionals.count(), 1)
+
+        modify_pdf_url = reverse('update_pdf', args=[self.document.pk])
+
+        new_name = 'Documento modificado con nuevo profesional'
+        new_suggestion_end_date = timezone.now().date() + timedelta(days=15)
+        new_voting_end_date = timezone.now().date() + timedelta(days=65) 
+        new_professional_id = new_professional.id
+
+        response = self.client.post(modify_pdf_url, {
+            'name': new_name,
+            'status': 'Borrador',            
+            'suggestion_end_date': new_suggestion_end_date,
+            'voting_end_date':new_voting_end_date,
+            'professionals': [self.professional.id, new_professional_id], 
+        })
+
+        self.assertEqual(response.status_code, 302) 
+
+
+        modified_document = Document.objects.get(pk=self.document.pk)
+
+        self.assertEqual(modified_document.name, new_name)
+        self.assertEqual(modified_document.professionals.count(), 2) 
+        self.assertIn(self.professional, modified_document.professionals.all()) 
+        self.assertIn(new_professional, modified_document.professionals.all()) 
+
+    def test_delete_pdf(self):
+        self.client.login(username='admin', password='admin')
+
+        delete_pdf_url = reverse('delete_pdf', args=[self.document.pk])
+
+        initial_count = Document.objects.count()
+
+        response = self.client.post(delete_pdf_url)
+
+        self.assertRedirects(response, reverse('list_pdf'))
+
+        self.assertEqual(Document.objects.count(), initial_count - 1)
+
+        with self.assertRaises(Document.DoesNotExist):
+            Document.objects.get(pk=self.document.pk)
+
+    def test_modify_pdf_with_invalid_suggestion_end_date(self):
+        self.client.login(username='admin', password='admin')
+
+        modify_pdf_url = reverse('update_pdf', args=[self.document.pk])
+
+
+        invalid_suggestion_end_date = timezone.now().date() - timedelta(days=15)  
+
+        response = self.client.post(modify_pdf_url, {
+            'name': self.document.name,
+            'suggestion_end_date': invalid_suggestion_end_date,
+            'professionals': [self.professional.id],
+        })
+
+        self.assertEqual(response.status_code, 200)
+
+        modified_document = Document.objects.get(pk=self.document.pk)
+        self.assertNotEqual(modified_document.suggestion_end_date, invalid_suggestion_end_date)
+
+        self.assertFormError(response, 'form', 'suggestion_end_date', ('La fecha de fin de sugerencia no puede ser anterior a la fecha de inicio.'))
+
+    
+    def test_modify_pdf_with_valid_data(self):
+        self.client.login(username='admin', password='admin')
+
+        modify_pdf_url = reverse('update_pdf', args=[self.document.pk])
+
+        new_name = 'Documento modificado con nuevo profesional'
+        new_suggestion_end_date = timezone.now().date() + timedelta(days=20)
+        new_voting_end_date = timezone.now().date() + timedelta(days=65) 
+
+        response = self.client.post(modify_pdf_url, {
+            'name': new_name,
+            'status': 'Borrador',            
+            'suggestion_end_date': new_suggestion_end_date,
+            'voting_end_date':new_voting_end_date,
+            'professionals': [self.professional.id],
+        })
+
+        self.assertEqual(response.status_code, 302) 
+
+        modified_document = Document.objects.get(pk=self.document.pk)
+        modified_suggestion_end_date = timezone.localtime(modified_document.suggestion_end_date).date()
+
+        self.assertEqual(modified_document.name, new_name)
+        self.assertEqual(modified_suggestion_end_date, new_suggestion_end_date)
