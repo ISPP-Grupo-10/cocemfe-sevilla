@@ -25,6 +25,7 @@ class ProfessionalModelTest(TestCase):
             telephone_number='123456789',
             license_number='ABC123',
             organizations=self.organization,
+            terms_accepted=True
         )
 
 
@@ -52,6 +53,7 @@ class ProfessionalFormTest(TestCase):
             'organizations': self.organization.id,
             'email': 'john.doe@example.com',
             'profile_picture': 'test.jpg',
+            'terms_accepted': 'True',
         }
         form = ProfessionalForm(data=form_data)
         self.assertTrue(form.is_valid(), form.errors)
@@ -71,6 +73,7 @@ class ProfessionalViewTest(TestCase):
             last_name='Doe',
             telephone_number='123456789',
             license_number='ABC123',
+            terms_accepted=True
         )
 
     def test_professional_detail_view(self):
@@ -113,7 +116,8 @@ class ProfessionalListTestCase(TestCase):
             last_name='Doe',
             telephone_number='123456789',
             license_number='12345',
-            organizations=self.organization
+            organizations=self.organization,
+            terms_accepted=True
         )
 
         self.professional2 = Professional.objects.create(
@@ -123,7 +127,8 @@ class ProfessionalListTestCase(TestCase):
             last_name='Smith',
             telephone_number='987654321',
             license_number='67890',
-            organizations=self.organization
+            organizations=self.organization,
+            terms_accepted=True
         )
 
     def test_professional_list_no_filter(self):
