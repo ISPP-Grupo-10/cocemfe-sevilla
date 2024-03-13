@@ -165,9 +165,10 @@ class DocumentTestCase(TestCase):
             'status': 'Borrador',            
             'suggestion_end_date': new_suggestion_end_date,
             'voting_end_date':new_voting_end_date,
-            'professionals': [self.professional.id, new_professional_id]
+            'professionals': [self.professional.id, new_professional_id],
+            'pdf_file': self.pdf_file,
+            'ubication': 'Ubicación de prueba',  
         })
-
         self.assertEqual(response.status_code, 302) 
 
 
@@ -224,7 +225,7 @@ class DocumentTestCase(TestCase):
 
         modify_pdf_url = reverse('update_pdf', args=[self.document.pk])
 
-        new_name = 'Documento modificado con nuevo profesional'
+        new_name = 'Documento modificado con datos validos'
         new_suggestion_end_date = timezone.now().date() + timedelta(days=20)
         new_voting_end_date = timezone.now().date() + timedelta(days=65) 
 
@@ -234,6 +235,8 @@ class DocumentTestCase(TestCase):
             'suggestion_end_date': new_suggestion_end_date,
             'voting_end_date':new_voting_end_date,
             'professionals': [self.professional.id],
+            'pdf_file': self.pdf_file,
+            'ubication': 'Ubicación de prueba', 
         })
 
         self.assertEqual(response.status_code, 302) 
