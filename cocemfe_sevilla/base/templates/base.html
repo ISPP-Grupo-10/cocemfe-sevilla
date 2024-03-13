@@ -75,8 +75,6 @@
         <div>
             {% if user.is_authenticated %}
             <li><a href="{% url "professionals:logout" %}"><span class="icon icon-person"></span> Cerrar Sesión</a></li>
-            {% else %}
-            <li><a href="{% url "professionals:login" %}"><span class="icon icon-person"></span> Iniciar Sesión</a></li>
             {% endif %}
         </div>
             {% if user.is_authenticated %}
