@@ -28,6 +28,7 @@ urlpatterns = [
     path('documents/', include('documents.urls')),
     path('professionals/', include('professionals.urls')),
     path('organizations/', include('organizations.urls')),
+    path('maps/', include('maps.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

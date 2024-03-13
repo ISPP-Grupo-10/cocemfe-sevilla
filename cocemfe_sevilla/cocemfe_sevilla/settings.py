@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "suggestions",
     "votings",
     "organizations",
+    "maps",
     "bootstrap5",
     "base"
 ]
