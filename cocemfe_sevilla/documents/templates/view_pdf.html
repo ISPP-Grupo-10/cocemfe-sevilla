@@ -8,10 +8,10 @@
 <div class='doc-container'>
     <div class="doc-info">
         <p><strong>Documento:</strong> {{ pdf.name }}</p>
-        <p><strong>Plazo:</strong> {{ pdf.start_date }} - {{ pdf.end_date }}</p>
+        <p><strong>Plazo:</strong> {{ pdf.suggestion_start_date }} - {{ pdf.suggestion_end_date }}</p>
         <p><strong>Ubicación:</strong> {{ pdf.ubication }}</p>
         <p class="estado-{{ pdf.status|lower }}">{{ pdf.status }}</p>
-    </div>
+    </div>    
     <div class="row">
         {% if pdf.pdf_file %}
         <div class="doc-visualizer">
