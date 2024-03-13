@@ -12,7 +12,7 @@ from django.utils.translation import gettext as _
 class DocumentTestCase(TestCase):
     def setUp(self):
         # Creamos una organización
-        self.user = Professional.objects.create_superuser(username='admin', password='admin')
+        self.user = Professional.objects.create_superuser(username='admin', password='admin', terms_accepted=True)
         self.pdf_file = SimpleUploadedFile("test.pdf", b"file_content", content_type="application/pdf")
 
         self.organization = Organization.objects.create(
@@ -30,7 +30,8 @@ class DocumentTestCase(TestCase):
             username='juanperez',
             telephone_number='987654321',
             license_number='Licencia del profesional',
-            organizations=self.organization
+            organizations=self.organization,
+            terms_accepted=True
         )
         
         # Creamos un documento asignado al profesional
