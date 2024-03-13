@@ -8,10 +8,10 @@
 <div class='doc-container'>
     <div class="doc-info">
         <p><strong>Documento:</strong> {{ pdf.name }}</p>
-        <p><strong>Plazo:</strong> {{ pdf.start_date }} - {{ pdf.end_date }}</p>
+        <p><strong>Plazo:</strong> {{ pdf.suggestion_start_date }} - {{ pdf.suggestion_end_date }}</p>
         <p><strong>Ubicación:</strong> {{ pdf.ubication }}</p>
         <p class="estado-{{ pdf.status|lower }}">{{ pdf.status }}</p>
-    </div>
+    </div>    
     <div class="row">
         {% if pdf.pdf_file %}
         <div class="doc-visualizer">
@@ -22,10 +22,24 @@
             <p>No hay archivo adjunto.</p>
         </div>
         {% endif %}
-        <div class="doc-comments">
-            <!-- Aquí puedes colocar el contenido de los comentarios -->
-            <h3>Comentarios</h3>
-        </div>
+        {% if pdf.status == 'Borrador' %}
+            <div class="doc-comments">
+                {% if mensaje %}
+                    <p style="color: red;">{{ mensaje }}</p>
+                {% else %}
+                    <p id="contador"></p>
+                {% endif %}
+                {% if user.is_superuser %}
+                    <p>Puede modificar el documento aquí:</p>
+                    <a href="{% url 'update_pdf' pdf.id %}" class="btn btn-primary">Editar</a>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="doc-comments">
+                <!-- Aquí puedes colocar el contenido de los comentarios -->
+                <h3>Comentarios</h3>
+            </div>
+        {% endif %}
     </div>
     {% if request.user.is_staff or request.user in pdf.professionals.all %}
     <a href="{% url 'view_pdf_chat' pk=pdf.pk %}">
@@ -39,4 +53,70 @@
     {% endif %}
 
 </div>
+<script>
+    // Obtener la fecha de inicio del contador desde el backend (en formato de cadena)
+    var suggestionStartDateStr = "{{ pdf.suggestion_start_date }}";
+
+    // Expresión regular para extraer los componentes de la fecha y hora
+    var regex = /(\d{1,2}) de ([a-z]+) de (\d{4}) a las (\d{2}):(\d{2})/i;
+    var matches = suggestionStartDateStr.match(regex);
+
+    // Verificar si hay coincidencias
+    if (matches && matches.length === 6) {
+        var day = parseInt(matches[1]);
+        var month = matches[2];
+        var year = parseInt(matches[3]);
+        var hour = parseInt(matches[4]);
+        var minute = parseInt(matches[5]);
+
+        // Convertir el nombre del mes a su número correspondiente
+        var months = {
+            "enero": 0,
+            "febrero": 1,
+            "marzo": 2,
+            "abril": 3,
+            "mayo": 4,
+            "junio": 5,
+            "julio": 6,
+            "agosto": 7,
+            "septiembre": 8,
+            "octubre": 9,
+            "noviembre": 10,
+            "diciembre": 11
+        };
+        var monthNumber = months[month.toLowerCase()];
+
+        // Construir un objeto Date con los componentes extraídos
+        var startDate = new Date(year, monthNumber, day, hour, minute);
+
+        // Función para actualizar el contador regresivo
+        function actualizarContador() {
+            // Obtener la fecha y hora actual
+            var now = new Date();
+
+            // Calcular la diferencia en milisegundos entre la fecha de inicio y la fecha actual
+            var difference = startDate.getTime() - now.getTime();
+
+            // Calcular los días, horas, minutos y segundos restantes
+            var days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+            // Mostrar el contador en el elemento HTML con id "contador"
+            document.getElementById("contador").innerHTML = "Tiempo restante para empezar las aportaciones: " + days + " días " + hours + " horas " + minutes + " minutos " + seconds + " segundos ";
+
+            // Actualizar el contador cada segundo
+            setTimeout(actualizarContador, 1000);
+        }
+
+        // Iniciar el contador cuando la página se carga completamente
+        window.onload = function() {
+            actualizarContador();
+        };
+    } else {
+        // Si la cadena no tiene el formato esperado, mostrar un mensaje de error
+        document.getElementById("contador").innerHTML = "Error: Formato de fecha incorrecto.";
+    }
+</script>
 {% endblock %}
