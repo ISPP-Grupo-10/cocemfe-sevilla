@@ -30,6 +30,14 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+# TODO: CREAR EL CORREO DE COCEMFE Y PONER EL USUARIO Y CONTRASEÑA
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = ""
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = True
+
 # Application definition
 
 INSTALLED_APPS = [

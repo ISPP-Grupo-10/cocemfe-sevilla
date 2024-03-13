@@ -10,6 +10,8 @@ from django.core.validators import FileExtensionValidator
 from professionals.models import Professional
 from chat_messages.models import ChatMessage
 from chat_messages.forms import MessageForm
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 def upload_pdf(request):
@@ -141,6 +143,14 @@ def list_pdf(request):
         # Ahora puedes usar suggestion_start_date en tus filtros
         documentos = documentos.filter(suggestion_start_date=suggestion_start_date)
 
+        send_mail(
+            "Subject here",
+            "Here is the message.",
+            settings.EMAIL_HOST_USER,
+            ["fernandobaquero2002@gmail.com"],
+            fail_silently=False,
+        )
+
     return render(request, "list_pdf.html", {'documentos': documentos, 'Document': Document})
 
 
@@ -172,4 +182,13 @@ def publish_comment(request, pk):
 
     comments = ChatMessage.objects.filter(document=doc)
     return render(request, 'list_comments.html', {'doc': doc, 'chat_messages': comments, 'form': form})
+
+def send_email_document():
+    send_mail(
+    "Subject here",
+    "Here is the message.",
+    EMAIL_COCEMFE,
+    ["wibewo5755@aersm.com"],
+    fail_silently=False,
+    )
 
