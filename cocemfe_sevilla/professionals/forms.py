@@ -4,6 +4,9 @@ from django import forms
 from django.contrib.auth import get_user_model
 from organizations.models import Organization
 from .models import Professional, Request
+from django import forms
+from .models import Professional
+
 
 class ProfessionalForm(forms.ModelForm):
     class Meta:
@@ -26,6 +29,17 @@ class ProfessionalForm(forms.ModelForm):
             self.fields.pop('license_number')
             self.fields.pop('organizations')
             self.fields.pop('profile_picture')
+
+    def save(self, commit=True):
+        # Guardar la contraseña correctamente utilizando set_password
+        instance = super().save(commit=False)
+        password = self.cleaned_data.get('password')
+        if password:
+            instance.set_password(password)
+        if commit:
+            instance.save()
+        return instance
+
 
 '''
 class ProfessionalForm(forms.ModelForm):
