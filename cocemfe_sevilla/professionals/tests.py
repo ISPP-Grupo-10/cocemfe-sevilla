@@ -116,7 +116,7 @@ class ProfessionalListTestCase(TestCase):
 class ProfessionalCreationTest(TestCase):
     def setUp(self):
         self.client = Client()
-        self.create_professional_url = reverse('create_professional')
+        self.create_professional_url = reverse('professionals:create_professional')
 
         self.organization = Organization.objects.create(
             name='Test Organization',

@@ -47,10 +47,7 @@ def create_professional(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Profesional creado exitosamente.')
-            profesionalID = form.cleaned_data['username']
-            prof = Professional.objects.get(username=profesionalID)
-            print(prof.username, prof.password, prof.email, prof.telephone_number, prof.license_number, prof.organizations)
-            return redirect(reverse('professional_list'))
+            return redirect(reverse('professionals:professional_list'))
         else:
             messages.error(request, 'Error al crear el profesional. Por favor, corrija los errores en el formulario.')
     else:
