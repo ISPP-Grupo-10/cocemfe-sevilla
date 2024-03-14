@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib import messages
 from django.contrib.auth import logout, login, authenticate
+
+from documents.models import Document
 from .models import Professional, Request
 from django.contrib.auth.decorators import user_passes_test
 from .forms import ProfessionalForm, RequestCreateForm, RequestUpdateForm
@@ -123,3 +125,15 @@ def update_request(request, pk):
 def request_list(request):
     requests = Request.objects.all()
     return render(request, 'list_requests.html', {'requests': requests})
+
+
+def request_document_chats(request):
+    if request.method == 'GET':
+        professional = # Logged in user
+        possessed_documents = []
+        all_documents = Document.objects.all()
+        for document in all_documents:
+            if professional in document.professionals.all():
+                possessed_documents.append(document)
+        return render(request, 'list_chat.html', {'possessed_documents': possessed_documents})
+    
