@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 app_name = 'professionals'
 
 urlpatterns = [
-    #path('', professional_list, name='professional_list'),
+    path('', professional_list, name='professional_list'),
     path('create_professional/', create_professional, name='create_professional'),
     path('<int:id>/delete/', delete_professional, name='delete_professional'),
     path('<int:pk>/', edit_user_view, name='professional_detail'),
