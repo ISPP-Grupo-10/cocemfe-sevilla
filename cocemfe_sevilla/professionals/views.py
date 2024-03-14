@@ -65,7 +65,6 @@ def edit_user_view(request, pk):
         form = ProfessionalForm(user_is_staff=user_is_staff, instance=professional)
         return render(request, template_name, {'form': form, 'professional': professional})
 
-    #form = ProfessionalForm(instance=professional)
     if request.method == 'POST':
         form = ProfessionalForm(request.POST, request.FILES, user_is_staff=user_is_staff, instance=professional)
         if form.is_valid():

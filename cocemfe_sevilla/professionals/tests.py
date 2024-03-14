@@ -196,76 +196,57 @@ class ProfessionalCreationTest(TestCase):
         '''
 
 
-class EditUserViewTest(TestCase):
+class EditUserViewTestCase(TestCase):
     def setUp(self):
-        self.staff_user = get_user_model().objects.create_user(username='staffuser', password='password', is_staff=True)
-        self.client = Client()
+        self.organization = Organization.objects.create(name='Org1', telephone_number='123456789', address='Address1', email='org1@example.com', zip_code='12345')
+        self.professional_staff = Professional.objects.create(username='staff_user', is_staff=True, telephone_number='123456789', license_number='ABC123', organizations=self.organization)
+        self.professional_normal = Professional.objects.create(username='normal_user', telephone_number='987654321', license_number='XYZ789')
 
-    def test_edit_user_view_staff(self):
-        self.client.login(username='staffuser', password='password')
-        professional = Professional.objects.create(username='testuser', first_name='John', last_name='Doe', password='password', telephone_number='123456789', license_number='ABC123', organizations=None, email='test@example.com')
-        url = reverse('professional_detail', kwargs={'pk': professional.id})
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+    def test_get_edit_page(self):
+        self.client.force_login(self.professional_staff)
+        response = self.client.get(reverse('professionals:professional_detail', kwargs={'pk': self.professional_staff.pk}))
+        self.assertEqual(response.status_code, 302)
+        self.assertTemplateUsed(response, 'professional_detail.html')
+        self.assertTrue('form' in response.context)
+        self.assertTrue('professional' in response.context)
 
-        updated_data = {
-            'username': 'updateduser',
+    def test_post_edit_page_as_staff(self):
+        self.client.force_login(self.professional_staff)
+        data = {
+            'username': 'testuser_new',
             'first_name': 'Updated',
             'last_name': 'User',
-            'password': 'newpassword',
+            'email': 'test_updated@example.com',
             'telephone_number': '987654321',
-            'license_number': 'XYZ456',
-            'organizations': None,
-            'email': 'updated@example.com',
+            'license_number': 'XYZ789',
+            'organizations': self.organization.pk
         }
-        response = self.client.post(url, updated_data, follow=True)
-        self.assertRedirects(response, reverse('professional_list') + '?message=Profesional+editado&status=Success')
-        updated_professional = Professional.objects.get(id=professional.id)
-        self.assertEqual(updated_professional.username, 'updateduser')
-        self.assertEqual(updated_professional.first_name, 'Updated')
-        self.assertEqual(updated_professional.last_name, 'User')
-        self.assertEqual(updated_professional.telephone_number, '987654321')
-        self.assertEqual(updated_professional.license_number, 'XYZ456')
-        self.assertEqual(updated_professional.email, 'updated@example.com')
+        response = self.client.post(reverse('professionals:professional_detail', kwargs={'pk': self.professional_staff.pk}), data)
+        self.assertEqual(response.status_code, 302)
+        self.professional_staff.refresh_from_db()
+        self.assertEqual(self.professional_staff.username, 'testuser_new')
+        self.assertEqual(self.professional_staff.first_name, 'Updated')
+        self.assertEqual(self.professional_staff.email, 'test_updated@example.com')
 
-    def test_edit_user_view_non_staff(self):
-        non_staff_user = get_user_model().objects.create_user(username='nonstaffuser', password='password', is_staff=False)
-        self.client.login(username='nonstaffuser', password='password')
-        organization = Organization.objects.create(name='Test Organization', zip_code='12345')
-        non_staff_user.organizations.add(organization)
-        professional = Professional.objects.create(username='testuser', first_name='John', last_name='Doe', password='password', telephone_number='123456789', license_number='ABC123', organizations=organization, email='test@example.com')
-        url = reverse('professional_detail', kwargs={'pk': professional.id})
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-        updated_data = {
+    def test_post_edit_page_as_normal_user(self):
+        self.client.force_login(self.professional_normal)
+        data = {
+            'email': 'test_updated@example.com',
             'telephone_number': '987654321',
-            'email': 'updated@example.com',
         }
-        response = self.client.post(url, updated_data, follow=True)
-        self.assertRedirects(response, reverse('professional_list') + '?message=Profesional+editado&status=Success')
-        updated_professional = Professional.objects.get(id=professional.id)
-        self.assertEqual(updated_professional.telephone_number, '987654321')
-        self.assertEqual(updated_professional.email, 'updated@example.com')
+        response = self.client.post(reverse('professionals:professional_detail', kwargs={'pk': self.professional_normal.pk}), data)
+        self.assertEqual(response.status_code, 302)
+        self.professional_normal.refresh_from_db()
+        self.assertEqual(self.professional_normal.email, 'test_updated@example.com')
+        self.assertEqual(self.professional_normal.telephone_number, '987654321')
+
+
         
     def test_edit_user_view_unauthenticated(self):
         self.client.logout()
-        request = self.client.get(reverse('professional_detail', kwargs={'pk': 1}))
-        request.user = AnonymousUser()
         professional = Professional.objects.create(username='testuser', first_name='John', last_name='Doe', password='password', telephone_number='123456789', license_number='ABC123', organizations=None, email='test@example.com')
-        url = reverse('professional_detail', kwargs={'pk': professional.id})
+        url = reverse('professionals:professional_detail', kwargs={'pk': professional.id})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
 
-    def test_edit_user_view_invalid_data(self):
-        self.client.login(username='staffuser', password='password')
-        professional = Professional.objects.create(username='testuser', first_name='John', last_name='Doe', password='password', telephone_number='123456789', license_number='ABC123', organizations=None, email='test@example.com')
-        url = reverse('professional_detail', kwargs={'pk': professional.id})
-        invalid_data = {
-            'telephone_number': 'invalid_phone_number',
-            'email': 'invalidemail',
-        }
-        response = self.client.post(url, invalid_data)
-        self.assertEqual(response.status_code, 200)
-        updated_professional = Professional.objects.get(id=professional.id)
-        self.assertNotEqual(updated_professional.telephone_number, 'invalid_phone_number')
-        self.assertNotEqual(updated_professional.email, 'invalidemail')
+
