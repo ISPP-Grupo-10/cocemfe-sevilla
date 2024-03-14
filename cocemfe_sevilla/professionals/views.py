@@ -3,21 +3,53 @@ from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.contrib import messages
 
-from .models import Professional
+from .models import Professional, Request
 from .forms import ProfessionalCreationForm, ProfessionalForm
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth import logout, login, authenticate
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
+from .forms import ProfessionalForm, RequestCreateForm, RequestUpdateForm
 
-#@method_decorator(user_passes_test(lambda u: u.is_authenticated and (u.is_staff or u.is_superuser)), name='dispatch')
-def create_professional(request):
-    print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+def custom_login(request):
     if request.method == 'POST':
-        print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
+        email = request.POST.get('email')
+        try:
+            professional = Professional.objects.get(email=email)
+            username = professional.username
+        except Professional.DoesNotExist:
+            error_message = "Nombre de usuario o contraseña incorrectos."
+            return render(request, 'registration/login.html', {'error_message': error_message})
+        
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('/')
+        else:
+            error_message = "Nombre de usuario o contraseña incorrectos."
+            return render(request, 'registration/login.html', {'error_message': error_message})
+    else:
+        return render(request, 'registration/login.html')
+
+def custom_logout(request):
+    logout(request)
+    return redirect('/')
+
+def is_admin(user):
+    return user.is_authenticated and user.is_staff
+
+
+@user_passes_test(is_admin)
+def create_professional(request):
+    if request.method == 'POST':
         form = ProfessionalCreationForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             messages.success(request, 'Profesional creado exitosamente.')
+            profesionalID = form.cleaned_data['username']
+            prof = Professional.objects.get(username=profesionalID)
+            print(prof.username, prof.password, prof.email, prof.telephone_number, prof.license_number, prof.organizations)
             return redirect(reverse('professional_list'))
         else:
             messages.error(request, 'Error al crear el profesional. Por favor, corrija los errores en el formulario.')
@@ -124,3 +156,4 @@ def update_request(request, pk):
 def request_list(request):
     requests = Request.objects.all()
     return render(request, 'list_requests.html', {'requests': requests})
+

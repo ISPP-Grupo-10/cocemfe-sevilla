@@ -3,7 +3,7 @@ import string
 from django import forms
 from django.contrib.auth import get_user_model
 from organizations.models import Organization
-from .models import Professional
+from .models import Professional, Request
 
 class ProfessionalForm(forms.ModelForm):
     class Meta:
@@ -25,7 +25,7 @@ class ProfessionalForm(forms.ModelForm):
 class ProfessionalCreationForm(forms.ModelForm):
     class Meta:
         model = Professional
-        fields = ['username', 'first_name', 'last_name', 'email']
+        fields = ['username', 'first_name', 'last_name', 'email', 'telephone_number', 'license_number', 'organizations', 'profile_picture']
 
     telephone_number = forms.CharField(max_length=9, validators=[Professional.phone_number_validator])
     license_number = forms.CharField(max_length=20)
@@ -35,7 +35,6 @@ class ProfessionalCreationForm(forms.ModelForm):
     def save(self, commit=True):
         professional = super().save(commit=False)
 
-        # Generar una contraseña aleatoria
         password = ''.join(random.choices(string.ascii_letters + string.digits, k=12))
         professional.set_password(password)
 
@@ -47,7 +46,7 @@ class ProfessionalCreationForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         return cleaned_data
-    
+ 
 class RequestCreateForm(forms.ModelForm):
     class Meta:
         model = Request
