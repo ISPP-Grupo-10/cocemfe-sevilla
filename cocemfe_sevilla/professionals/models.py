@@ -17,8 +17,8 @@ class Professional(AbstractUser):
     license_number = models.CharField(max_length=20)
     organizations = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='professionals', null=True)
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
-    access_documents = models.ManyToManyField('documents.Document')
-    terms_accepted = models.BooleanField(default=False)
+    access_documents = models.ManyToManyField('documents.Document', blank=True)
+    terms_accepted = models.BooleanField(default=False, blank=True, null=True)
 
     def __str__(self):
         return self.username

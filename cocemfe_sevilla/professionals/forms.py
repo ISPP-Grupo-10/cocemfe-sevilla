@@ -9,7 +9,12 @@ class ProfessionalForm(forms.ModelForm):
     class Meta:
         model = Professional
         fields = ['username', 'first_name', 'last_name', 'password', 'telephone_number', 'license_number', 'organizations', 'email', 'profile_picture']
+        widgets = {
+            'password': forms.PasswordInput(),  # Establecer el widget como PasswordInput
+        }
+
     profile_picture = forms.ImageField(required=False)
+
     def __init__(self, *args, **kwargs):
         user_is_staff = kwargs.pop('user_is_staff', True)
         super(ProfessionalForm, self).__init__(*args, **kwargs)
@@ -21,7 +26,17 @@ class ProfessionalForm(forms.ModelForm):
             self.fields.pop('license_number')
             self.fields.pop('organizations')
             self.fields.pop('profile_picture')
-    
+
+'''
+class ProfessionalForm(forms.ModelForm):
+    class Meta:
+        model = Professional
+        fields = ['username', 'first_name', 'last_name', 'password', 'telephone_number', 'license_number', 'organizations', 'email', 'profile_picture']
+        widgets = {
+            'password': forms.PasswordInput(),
+        }
+'''
+
 class ProfessionalCreationForm(forms.ModelForm):
     class Meta:
         model = Professional

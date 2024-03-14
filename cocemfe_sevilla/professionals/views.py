@@ -54,32 +54,53 @@ def create_professional(request):
         form = ProfessionalCreationForm()
 
     return render(request, 'professional_create.html', {'form': form})
+'''
+@login_required
+def edit_professional_view(request, pk):
+    professional = get_object_or_404(Professional, id=pk)
+    
+    if request.method == 'POST':
+        form = ProfessionalForm(request.POST, request.FILES, instance=professional)
+        if form.is_valid():
+            form.save()
+            return redirect('/professionals/?message=Profesional editado&status=Success')
+    else:
+        form = ProfessionalForm(instance=professional)
+    
+    return render(request, 'professional_detail.html', {'form': form})
 
-
+'''
 @login_required
 def edit_user_view(request, pk):
     template_name = 'professional_detail.html'
     professional = get_object_or_404(Professional, id=pk)
 
+    if request.method == 'GET':
+        if not (request.user.is_staff or request.user.is_superuser):
+            form = ProfessionalForm(user_is_staff=False, instance=professional)
+        else:
+            form = ProfessionalForm(user_is_staff=True, instance=professional)
+        return render(request, 'professional_detail.html', {'form': form, 'professional': professional})
+
     if not (request.user.is_staff or request.user.is_superuser):
-        form = ProfessionalForm(user_is_staff=False, initial={'password': professional.password, 'email': professional.email, 'telephone_number': professional.telephone_number})
+        form = ProfessionalForm(user_is_staff=False)
     else:
-        form = ProfessionalForm(user_is_staff=True, instance=professional)
-
+        form = ProfessionalForm(user_is_staff=True)
+    print(form.errors)
     if request.method == 'POST':
-        form_data = request.POST.copy()
-        if not request.user.is_staff:
-
-            form_data['organizations'] = request.user.organizations.id
-        form = ProfessionalForm(form_data, request.FILES, instance=professional, user_is_staff=request.user.is_staff)
+        form = ProfessionalForm(request.POST, request.FILES, instance=professional)
+        print(form.errors)
         if form.is_valid():
-            if request.user.is_superuser:
+            if request.user.is_superuser or request.user.is_staff:
                 form.save()
                 return redirect('/professionals/?message=Profesional editado&status=Success')
             else:
                 return render(request, '403.html')
         else:
             return render(request, 'professional_detail.html', {'form': form, 'professional': professional})
+
+
+
 
 
 def professional_list(request):
