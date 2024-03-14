@@ -47,3 +47,21 @@ class ProfessionalCreationForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         return cleaned_data
+    
+class RequestCreateForm(forms.ModelForm):
+    class Meta:
+        model = Request
+        fields = ['email', 'description']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        return cleaned_data
+    
+class RequestUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Request
+        fields = ['status']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        return cleaned_data

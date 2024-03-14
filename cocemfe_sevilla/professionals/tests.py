@@ -21,6 +21,7 @@ class ProfessionalViewTest(TestCase):
             last_name='Doe',
             telephone_number='123456789',
             license_number='ABC123',
+            terms_accepted=True
         )
 
     def test_professional_detail_view(self):

@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic import DeleteView, DetailView, UpdateView
 from django.contrib import messages
 
 from .models import Professional
@@ -45,15 +44,17 @@ def edit_user_view(request, pk):
             form_data['organizations'] = request.user.organizations.id
         form = ProfessionalForm(form_data, request.FILES, instance=professional, user_is_staff=request.user.is_staff)
         if form.is_valid():
-            form.save()
-            return redirect('/professionals/?message=Profesional editado&status=Success')
-
-    return render(request, template_name, {'form': form, 'professional': professional})
-
+            if request.user.is_superuser:
+                form.save()
+                return redirect('/professionals/?message=Profesional editado&status=Success')
+            else:
+                return render(request, '403.html')
+        else:
+            return render(request, 'professional_detail.html', {'form': form, 'professional': professional})
 
 
 def professional_list(request):
-    professionals = Professional.objects.all()
+    professionals = Professional.objects.filter(is_superuser=False)
 
     professionals = professionals.filter(is_staff=True)
     name_filter = request.GET.get('name', '')
@@ -83,7 +84,7 @@ def professional_list(request):
 @method_decorator(user_passes_test(lambda u: u.is_authenticated and (u.is_staff or u.is_superuser)), name='dispatch')
 def delete_professional(request, id):
     professional = get_object_or_404(Professional, id=id)
-    professionals = Professional.objects.all()
+    professionals = Professional.objects.filter(is_superuser=False)
 
     if request.method == 'POST':
         if request.user.is_superuser:
@@ -97,3 +98,29 @@ def delete_professional(request, id):
 
     return render(request, 'professional_list.html', {'professionals': professionals})
 
+def create_request(request):
+    if request.method == 'POST':
+        form = RequestCreateForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, 'registration/login.html') 
+    else:
+        form = RequestCreateForm()
+    return render(request, 'create_request.html', {'form': form})
+
+@user_passes_test(is_admin)
+def update_request(request, pk):
+    db_request = get_object_or_404(Request, pk=pk)
+    if request.method == 'POST':
+        form = RequestUpdateForm(request.POST, instance=db_request)
+        if form.is_valid():
+            form.save()
+            return redirect('professionals:request_list') 
+    else:
+        form = RequestUpdateForm(instance=db_request)
+    return render(request, 'update_request.html', {'form': form, 'email':db_request.email , 'description': db_request.description})
+
+@user_passes_test(is_admin)
+def request_list(request):
+    requests = Request.objects.all()
+    return render(request, 'list_requests.html', {'requests': requests})
