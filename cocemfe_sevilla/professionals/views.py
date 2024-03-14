@@ -1,9 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.contrib import messages
-from django.contrib.auth import logout, login, authenticate
+
 from .models import Professional, Request
-from django.contrib.auth.decorators import user_passes_test
+from .forms import ProfessionalCreationForm, ProfessionalForm
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth import logout, login, authenticate
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_protect
 from .forms import ProfessionalForm, RequestCreateForm, RequestUpdateForm
 
 def custom_login(request):
@@ -33,29 +38,53 @@ def custom_logout(request):
 
 def is_admin(user):
     return user.is_authenticated and user.is_staff
-class EditUserView(View):
-    def get(self, request, pk):
-        professional = get_object_or_404(Professional, id=pk)
-        form = ProfessionalForm(instance=professional)
-        return render(request, 'professional_detail.html', {'form': form, 'professional': professional})
 
-    def post(self, request, pk):
-        professional = get_object_or_404(Professional, id=pk)
-        print(request.FILES)
-        form = ProfessionalForm(request.POST,request.FILES, instance=professional)
+
+@user_passes_test(is_admin)
+def create_professional(request):
+    if request.method == 'POST':
+        form = ProfessionalCreationForm(request.POST, request.FILES)
         if form.is_valid():
-            if request.user.is_superuser:
+            form.save()
+            #messages.success(request, 'Profesional creado exitosamente.')
+            return redirect(reverse('professionals:professional_list'))
+        #else:
+            #messages.error(request, 'Error al crear el profesional. Por favor, corrija los errores en el formulario.')
+    else:
+        form = ProfessionalCreationForm()
+
+    return render(request, 'professional_create.html', {'form': form})
+
+
+@login_required
+def edit_user_view(request, pk):
+    template_name = 'professional_detail.html'
+    professional = get_object_or_404(Professional, id=pk)
+    user_is_staff = request.user.is_staff or request.user.is_superuser
+    if request.method == 'GET':
+        form = ProfessionalForm(user_is_staff=user_is_staff, instance=professional)
+        return render(request, template_name, {'form': form, 'professional': professional})
+
+    if request.method == 'POST':
+        form = ProfessionalForm(request.POST, request.FILES, user_is_staff=user_is_staff, instance=professional)
+        if form.is_valid():
+            if user_is_staff:
                 form.save()
                 return redirect('/professionals/?message=Profesional editado&status=Success')
+            elif request.user.id == professional.id:
+                form.save()
+                return redirect('/professionals/?message=Datos de perfil actualizados&status=Success')
             else:
                 return render(request, '403.html')
         else:
-            return render(request, 'professional_detail.html', {'form': form, 'professional': professional})
+            return render(request, template_name, {'form': form, 'professional': professional})
 
-@user_passes_test(is_admin)
+
+
 def professional_list(request):
     professionals = Professional.objects.filter(is_superuser=False)
 
+    professionals = professionals.filter(is_staff=False)
     name_filter = request.GET.get('name', '')
     if name_filter:
         professionals = professionals.filter(first_name__icontains=name_filter)
@@ -80,7 +109,7 @@ def professional_list(request):
         'organization_filter': organization_filter,
     })
 
-@user_passes_test(is_admin)
+@method_decorator(user_passes_test(lambda u: u.is_authenticated and (u.is_staff or u.is_superuser)), name='dispatch')
 def delete_professional(request, id):
     professional = get_object_or_404(Professional, id=id)
     professionals = Professional.objects.filter(is_superuser=False)
@@ -123,3 +152,4 @@ def update_request(request, pk):
 def request_list(request):
     requests = Request.objects.all()
     return render(request, 'list_requests.html', {'requests': requests})
+
