@@ -46,10 +46,10 @@ def create_professional(request):
         form = ProfessionalCreationForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Profesional creado exitosamente.')
+            #messages.success(request, 'Profesional creado exitosamente.')
             return redirect(reverse('professionals:professional_list'))
-        else:
-            messages.error(request, 'Error al crear el profesional. Por favor, corrija los errores en el formulario.')
+        #else:
+            #messages.error(request, 'Error al crear el profesional. Por favor, corrija los errores en el formulario.')
     else:
         form = ProfessionalCreationForm()
 

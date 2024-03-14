@@ -133,7 +133,7 @@ class ProfessionalCreationTest(TestCase):
         unique_username = f'testuser_{uuid.uuid4().hex[:6]}'
 
         # Create a new user for authentication
-        self.user = get_user_model().objects.create_user(
+        self.user = get_user_model().objects.create_superuser(
             username=unique_username,
             password='testpassword',
             email=f'{unique_username}@example.com'
@@ -169,31 +169,35 @@ class ProfessionalCreationTest(TestCase):
         self.user.delete()
         Professional.objects.all().delete()
 
+
     def test_valid_professional_creation_form(self):
         form = ProfessionalCreationForm(data=self.valid_form_data)
         self.assertTrue(form.is_valid(), form.errors)
+
 
     def test_invalid_professional_creation_form(self):
         form = ProfessionalCreationForm(data=self.invalid_form_data)
         self.assertFalse(form.is_valid())
 
-        '''
-            def test_create_professional_view_POST_success(self):
-                request = RequestFactory().post('/create_professional/', data=self.valid_form_data)
-                request.user = self.user
-                response = create_professional(self.valid_form_data, request)
-                self.assertEqual(response.status_code, 302)
+
+    def test_create_professional_view_POST_success(self):
+        request = RequestFactory().post(self.create_professional_url, data=self.valid_form_data)
+        request.user = self.user
+        professionals_before = Professional.objects.count()
+        response = create_professional(request)
+        professionals_after = Professional.objects.count()
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(professionals_after, professionals_before+1)
 
 
-            def test_create_professional_view_POST_failure(self):
-                request = RequestFactory().post('/create_professional/', data=self.invalid_form_data)
-                request.user = self.user
-                response = create_professional(self.valid_form_data, request)
-                professionals_before = Professional.objects.count()
-                self.assertEqual(response.status_code, 302)
-                professionals_after = Professional.objects.count()
-                self.assertEqual(professionals_after, professionals_before)
-        '''
+    def test_create_professional_view_POST_failure(self):
+        request = RequestFactory().post(self.create_professional_url, data=self.invalid_form_data)
+        request.user = self.user
+        response = create_professional(request)
+        professionals_before = Professional.objects.count()
+        self.assertEqual(response.status_code, 200)
+        professionals_after = Professional.objects.count()
+        self.assertEqual(professionals_after, professionals_before)
 
 
 class EditUserViewTest(TestCase):
