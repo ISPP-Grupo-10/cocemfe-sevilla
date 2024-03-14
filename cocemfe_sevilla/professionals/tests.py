@@ -206,6 +206,10 @@ class EditUserViewTestCase(TestCase):
         self.professional_staff = Professional.objects.create(username='staff_user', is_staff=True, telephone_number='123456789', license_number='ABC123', organizations=self.organization)
         self.professional_normal = Professional.objects.create(username='normal_user', telephone_number='987654321', license_number='XYZ789')
 
+    def tearDown(self):
+        Organization.objects.all().delete()
+        Professional.objects.all().delete()
+
     def test_get_edit_page(self):
         self.client.force_login(self.professional_staff)
         response = self.client.get(reverse('professionals:professional_detail', kwargs={'pk': self.professional_staff.pk}))
@@ -244,13 +248,12 @@ class EditUserViewTestCase(TestCase):
         self.assertEqual(self.professional_normal.email, 'test_updated@example.com')
         self.assertEqual(self.professional_normal.telephone_number, '987654321')
 
-
-        
     def test_edit_user_view_unauthenticated(self):
         self.client.logout()
         professional = Professional.objects.create(username='testuser', first_name='John', last_name='Doe', password='password', telephone_number='123456789', license_number='ABC123', organizations=None, email='test@example.com')
         url = reverse('professionals:professional_detail', kwargs={'pk': professional.id})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
+
 
 
