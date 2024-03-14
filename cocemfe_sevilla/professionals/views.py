@@ -129,11 +129,11 @@ def request_list(request):
 
 def request_document_chats(request):
     if request.method == 'GET':
-        professional = # Logged in user
+        professional = request.user
         possessed_documents = []
         all_documents = Document.objects.all()
         for document in all_documents:
             if professional in document.professionals.all():
                 possessed_documents.append(document)
-        return render(request, 'list_chat.html', {'possessed_documents': possessed_documents})
+        return render(request, 'list_chats.html', {'possessed_documents': possessed_documents})
     
