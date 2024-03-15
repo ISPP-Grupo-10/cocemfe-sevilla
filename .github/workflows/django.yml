@@ -2,9 +2,9 @@ name: Django CI
 
 on:
   push:
-    branches: [ "main", "develop" ]
+    branches: ["main", "develop"]
   pull_request:
-    branches: [ "main" , "develop"]
+    branches: ["main", "develop"]
 
 jobs:
   build:
@@ -13,18 +13,54 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.7, 3.8, 3.9]
+        python-version: [3.7, 3.8, 3.9, 3.10, 3.11]
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install Dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    - name: Run Tests
-      run: |
-        python manage.py test
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ./cocemfe_sevilla/requirements.txt
+      - name: Install importlib_metadata
+        run: |
+          pip install importlib_metadata
+      - name: Run Migrations
+        run: |
+          python ./cocemfe_sevilla/manage.py makemigrations
+          python ./cocemfe_sevilla/manage.py migrate
+      - name: Run Tests
+        run: |
+          python ./cocemfe_sevilla/manage.py test
+
+  build-windows:
+
+    runs-on: windows-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.7, 3.8, 3.9, 3.10, 3.11]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ./cocemfe_sevilla/requirements.txt
+      - name: Install importlib_metadata
+        run: |
+          pip install importlib_metadata
+      - name: Run Migrations
+        run: |
+          python ./cocemfe_sevilla/manage.py makemigrations
+          python ./cocemfe_sevilla/manage.py migrate
+      - name: Run Tests
+        run: |
+          python ./cocemfe_sevilla/manage.py test
