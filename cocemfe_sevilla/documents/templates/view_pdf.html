@@ -182,7 +182,6 @@ function goToSuggestionPage(pageNumber, pdfUrl, section) {
                             if (text.trim() === section.trim()) {
                                 // Resaltar el texto
                                 child.style.backgroundColor = 'yellow';
-                                child.scrollIntoView();
 
                                 // Registra el texto resaltado
                                 highlightedText[pageNumber + '-' + i] = true;
