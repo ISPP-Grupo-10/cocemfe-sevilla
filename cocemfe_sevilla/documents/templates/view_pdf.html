@@ -37,6 +37,7 @@
     </div>
     <div class="row">
         {% if pdf.pdf_file %}
+        
         <div class="doc-visualizer">
             <iframe id="pdfViewer" src="{% static 'pdfjs/web/viewer.html' %}?file={{ pdf.pdf_file.url | urlencode }}" width="100%" height="600"></iframe>
         </div>
@@ -164,6 +165,7 @@
         }
     }
 </script>
+
 
 
 
