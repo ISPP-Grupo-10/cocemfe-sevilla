@@ -66,6 +66,9 @@
                     <b>No hay comentarios</b>
                 {% endfor %}
             </div>
+
+            <button id="captureButton">Capturar Selección</button>
+
             <div class="pagination">
                 <span class="step-links">
                     {% if page_obj.has_previous %}
@@ -142,28 +145,50 @@
     function goToSuggestionPage(pageNumber, pdfUrl, section) {
         var iframe = document.getElementById('pdfViewer');
         
-        iframe.src = pdfUrl
-        iframe.document = pdfUrl
-
-
+        iframe.src = "/static/pdfjs/web/viewer.html?file=" + pdfUrl
+        iframe.document = "/static/pdfjs/web/viewer.html?file=" +  pdfUrl
+        
         // Verifica si se encuentra el iframe
         if (iframe) {
             // Construye la nueva URL de la página del PDF
             var pdfUrl = iframe.src;
+            console.log(pdfUrl)
             var newUrl = pdfUrl + '#page=' + pageNumber;
             // Establece la nueva URL del iframe
             iframe.src = newUrl;
             iframe.document = newUrl;
-
-            //Subrayar el texto de la seccion
-            var documentIfram = iframe.contentDocument || iframe.contentWindow.document;
-
-            console.log(documentIfram)
-            var elemento = documentIfram.getElementById('numPages')
-            console.log(elemento)
  
         }
     }
+
+    function captureSelection() {
+    var iframe = document.getElementById('pdfViewer');
+    var selectedText = '';
+    var currentPage = 0;
+
+    // Verifica si se encuentra el iframe
+    if (iframe) {
+        var documentIframe = iframe.contentDocument || iframe.contentWindow.document;
+        
+        // Captura el texto seleccionado
+        selectedText = documentIframe.getSelection().toString();
+        console.log(selectedText)
+        // Obtiene el número de página actual
+        currentPage = documentIframe.getElementById("pageNumber").value;
+        console.log(currentPage)
+        // Actualiza los campos del formulario con la selección y la página
+        document.getElementById('section').value = selectedText;
+        document.getElementById('page').value = currentPage;
+
+        // Muestra una alerta
+        alert('Se ha capturado el texto seleccionado del PDF. Verifica los campos sección y página del formulario.');
+    }
+    }
+
+    // Evento para capturar la selección al hacer clic en un botón o realizar alguna acción específica
+    document.getElementById('captureButton').addEventListener('click', function() {
+        captureSelection();
+    });
 </script>
 
 
