@@ -29,6 +29,12 @@
 
 <h2 class="text-center">Detalles de documento</h2>
 <div class='doc-container'>
+    {% if request.user.is_staff %}
+    <!-- Verifica si el usuario es un admin -->
+    <a href="{% url 'update_pdf' pk=pdf.pk %}">
+        <button type="button" class="btn btn-primary">Editar Documento</button>
+    </a>
+    {% endif %}
     <div class="doc-info">
         <p><strong>Documento:</strong> {{ pdf.name }}</p>
         <p><strong>Plazo:</strong> {{ pdf.start_date }} - {{ pdf.end_date }}</p>
@@ -39,7 +45,9 @@
         {% if pdf.pdf_file %}
         
         <div class="doc-visualizer">
+            
             <iframe id="pdfViewer" src="{% static 'pdfjs/web/viewer.html' %}?file={{ pdf.pdf_file.url | urlencode }}" width="100%" height="600"></iframe>
+            <button lass="comment-form-container" onclick="toggleFullScreen()" type="submit">Ver en pantalla completa</button>
         </div>
         {% else %}
         <div class="doc-visualizer">
@@ -90,7 +98,7 @@
         </div>
         
         <button class="comment-form-container" id="captureButton" type="submit">Capturar Selección</button>
-
+        
         {% if pdf.status == 'Aportaciones' %}
         <div class="comment-form-container">
             <!-- Formulario para enviar comentarios -->
@@ -143,6 +151,21 @@
 </div>
 
 <script>
+
+function toggleFullScreen() {
+        var iframe = document.getElementById('pdfViewer');
+        if (iframe.requestFullscreen) {
+            iframe.requestFullscreen();
+        } else if (iframe.mozRequestFullScreen) { /* Firefox */
+            iframe.mozRequestFullScreen();
+        } else if (iframe.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+            iframe.webkitRequestFullscreen();
+        } else if (iframe.msRequestFullscreen) { /* IE/Edge */
+            iframe.msRequestFullscreen();
+        }
+    }
+
+
     // Mantén un objeto para registrar el resaltado de texto
 var highlightedText = {};
 
@@ -179,7 +202,7 @@ function goToSuggestionPage(pageNumber, pdfUrl, section) {
                             var text = child.textContent || child.innerText;
 
                             // Comparar el texto del hijo con la sección
-                            if (text.trim() === section.trim()) {
+                            if (text.trim() !== '' && section.trim().includes(text.trim())) {
                                 // Resaltar el texto
                                 child.style.backgroundColor = 'yellow';
 

@@ -11,7 +11,7 @@ class Suggestion(models.Model):
     main = models.CharField(max_length=255)
     justification = models.TextField()
     relevance = models.CharField(max_length=20, choices=RELEVANCE_CHOICES)
-    section = models.CharField(max_length=10)
+    section = models.CharField(max_length=2000)
     page = models.IntegerField()
     date = models.DateField()
     professional = models.ForeignKey(Professional, on_delete=models.CASCADE, null=True, related_name='suggestions')

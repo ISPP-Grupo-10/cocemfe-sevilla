@@ -48,7 +48,7 @@ def view_pdf(request, pk):
     pdf = get_object_or_404(Document, pk=pk)
     professional=request.user
     suggestions = Suggestion.objects.filter(document=pdf)
-    paginator = Paginator(suggestions, 10)  # Divide los comentarios en páginas de 10 comentarios cada una
+    paginator = Paginator(suggestions, 5)  # Divide los comentarios en páginas de 10 comentarios cada una
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
