@@ -11,7 +11,7 @@ body:
     attributes:
         label: "Describe las Tareas de la Historia de usuario."
         description: "Una descripción clara y concisa de lo que implica la funcionalidad."
-        value: "-[ ] Tarea 1 \n -[ ] Tarea 2 \n -[ ] Tarea 3 \n Añadir #Num_issue al final para vincularlas "
+        value: "- [ ] Tarea 1 \n- [ ] Tarea 2 \n- [ ] Tarea 3 \n Añadir #Num_issue al final para vincularlas "
     validations:
         required: true
   - type: textarea
