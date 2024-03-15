@@ -24,9 +24,9 @@
 {% endif %}
 
 
-
 <link rel="stylesheet" type="text/css" href="{% static 'css/view_pdf.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/chat.css' %}">
+
 <h2 class="text-center">Detalles de documento</h2>
 <div class='doc-container'>
     <div class="doc-info">
@@ -38,7 +38,7 @@
     <div class="row">
         {% if pdf.pdf_file %}
         <div class="doc-visualizer">
-            <iframe name="pdfViewer" id="pdfViewer" src="{{ pdf.pdf_file.url }}"></iframe>
+            <iframe id="pdfViewer" src="{% static 'pdfjs/web/viewer.html' %}?file={{ pdf.pdf_file.url | urlencode }}" width="100%" height="600"></iframe>
         </div>
         {% else %}
         <div class="doc-visualizer">
@@ -136,11 +136,13 @@
     {% endif %}
 
 </div>
+
 <script>
     function goToSuggestionPage(pageNumber, pdfUrl, section) {
         var iframe = document.getElementById('pdfViewer');
         
         iframe.src = pdfUrl
+        iframe.document = pdfUrl
 
 
         // Verifica si se encuentra el iframe
@@ -150,6 +152,7 @@
             var newUrl = pdfUrl + '#page=' + pageNumber;
             // Establece la nueva URL del iframe
             iframe.src = newUrl;
+            iframe.document = newUrl;
 
             //Subrayar el texto de la seccion
             var documentIfram = iframe.contentDocument || iframe.contentWindow.document;
@@ -161,6 +164,7 @@
         }
     }
 </script>
+
 
 
 {% endblock %}
