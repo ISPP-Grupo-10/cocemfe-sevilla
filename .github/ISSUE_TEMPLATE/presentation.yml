@@ -1,0 +1,22 @@
+name: "🌟 Crear Presentación"
+description: "Elaborar una presentación para el proyecto"
+title: "[Presentation] Presentación dd/MM/YYYY"
+labels: ["presentation"]
+body:
+  - type: markdown
+    attributes:
+        value: |
+            # **Presentación**
+  - type: textarea
+    attributes:
+        label: "Describe la fecha de la presentación."
+        description: "Una descripción clara y concisa de lo que implica la funcionalidad."
+        value: "Elaborar presentación del día dd/MM/YYYY"
+    validations:
+        required: true
+  - type: textarea
+    attributes:
+      label: "Contexto Adicional"
+      description: "Añade cualquier otro contexto o información adicional sobre el problema aquí."
+    validations:
+      required: false
