@@ -6,7 +6,7 @@
         "username": "mariagomez",
         "first_name": "María",
         "last_name": "Gómez",
-        "is_staff": false,
+        "is_staff": true,
         "is_active": true,
         "date_joined": "2023-06-08T00:00:00Z",
         "password": "mariagomez",
