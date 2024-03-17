@@ -12,7 +12,6 @@ from professionals.models import Professional
 from chat_messages.models import ChatMessage
 from chat_messages.forms import MessageForm
 
-
 @login_required
 def upload_pdf(request):
     if request.user.is_superuser:
@@ -170,4 +169,5 @@ def publish_comment(request, pk):
 
     comments = ChatMessage.objects.filter(document=doc)
     return render(request, 'list_comments.html', {'doc': doc, 'chat_messages': comments, 'form': form})
+
 
