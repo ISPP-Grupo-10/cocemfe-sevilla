@@ -10,7 +10,7 @@ class Suggestion(models.Model):
     )
     main = models.CharField(max_length=255)
     justification = models.TextField()
-    relevance = models.CharField(max_length=20, choices=RELEVANCE)
+    relevance = models.CharField(max_length=20, choices=RELEVANCE, default='Importante')
     section = models.CharField(max_length=10)
     page = models.IntegerField()
     date = models.DateField()
