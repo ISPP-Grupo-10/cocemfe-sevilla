@@ -11,7 +11,6 @@ from django.core.validators import FileExtensionValidator
 from professionals.models import Professional
 from chat_messages.models import ChatMessage
 from chat_messages.forms import MessageForm
-from base.views import send_email
 from base.models import NotificationType
 
 
@@ -142,8 +141,6 @@ def list_pdf(request):
 
         # Ahora puedes usar suggestion_start_date en tus filtros
         documentos = documentos.filter(suggestion_start_date=suggestion_start_date)
-
-    send_email(NotificationType.REVIEWER,recipients={"fernandobaquero2002@gmail.com"}, document="Prueba")
 
     return render(request, "list_pdf.html", {'documentos': documentos, 'Document': Document})
 
