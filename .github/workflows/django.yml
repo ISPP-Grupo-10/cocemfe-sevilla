@@ -8,9 +8,9 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
+      max-parallel: 4
       matrix:
         python-version: [3.7, 3.8, 3.9, 3.10, 3.11]
 
@@ -36,7 +36,6 @@ jobs:
           python ./cocemfe_sevilla/manage.py test
 
   build-windows:
-
     runs-on: windows-latest
     strategy:
       max-parallel: 4
