@@ -1,4 +1,4 @@
-name: "🌟 Historia Épica de Usuario"
+name: "🚀🆕 Historia Épica de Usuario"
 description: "Sugiere un conjunto de ideas o funcionalidad para añadir al Proyecto"
 title: "[Epic] "
 labels: ["epic"]
@@ -11,12 +11,12 @@ body:
     attributes:
         label: "Describe las Tareas de la Historia de usuario."
         description: "Una descripción clara y concisa de lo que implica la funcionalidad."
-        value: "- [ ] Tarea 1 \n- [ ] Tarea 2 \n- [ ] Tarea 3 \n Añadir #Num_issue al final para vincularlas "
+        placeholder: "[] Tarea 1 \n [] Tarea 2 \n [] Tarea 3 \n Añadir #Num_issue al final para vincularlas "
     validations:
         required: true
   - type: textarea
     attributes:
       label: "Contexto Adicional"
       description: "Añade cualquier otro contexto o información adicional sobre el problema aquí."
-    validations:
+    validations: 
       required: false

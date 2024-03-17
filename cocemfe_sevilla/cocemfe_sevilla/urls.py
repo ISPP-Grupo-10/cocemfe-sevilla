@@ -21,13 +21,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 from professionals import views as profViews
 
-
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('', include('base.urls', namespace='base')),
     path('documents/', include('documents.urls')),
     path('professionals/', include('professionals.urls')),
     path('organizations/', include('organizations.urls')),
+    path('accounts/login/', profViews.custom_login),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

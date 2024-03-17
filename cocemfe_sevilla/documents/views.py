@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import PDFUploadForm
+from django.contrib.auth.decorators import login_required
 from .models import Document
 from django.utils import timezone
 from django.contrib import messages
@@ -14,6 +15,7 @@ from base.views import send_email
 from base.models import NotificationType
 
 
+@login_required
 def upload_pdf(request):
     if request.user.is_superuser:
         professionals = Professional.objects.filter(is_superuser=False)
@@ -41,7 +43,6 @@ def upload_pdf(request):
     else:
         return render(request, '403.html')
 
-
 def view_pdf(request, pk):
     pdf = get_object_or_404(Document, pk=pk)
     professional=request.user
@@ -50,6 +51,7 @@ def view_pdf(request, pk):
     else:
         return render(request, '403.html')
 
+@login_required
 def view_pdf_admin(request, pk):
     pdf = get_object_or_404(Document, pk=pk)
     if request.user.is_superuser:
@@ -74,12 +76,9 @@ def view_pdf_admin(request, pk):
             return render(request, 'view_pdf.html', {'pdf': pdf})
     else:
         return render(request, '403.html')
-
     
-
-from django.shortcuts import redirect
-
-def update_pdf(request, pk):
+@login_required
+def update_pdf(request,pk):
     document = get_object_or_404(Document, pk=pk)
     professionals_not_superuser = Professional.objects.filter(is_superuser=False)
     if request.user.is_superuser:
@@ -110,7 +109,7 @@ def update_pdf(request, pk):
     else:
         return render(request, '403.html')
 
-
+@login_required
 def delete_pdf(request, pk):
     
     document = get_object_or_404(Document, pk=pk)
@@ -120,6 +119,7 @@ def delete_pdf(request, pk):
     else:
         return render(request, '403.html')
 
+@login_required
 def list_pdf(request):
     documentos = Document.objects.all()
 
@@ -147,6 +147,7 @@ def list_pdf(request):
 
     return render(request, "list_pdf.html", {'documentos': documentos, 'Document': Document})
 
+@login_required
 def load_comments(request, pk):
     doc = get_object_or_404(Document, id=pk)
     if request.user in doc.professionals.all() or request.user.is_staff:
@@ -154,7 +155,6 @@ def load_comments(request, pk):
         return render(request, 'list_comments.html', {'doc': doc, 'chat_messages': comments})
     else:
         return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
-
 
 @login_required
 def publish_comment(request, pk):

@@ -1,81 +1,98 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>{% block title %}{% endblock %}</title>
-  <meta name="viewport" content="width=device-width; initial-scale=1.0"/>
-  {% load bootstrap5 %}
-  {% bootstrap_css %}
-  {% bootstrap_javascript %}
-  {% load static %}
 
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width; initial-scale=1.0" />
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% load static %}
 
 </head>
+
 <body>
-<style>
-    a {
-        color: #1e2125!important;
-        text-decoration: none;
-        margin: 0 10px;
-        font-weight: 500;
-    }
+    <style>
+        a {
+            color: #1e2125 !important;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: 500;
+        }
 
-    .navbar {
-        background-color: #c4e4e1!important;
-    }
+        .navbar {
+            background-color: #c4e4e1 !important;
+        }
 
-    .nav-link:hover {
-        background-color: #a3bfbd;
-        border-radius: 10px;
-    }
+        .nav-link:hover {
+            background-color: #a3bfbd;
+            border-radius: 10px;
+        }
 
-    .btn-orange {
-        background-color: transparent;
-        border: 2px solid orange;
-        color: #222529;
-    }
+        .btn-orange {
+            background-color: transparent;
+            border: 2px solid orange;
+            color: #222529;
+        }
 
-    .btn-orange:hover {
-        background-color: orange;
-        color: white;
-    }
-</style>
+        .btn-orange:hover {
+            background-color: orange;
+            color: white;
+        }
+    </style>
 
-<!-- Grey with black text -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid d-flex justify-content-around">
-        <div class="d-flex justify-content-center ms-2" style="width: 250px; height: 200%;">
-            <a href="/">
-                <img src="{% static 'logo_sevilla.png' %}" alt="Descripción de la imagen" style="width: 250px; height: auto;">
-            </a>
+    <!-- Grey with black text -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-start ms-2" style="width: 250px; height: 100%;">
+                <a href="/">
+                    <img src="{% static 'logo_sevilla.png' %}" alt="Descripción de la imagen"
+                        style="width: 250px; height: auto;">
+                </a>
+            </div>
+    
+            {% if user.is_authenticated %}
+                {% if user.terms_accepted %}
+                    <div class="collapse navbar-collapse d-flex justify-content-center" id="navbarNav">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/documents">Documentos</a>
+                            </li>
+                            {% if user.is_staff %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url "professionals:professional_list" %}">Profesionales</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url "organizations:organization_list" %}">Organizaciones</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url "professionals:request_list" %}">Solicitudes</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+    
+                    <div class="d-flex justify-content-end align-items-center">
+                        <div class="me-5">
+                            <button class="btn btn-orange" type="button">Perfil</button>
+                        </div>
+                {% endif %}
+                        <div>
+                            <a href="{% url "professionals:logout" %}" class="me-5">Cerrar Sesión</a>
+                        </div>
+                    </div>
+            {% endif %}
         </div>
-
-        <div class="collapse navbar-collapse d-flex justify-content-center" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="/documents">Documentos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/professionals">Profesionales</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url "organizations:organization_list" %}">Organizaciones</a>
-                </li>
-            </ul>
-        </div>
-        <div class="d-flex justify-content-end" style="width: 200px; height: 100%;">
-            <button class="btn btn-orange me-5" type="button">Perfil</button>
-        </div>
-    </div>
-</nav>
-
+    </nav>
+    
     {% block encabezado %}
     {% endblock %}
     {% block contenido %}
     {% endblock %}
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
+
 </html>
