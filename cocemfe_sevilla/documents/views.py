@@ -143,8 +143,6 @@ def list_pdf(request):
         # Ahora puedes usar suggestion_start_date en tus filtros
         documentos = documentos.filter(suggestion_start_date=suggestion_start_date)
 
-    send_email(NotificationType.REVIEWER,recipients={"fernandobaquero2002@gmail.com"}, document="Prueba")
-
     return render(request, "list_pdf.html", {'documentos': documentos, 'Document': Document})
 
 @login_required
