@@ -11,8 +11,6 @@ from django.core.validators import FileExtensionValidator
 from professionals.models import Professional
 from chat_messages.models import ChatMessage
 from chat_messages.forms import MessageForm
-from base.models import NotificationType
-
 
 @login_required
 def upload_pdf(request):
