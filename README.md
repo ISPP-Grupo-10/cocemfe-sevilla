@@ -1,69 +1,69 @@
 # Cocemfe Web
 
-- [Descripción](#descripción)
-- [Instalación](#instalación)
-- [Contribución](#contribución)
-- [Licencia](#licencia)
+- [Description](#description)
+- [Installation](#installation)
+- [Contribution](#contribution)
+- [License](#license)
   
-## Descripción
-Cocemfe Web es un proyecto elaborado por 17 estudiantes de ingeniería del software que pretende mejorar la eficiencia de todos los municipios a la hora de crear planes de accesibilidad. El software permite la subida de documentos para que, posteriormente, una serie de personas cualificadas puedan sugerir mejoras al documento, haciendo así el proceso de edición del plan y propuesta de mejoras mucho más ameno.
+## Description
+Cocemfe Web is a project developed by 17 software engineering students that aims to improve the efficiency of all municipalities when creating accessibility plans. The software allows the uploading of documents so that, subsequently, a number of qualified people can suggest improvements to the document, thus making the process of editing the plan and proposing improvements much more enjoyable.
 
-## Instalación
+## Instalation
 
-### Requisitos
+### Requirements
 
 - Python >= 3.7
 
 ### Pasos
 
-1. Clona el repositorio:
+1. Clone the repository:
 
 ```bash
 git clone https://github.com/tu_usuario/cocemfe-web.git
 cd cocemfe-web
 ```
-2. Instala las dependencias:
+2. Install the dependencies:
 
 ```bash
 python -m pip install --upgrade pip
 pip install -r ./cocemfe_sevilla/requirements.txt
 pip install importlib_metadata
 ```
-3. Realiza las migraciones de la base de datos:
+3. Performs database migrations:
 
 ```bash
 python ./cocemfe_sevilla/manage.py makemigrations
 python ./cocemfe_sevilla/manage.py migrate
 ```
-4. Lanza el proyecto
+4. Launch the proyect
 
 ```bash
 python ./cocemfe_sevilla/manage.py runserver
 ```
 
-## Contribución
+## Contribution
 
-¡Agradecemos contribuciones! Para contribuir al proyecto, sigue estos pasos:
-1. Forkea el proyecto.
-2. Crea tu rama de características usando el formato `feature/numeroissue-nombre-de-la-rama`:
+We welcome contributions! To contribute to the project, follow these steps:
+1. Fork the proyect.
+2. Create your feature branch using the format `feature/issueNumber-branch-name`:
 ```bash
-git checkout -b feature/numeroissue-nombre-de-la-rama
+git checkout -b feature/issueNumber-branch-name
 ```
 Por ejemplo:
 ```bash
-git checkout -b feature/123-nueva-caracteristica
+git checkout -b feature/123-new-feature
 ```
-3.Realiza tus cambios y haz commit de ellos siguiendo las convenciones de Conventional Commits:
+3. Make your changes and commit them following the Conventional Commits conventions:
 ```bash
-git commit -m 'feat: agregar nueva característica'
+git commit -m 'feat: add new feature'
 ```
-4. Haz push a tu repositorio remoto:
+4. Push to your remote repository:
 ```bash
-git push origin feature/numeroissue-nombre-de-la-rama
+git push origin feature/issueNumber-branch-name
 ```
-5. Realiza una pull request a Develop y espera a que sea aceptada :)
+5. Make a pull request to Develop and wait for it to be accepted :)
 
-## Licencia
+## License
 
-Este proyecto está bajo la Licencia MIT. Para más información, consulta el archivo [LICENSE](./LICENSE).
+This project is licensed under the MIT License. For more information, see the file [LICENSE](./LICENSE).
 
