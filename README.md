@@ -1,5 +1,11 @@
 # Cocemfe Web
 
+- [Descripción](#descripción)
+- [Instalación](#instalación)
+- [Contribución](#contribución)
+- [Licencia](#licencia)
+  
+## Descripción
 Cocemfe Web es un proyecto elaborado por 17 estudiantes de ingeniería del software que pretende mejorar la eficiencia de todos los municipios a la hora de crear planes de accesibilidad. El software permite la subida de documentos para que, posteriormente, una serie de personas cualificadas puedan sugerir mejoras al documento, haciendo así el proceso de edición del plan y propuesta de mejoras mucho más ameno.
 
 ## Instalación
@@ -56,3 +62,8 @@ git commit -m 'feat: agregar nueva característica'
 git push origin feature/numeroissue-nombre-de-la-rama
 ```
 5. Realiza una pull request a Develop y espera a que sea aceptada :)
+
+## Licencia
+
+Este proyecto está bajo la Licencia MIT. Para más información, consulta el archivo [LICENSE](./LICENSE).
+
