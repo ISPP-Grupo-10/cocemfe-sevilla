@@ -47,7 +47,10 @@
         <div class="doc-visualizer">
             
             <iframe id="pdfViewer" src="{% static 'pdfjs/web/viewer.html' %}?file={{ pdf.pdf_file.url | urlencode }}" width="100%" height="600"></iframe>
-            <button lass="comment-form-container" onclick="toggleFullScreen()" type="submit">Ver en pantalla completa</button>
+            <button onclick="toggleFullScreen()" type="submit">Ver en pantalla completa</button>
+            <button id="verSeleccionButton" style="display: none;" onclick="verSeleccion()" type="submit">Ver Selección</button>
+            <button id="limpiarSeleccionButton" style="display: none;" onclick="limpiarSeleccion()" type="submit">Limpiar Selección</button>
+
         </div>
         {% else %}
         <div class="doc-visualizer">
@@ -152,6 +155,20 @@
 
 <script>
 
+function verSeleccion() {
+        var page = document.getElementById('page').value;
+        var pdfUrl = '{{ pdf.pdf_file.url }}';
+        var section = document.getElementById('section').value;
+        goToSuggestionPage(page, pdfUrl, section);
+}
+
+function limpiarSeleccion() {
+        var page = document.getElementById('page').value;
+        var pdfUrl = '{{ pdf.pdf_file.url }}';
+        var section = document.getElementById('section').value = "";
+        goToSuggestionPage(page, pdfUrl, section);
+}
+
 function toggleFullScreen() {
         var iframe = document.getElementById('pdfViewer');
         if (iframe.requestFullscreen) {
@@ -170,6 +187,7 @@ function toggleFullScreen() {
 var highlightedText = {};
 
 function goToSuggestionPage(pageNumber, pdfUrl, section) {
+
     var iframe = document.getElementById('pdfViewer');
     
     iframe.src = "/static/pdfjs/web/viewer.html?file=" + pdfUrl;
@@ -184,13 +202,17 @@ function goToSuggestionPage(pageNumber, pdfUrl, section) {
             iframe.src = newUrl;
             iframe.document = newUrl;
 
-            // Espera un breve período de tiempo antes de aplicar el resaltado
+            if (section !== ""){
+                // Espera un breve período de tiempo antes de aplicar el resaltado
             setTimeout(function() {
                 // Buscar el elemento de la página actual
                 var pageElement = documentIframe.querySelector('.page[data-page-number="' + pageNumber + '"]');
                 if (pageElement) {
                     // Obtener todos los elementos de texto dentro de la página
                     var textElements = pageElement.querySelectorAll('.textLayer');
+                    let primeraPalabraEncontrada = false
+                    let ultimaPalabraEncontrada = false
+                    var sectionWords = section.trim().split(/\s+/) // Divide la sección en palabras
 
                     // Recorrer todos los elementos de texto para buscar el texto deseado
                     textElements.forEach(function(textLayer) {
@@ -200,15 +222,36 @@ function goToSuggestionPage(pageNumber, pdfUrl, section) {
                         for (var i = 0; i < children.length; i++) {
                             var child = children[i];
                             var text = child.textContent || child.innerText;
+                            
+                            var sectionText = text.trim().split(/\s+/)
+                        
+                            for (var e = 0; e<sectionText.length; e++){
+                                var cleanedText = sectionText[e].trim().replace(/[^\w\d]+$/, '') //Elimina cualquier caracter no alfabetico o numerico al final
+                                if (cleanedText !== '' && cleanedText === sectionWords[0].trim().replace(/[^\w\d]+$/, '')){
+                                    primeraPalabraEncontrada = true
+                                }
 
-                            // Comparar el texto del hijo con la sección
-                            if (text.trim() !== '' && section.trim().includes(text.trim())) {
-                                // Resaltar el texto
-                                child.style.backgroundColor = 'yellow';
+                                // Comparar el texto del hijo con la sección
+                                if (cleanedText !== '' && section.trim().includes(cleanedText) && primeraPalabraEncontrada === true) {
+                                    // Resaltar el texto
+                                    child.style.backgroundColor = 'yellow';
 
-                                // Registra el texto resaltado
-                                highlightedText[pageNumber + '-' + i] = true;
+                                    // Registra el texto resaltado
+                                    highlightedText[pageNumber + '-' + i] = true;
+
+                                    //Verificar si el texto coincide con la última palabra del sectionWord
+                                    
+                                    if (cleanedText === sectionWords[sectionWords.length - 1].trim().replace(/[^\w\d]+$/, '')){
+                                        ultimaPalabraEncontrada = true
+                                        break; //Detiene el bucle si lo encuentra
+                                    } 
+                                }
                             }
+
+                            if (ultimaPalabraEncontrada === true){
+                                break;
+                            }
+                        
                         }
                     });
                 } else {
@@ -239,6 +282,9 @@ function goToSuggestionPage(pageNumber, pdfUrl, section) {
             }
         });
     });
+} 
+
+            
 }
 
 
@@ -252,7 +298,8 @@ function goToSuggestionPage(pageNumber, pdfUrl, section) {
         var documentIframe = iframe.contentDocument || iframe.contentWindow.document;
         
         // Captura el texto seleccionado
-        selectedText = documentIframe.getSelection().toString();
+        selectedText = documentIframe.getSelection().toString().replace(/(\r\n|\n|\r)/gm, " ").trim();
+        
         console.log(selectedText)
         // Obtiene el número de página actual
         currentPage = documentIframe.getElementById("pageNumber").value;
@@ -261,8 +308,13 @@ function goToSuggestionPage(pageNumber, pdfUrl, section) {
         document.getElementById('section').value = selectedText;
         document.getElementById('page').value = currentPage;
 
+        console.log(document.getElementById('section').value)
         // Muestra una alerta
         alert('Se ha capturado el texto seleccionado del PDF. Verifica los campos sección y página del formulario.');
+
+        // Muestra el botón "Ver Selección"
+        document.getElementById('verSeleccionButton').style.display = 'inline';
+        document.getElementById('limpiarSeleccionButton').style.display = 'inline';
     }
     }
 
