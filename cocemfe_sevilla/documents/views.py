@@ -11,6 +11,8 @@ from django.core.validators import FileExtensionValidator
 from professionals.models import Professional
 from chat_messages.models import ChatMessage
 from chat_messages.forms import MessageForm
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 
 @login_required
 def upload_pdf(request):
@@ -21,7 +23,6 @@ def upload_pdf(request):
             if form.is_valid():
                 suggestion_end_date = form.cleaned_data['suggestion_end_date']
                 suggestion_start_date = form.cleaned_data['suggestion_start_date']
-                
                 document = form.save(commit=False)
                 document.voting_start_date = suggestion_end_date
                 if suggestion_start_date and suggestion_start_date.date() == timezone.now().date():
@@ -32,8 +33,14 @@ def upload_pdf(request):
                 document.save()
                 document.professionals.set(professionals)
                 document.save()
+                # Enviar correo electrónico a cada profesional asignado
+                subject = 'Nuevo plan de accesibilidad'
+                from_email = 'cocemfesevillanotificaciones@gmail.com'
+                for professional in professionals:
+                    # Renderizar el mensaje de correo electrónico desde un template
+                    message = render_to_string('email/new_document_notification.txt', {'document': document, 'professional': professional})
+                    send_mail(subject, message, from_email, [professional.email], fail_silently=False)
                 return redirect('list_pdf')
-               
         else:
             form = PDFUploadForm()
         return render(request, 'upload_pdf.html', {'form': form, 'professionals_not_superuser': professionals})
