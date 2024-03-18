@@ -62,9 +62,9 @@
                 {% if mensaje %}
                     <p style="color: red;">{{ mensaje }}</p>
                 {% elif pdf.suggestion_start_date is None %}
-                    <p>El documento aún no está disponible para comentarios.</p>
+                    <p>El documento aún no está disponible para aportaciones.</p>
                 {% else %}
-                    <p>El documento aún no está disponible para comentarios. Quedan:</p>
+                    <p>El documento aún no está disponible para aportaciones. Quedan:</p>
                     <div class="contador-container">
                         <div id="dias" class="contador-item"></div>
                         <div class="contador-item">:</div>
@@ -74,10 +74,6 @@
                         <div class="contador-item">:</div>
                         <div id="segundos" class="contador-item"></div>
                     </div>
-                {% endif %}
-                {% if user.is_superuser %}
-                    <p>Puede modificar el documento aquí:</p>
-                    <a href="{% url 'update_pdf' pdf.id %}" class="btn btn-primary">Editar</a>
                 {% endif %}
             </div>
         {% else %}

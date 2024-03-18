@@ -75,7 +75,7 @@ def view_pdf_admin(request, pk):
             if pdf.suggestion_start_date and pdf.suggestion_end_date and pdf.professionals.all():
                 mensaje = None
             else:
-                mensaje = f"Debe indicar las fechas de inicio y fin de sugerencia y seleccionar al menos un profesional. Ahora mismo hay seleccionados {pdf.professionals.all().count()} profesionales."
+                mensaje = f"Debe indicar las fechas de inicio y fin de aportaciones y seleccionar al menos un profesional. Ahora mismo hay seleccionados {pdf.professionals.all().count()} profesionales."
                 
             return render(request, 'view_pdf.html', {'pdf': pdf, 'mensaje': mensaje})
         else:
