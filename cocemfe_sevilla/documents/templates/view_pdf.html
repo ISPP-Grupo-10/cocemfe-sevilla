@@ -100,9 +100,10 @@
             </div>
         </div>
         
-        <button class="comment-form-container" id="captureButton" type="submit">Capturar Selección</button>
+        
         
         {% if pdf.status == 'Aportaciones' %}
+        <button class="comment-form-container" id="captureButton" type="submit">Capturar Selección</button>
         <div class="comment-form-container">
             <!-- Formulario para enviar comentarios -->
             <form method="post" action="{% url 'create_suggestion' document_id=pdf.pk %}">

@@ -72,7 +72,8 @@ def view_pdf_admin(request, pk):
                 
             return render(request, 'view_pdf.html', {'pdf': pdf, 'mensaje': mensaje})
         else:
-            return render(request, 'view_pdf.html', {'pdf': pdf})
+            #El page_obj son los comentarios que se han hecho del doc, si que es verdad que si esta en Borrador no deberia haber nignuno.
+            return render(request, 'view_pdf.html', {'pdf': pdf, 'page_obj': page_obj})
     elif request.user in pdf.professionals.all():
         if pdf.status == 'Borrador':
             if pdf.suggestion_start_date and pdf.suggestion_end_date and pdf.professionals.all():
@@ -82,7 +83,8 @@ def view_pdf_admin(request, pk):
             return render(request, 'view_pdf.html', {'pdf': pdf, 'mensaje': mensaje})
         else:
             #Aquí iría la lógica para otros estados
-            return render(request, 'view_pdf.html', {'pdf': pdf})
+            #De momento solo esta aportaciones que se deben ver los comentarios del pdf por eso se pode page_obj
+            return render(request, 'view_pdf.html', {'pdf': pdf, 'page_obj': page_obj})
     else:
         return render(request, '403.html')
     
