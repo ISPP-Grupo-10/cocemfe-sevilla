@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block contenido %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de la Sugerencia</title>
+    <style>
+        .btn-favor {
+            background-color: green;
+            color: white;
+        }
+        .btn-contra {
+            background-color: red;
+            color: white;
+        }
+        .documento-box {
+            background-color: #f0f0f0; /* Color de fondo del recuadro */
+            border: 1px solid #ccc; /* Borde del recuadro */
+            border-radius: 5px; /* Bordes redondeados */
+            padding: 10px; /* Relleno del recuadro */
+            margin-top: 20px; /* Espacio entre el recuadro y el contenido anterior */
+            display: inline-block; /* Mostrar como bloque en línea */
+            text-align: center; /* Alinear el texto al centro */
+            cursor: pointer; /* Cambiar el cursor al pasar el mouse */
+            transition: background-color 0.3s ease; /* Transición suave para el color de fondo */
+            margin-bottom: 30px;
+        }
+        .documento-box a {
+            text-decoration: none; /* Quitar subrayado del enlace */
+            color: #333; /* Color del texto */
+            font-weight: bold; /* Texto en negrita */
+        }
+        .documento-box:hover {
+            background-color: #e0e0e0; /* Cambiar color de fondo al pasar el mouse */
+        }
+    </style>
+</head>
+<body>
+    <h1>Detalles de la Sugerencia</h1>
+    <div>
+        <p><strong>Principal:</strong> {{ suggestion.main }}</p>
+        <p><strong>Justificación:</strong> {{ suggestion.justification }}</p>
+        <p><strong>Relevancia:</strong> {{ suggestion.get_relevance_display }}</p>
+        <p><strong>Sección:</strong> {{ suggestion.section }}</p>
+        <p><strong>Página:</strong> {{ suggestion.page }}</p>
+        <p><strong>Fecha:</strong> {{ suggestion.date }}</p>
+        <p><strong>Profesional:</strong> {{ suggestion.professional }}</p>
+    </div>
+
+    <!-- Recuadro estilo botón para el enlace "Ver Documento" -->
+    <div class="documento-box">
+        <a href="{% url 'view_pdf_admin' suggestion.document_id %}">Ver Documento</a>
+    </div>
+
+    <br><br>
+
+    <h2>Votos Realizados</h2>
+    <ul>
+        {% for vote in votes %}
+        <li>{{ vote.professional }} - {% if vote.vote %}A Favor{% else %}En Contra{% endif %}</li>
+        {% empty %}
+        <li>No se han registrado votos aún.</li>
+        {% endfor %}
+    </ul>
+
+    <br><br>
+
+    {% if not request.user.is_superuser %}
+    <!-- Texto antes del voto -->
+    <h2>Vota si aceptas la aportación:</h2>
+
+    <!-- Botones de votación -->
+    <form method="post" action="{% url 'votings:voting_vote' suggestion.id %}">
+        {% csrf_token %}
+        <br>
+        <label for="justificacion">Justificación:</label><br>
+        <textarea id="justificacion" name="justificacion" rows="4" cols="50"></textarea><br>
+        <button type="submit" name="vote" value="True" class="btn-favor">A Favor</button>
+        <button type="submit" name="vote" value="False" class="btn-contra">En Contra</button>
+    </form>
+    {% endif %}
+
+
+</body>
+</html>
+
+{% endblock %}

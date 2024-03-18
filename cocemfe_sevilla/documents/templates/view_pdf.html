@@ -62,6 +62,27 @@
             <h3>Comentarios</h3>
             <div class="comments-container">
                 {% for suggestion in page_obj %}
+                    {% if pdf.status == 'Votaciones' %}
+                        {% with suggestion_id=suggestion.id %}
+                            <div class="comment-box">
+                                <a href="{% url 'view_suggestion' suggestion.id %}">
+                                    <div class="comment-header">
+                                        <span>{{ suggestion.professional }}</span>
+                                        <span>{{ suggestion.date }}</span>
+                                    </div>
+                                    <div class="comment-content">
+                                        <p style="font-size: 19px;">{{ suggestion.main }}</p>
+                                        <p style="color: #4b4a4a;">{{ suggestion.justification }}</p>
+                                        <!-- Agrega más contenido si es necesario -->
+                                    </div>
+                                </a>
+                                <ul>
+                                    <li>Votos a favor: {{ votes_info.2.favor_count }}</li>
+                                    <li>Votos en contra: {{ votes_info.suggestion_id.against_count }}</li>
+                                </ul>
+                            </div>
+                        {% endwith %}
+                    {% else %}
                     <div class="comment-box" onclick="goToSuggestionPage(parseInt('{{ suggestion.page }}'), '{{ pdf.pdf_file.url }}', '{{ suggestion.section }}')">
                         <div class="comment-header">
                             <span>{{ suggestion.professional }}</span>
@@ -73,6 +94,7 @@
                             <!-- Agrega más contenido si es necesario -->
                         </div>
                     </div>
+                    {% endif %}
                 {% empty %}
                     <b>No hay comentarios</b>
                 {% endfor %}
@@ -395,5 +417,3 @@ function goToSuggestionPage(pageNumber, pdfUrl, section) {
 
 
 {% endblock %}
-
-

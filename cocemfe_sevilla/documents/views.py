@@ -63,28 +63,57 @@ def view_pdf_admin(request, pk):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
+    votes_info = {}
+
+    for suggestion in suggestions:
+        votes = suggestion.votings.all()  # Recupera todos los votos asociados a la sugerencia
+        favor_count = votes.filter(vote=True).count()  # Cuenta los votos a favor
+        against_count = votes.filter(vote=False).count()  # Cuenta los votos en contra
+        votes_info[suggestion.id] = {'favor_count': favor_count, 'against_count': against_count}
+    
+        
+    context = {
+        'pdf': pdf,
+        'page_obj': page_obj,
+        'votes_info': votes_info,
+    }
+
     if request.user.is_superuser:
         if pdf.status == 'Borrador':
             if pdf.suggestion_start_date and pdf.suggestion_end_date and pdf.professionals.all():
                 mensaje = None
             else:
                 mensaje = "Debe indicar las fechas de inicio y fin de sugerencia y seleccionar al menos un profesional."
-                
-            return render(request, 'view_pdf.html', {'pdf': pdf, 'mensaje': mensaje})
+
+            context = {
+                'pdf': pdf,
+                'page_obj': page_obj,
+                'votes_info': votes_info,
+                'mensaje': mensaje,
+            }    
+            return render(request, 'view_pdf.html', context)
         else:
             #El page_obj son los comentarios que se han hecho del doc, si que es verdad que si esta en Borrador no deberia haber nignuno.
-            return render(request, 'view_pdf.html', {'pdf': pdf, 'page_obj': page_obj})
+            return render(request, 'view_pdf.html', context)
     elif request.user in pdf.professionals.all():
         if pdf.status == 'Borrador':
             if pdf.suggestion_start_date and pdf.suggestion_end_date and pdf.professionals.all():
                 mensaje = None
             else:
                 mensaje = "Debe indicar las fechas de inicio y fin de sugerencia y seleccionar al menos un profesional."
-            return render(request, 'view_pdf.html', {'pdf': pdf, 'mensaje': mensaje})
+
+            context = {
+                'pdf': pdf,
+                'page_obj': page_obj,
+                'votes_info': votes_info,
+                'mensaje': mensaje,
+            } 
+
+            return render(request, 'view_pdf.html', context)
         else:
             #Aquí iría la lógica para otros estados
             #De momento solo esta aportaciones que se deben ver los comentarios del pdf por eso se pode page_obj
-            return render(request, 'view_pdf.html', {'pdf': pdf, 'page_obj': page_obj})
+            return render(request, 'view_pdf.html', context)
     else:
         return render(request, '403.html')
     
