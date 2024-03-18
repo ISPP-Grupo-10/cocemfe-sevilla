@@ -62,25 +62,22 @@ def view_pdf_admin(request, pk):
     paginator = Paginator(suggestions, 5)  # Divide los comentarios en páginas de 10 comentarios cada una
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-
+    print(pdf.professionals.all())
     if request.user.is_superuser:
         if pdf.status == 'Borrador':
             if pdf.suggestion_start_date and pdf.suggestion_end_date and pdf.professionals.all():
                 mensaje = None
             else:
-                mensaje = "Debe indicar las fechas de inicio y fin de sugerencia y seleccionar al menos un profesional."
+                mensaje = f"Debe indicar las fechas de inicio y fin de sugerencia y seleccionar al menos un profesional. Ahora mismo hay seleccionados {pdf.professionals.all().count()} profesionales."
                 
             return render(request, 'view_pdf.html', {'pdf': pdf, 'mensaje': mensaje})
         else:
             #El page_obj son los comentarios que se han hecho del doc, si que es verdad que si esta en Borrador no deberia haber nignuno.
             return render(request, 'view_pdf.html', {'pdf': pdf, 'page_obj': page_obj})
+    
     elif request.user in pdf.professionals.all():
         if pdf.status == 'Borrador':
-            if pdf.suggestion_start_date and pdf.suggestion_end_date and pdf.professionals.all():
-                mensaje = None
-            else:
-                mensaje = "Debe indicar las fechas de inicio y fin de sugerencia y seleccionar al menos un profesional."
-            return render(request, 'view_pdf.html', {'pdf': pdf, 'mensaje': mensaje})
+            return render(request, 'view_pdf.html', {'pdf': pdf})
         else:
             #Aquí iría la lógica para otros estados
             #De momento solo esta aportaciones que se deben ver los comentarios del pdf por eso se pode page_obj
