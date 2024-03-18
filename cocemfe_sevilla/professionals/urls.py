@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.urls import path
-from .views import create_professional, professional_list, edit_user_view, delete_professional, custom_login, custom_logout, request_list, create_request, update_request
+from .views import create_professional, professional_list, edit_user_view, delete_professional, custom_login, custom_logout, request_document_chats, request_list, create_request, update_request
 from django.conf.urls.static import static
 
 app_name = 'professionals'
@@ -16,4 +16,5 @@ urlpatterns = [
     path('requests/create/', create_request, name='create_request'),
     path('requests/<int:pk>/update', update_request, name='update_request'),
 
+    path('chats/', request_document_chats, name="chats"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

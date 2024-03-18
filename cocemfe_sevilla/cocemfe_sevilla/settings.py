@@ -52,9 +52,10 @@ INSTALLED_APPS = [
     "votings",
     "organizations",
     "bootstrap5",
-    "base"
+    "base",
 ]
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -67,6 +68,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "cocemfe_sevilla.urls"
+
 
 TEMPLATES = [
     {
