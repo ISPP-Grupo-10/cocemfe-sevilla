@@ -159,8 +159,11 @@ def request_document_chats(request):
         professional = request.user
         possessed_documents = []
         all_documents = Document.objects.all()
-        for document in all_documents:
-            if professional in document.professionals.all():
-                possessed_documents.append(document)
+        if request.user.is_superuser:
+            possessed_documents = Document.objects.all()
+        else:
+            for document in all_documents:
+                if professional in document.professionals.all():
+                    possessed_documents.append(document)
         return render(request, 'list_chats.html', {'possessed_documents': possessed_documents})
-    
+
