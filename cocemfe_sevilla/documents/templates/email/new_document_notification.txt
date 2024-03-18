@@ -1,0 +1,15 @@
+Estimado/a {{ professional.first_name }},
+
+Le informamos que le ha sido asignado un nuevo documento de accesibilidad en el sistema. A continuación, encontrará los detalles del documento:
+
+Título del documento: {{ document.name }}
+Fecha de inicio de sugerencias: {{ document.suggestion_start_date }}
+Fecha de finalización de sugerencias: {{ document.suggestion_end_date }}
+Estado del documento: {{ document.status }}
+
+Puede acceder al documento en el sistema para revisarlo y realizar las acciones correspondientes. 
+
+Si tiene alguna pregunta o necesita más información, no dude en ponerse en contacto con nosotros.
+
+Atentamente,
+El equipo de COCEMFE Sevilla
