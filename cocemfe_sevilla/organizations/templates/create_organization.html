@@ -35,7 +35,7 @@
         }
 
         .form-control-label {
-            margin-bottom: 0;
+            margin-bottom: left;
         }
 
         input,
@@ -117,8 +117,8 @@
                     {% csrf_token %}
                     <div class="row justify-content-between text-left">
                         <div class="form-group col-12 flex-column d-flex mb-4">
-                            <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                                <i class="fas fa-user"></i> Nombre<span class="text-danger"> *</span>
+                            <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold; text-align: left;">
+                                Nombre<span class="text-danger"> *</span>
                             </label>
                             {{ form.name }}
                             {% for error in form.name.errors %}
@@ -128,8 +128,8 @@
                     </div>
                     <div class="row justify-content-between text-left">
                         <div class="form-group col-sm-6 flex-column d-flex mb-4">
-                            <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                                <i class="fas fa-phone"></i> Teléfono<span class="text-danger"> *</span>
+                            <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold; text-align: left;">
+                                 Teléfono<span class="text-danger"> *</span>
                             </label>
                             {{ form.telephone_number }}
                             {% for error in form.telephone_number.errors %}
@@ -137,8 +137,8 @@
                             {% endfor %}
                         </div>
                         <div class="form-group col-sm-6 flex-column d-flex mb-4">
-                            <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                                <i class="fas fa-map-marker-alt"></i> Dirección<span class="text-danger"> *</span>
+                            <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold; text-align: left;">
+                                 Dirección<span class="text-danger"> *</span>
                             </label>
                             {{ form.address }}
                             {% for error in form.address.errors %}
@@ -148,8 +148,8 @@
                     </div>
                     <div class="row justify-content-between text-left">
                         <div class="form-group col-sm-6 flex-column d-flex mb-4">
-                            <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                                <i class="fas fa-envelope"></i> Correo electrónico<span class="text-danger"> *</span>
+                            <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold; text-align: left;">
+                                 Correo electrónico<span class="text-danger"> *</span>
                             </label>
                             {{ form.email }}
                             {% for error in form.email.errors %}
@@ -157,8 +157,8 @@
                             {% endfor %}
                         </div>
                         <div class="form-group col-sm-6 flex-column d-flex mb-4">
-                            <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                                <i class="fas fa-mail-bulk"></i> Código Postal<span class="text-danger"> *</span>
+                            <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold; text-align: left;">
+                                 Código Postal<span class="text-danger"> *</span>
                             </label>
                             {{ form.zip_code }}
                             {% for error in form.zip_code.errors %}
