@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.contrib import messages
+from django.contrib.auth import logout, login, authenticate
 
+from documents.models import Document
 from .models import Professional, Request
 from .forms import ProfessionalCreationForm, ProfessionalForm
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -80,7 +82,7 @@ def edit_user_view(request, pk):
             return render(request, template_name, {'form': form, 'professional': professional})
 
 
-
+@user_passes_test(lambda u: u.is_authenticated)
 def professional_list(request):
     professionals = Professional.objects.filter(is_superuser=False)
 
@@ -109,7 +111,7 @@ def professional_list(request):
         'organization_filter': organization_filter,
     })
 
-@method_decorator(user_passes_test(lambda u: u.is_authenticated and (u.is_staff or u.is_superuser)), name='dispatch')
+@user_passes_test(lambda u: u.is_authenticated and (u.is_staff or u.is_superuser))
 def delete_professional(request, id):
     professional = get_object_or_404(Professional, id=id)
     professionals = Professional.objects.filter(is_superuser=False)
@@ -117,12 +119,10 @@ def delete_professional(request, id):
     if request.method == 'POST':
         if request.user.is_superuser:
             professional.delete()
-            messages.success(request, 'Profesional eliminado exitosamente.')\
-            
+            messages.success(request, 'Profesional eliminado exitosamente.')
             return render(request, 'professional_list.html', {'professionals': professionals})
         else:
             return render(request, '403.html')
-         
 
     return render(request, 'professional_list.html', {'professionals': professionals})
 
@@ -153,3 +153,14 @@ def request_list(request):
     requests = Request.objects.all()
     return render(request, 'list_requests.html', {'requests': requests})
 
+
+def request_document_chats(request):
+    if request.method == 'GET':
+        professional = request.user
+        possessed_documents = []
+        all_documents = Document.objects.all()
+        for document in all_documents:
+            if professional in document.professionals.all():
+                possessed_documents.append(document)
+        return render(request, 'list_chats.html', {'possessed_documents': possessed_documents})
+    
