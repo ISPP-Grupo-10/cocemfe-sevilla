@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -34,7 +33,6 @@ jobs:
           python ./cocemfe_sevilla/manage.py test
 
   build-windows:
-
     runs-on: windows-latest
     strategy:
       matrix:
@@ -58,6 +56,3 @@ jobs:
       - name: Run Tests
         run: |
           python ./cocemfe_sevilla/manage.py test
-
-
-

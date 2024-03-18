@@ -127,10 +127,12 @@
             <p><strong>Correo Electrónico:</strong> {{ organization.email }}</p>
             <p><strong>Código Postal:</strong> {{ organization.zip_code }}</p>
         </div>
+        {% if request.user.is_superuser %}
         <div class="btn-group" role="group">
             <a href="{% url 'organizations:update_organization' pk=organization.pk %}" class="btn btn-primary">Editar</a>
             <a href="{% url 'organizations:delete_organization' pk=organization.pk %}" class="btn btn-primary">Eliminar</a>
         </div>
+        {% endif %}
     </div>
 </body>
 

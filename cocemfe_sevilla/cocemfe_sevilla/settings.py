@@ -29,6 +29,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "cocemfesevillanotificaciones@gmail.com"
+EMAIL_HOST_PASSWORD = 'stqx wqug nfqd woau'
+EMAIL_USE_TLS = True
 
 # Application definition
 
@@ -58,6 +64,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "base.middleware.CheckUserStatusMiddleware",
 ]
 
 ROOT_URLCONF = "cocemfe_sevilla.urls"

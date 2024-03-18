@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block contenido %}
+<style>
+    .contenedor-table {
+        border-radius: 10px;
+        background-color: rgba(0, 162, 152, 0.25);
+        padding: 10px;
+        margin: 0 25px; /* Se aplica el margen a ambos lados */
+    }
+
+    .tabla-personalizada th {
+        font-size: large;
+    }
+
+    .tabla-personalizada td {
+        background-color: white;
+        font-size: large;
+    }
+
+    td:first-child {
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+    }
+
+    td:last-child {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    .tabla-personalizada {
+        border-collapse: separate;
+        border-spacing: 0 15px;
+    }
+</style>
+<div class="container-fluid">
+    <h2 class="text-center">Requests</h2>
+    {% if messages %}
+    <div class="container mt-3">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div id="errorMessage" class="alert alert-danger" role="alert">
+                    {% for message in messages %}
+                        <small>{{ message }}</small><br>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        setTimeout(function() {
+            var errorMessage = document.getElementById('errorMessage');
+            errorMessage.style.display = 'none';
+        }, 20000);
+    </script>
+    {% endif %}
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="contenedor-table">
+                <table class="table table-borderless text-center tabla-personalizada">
+                    <thead>
+                        <tr>
+                            <th scope="col">Email</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if requests %}
+                            {% for req in requests %}
+                            <tr class="spaceUnder">
+                                <td>
+                                    <a href="{% url 'professionals:update_request' pk=req.pk %}" style="color: black;"> {{ req.email }} </a>
+                                </td>
+                                <td>{{ req.description }}</td>
+                                <td>{{ req.status }}</td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <a href="{% url 'professionals:update_request' pk=req.pk %}" class="btn btn-primary" style="border-radius: 0px; border-color: transparent; background-color: transparent;">&#9998;</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="4" class="text-center">No hay solicitudes que mostrar</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
