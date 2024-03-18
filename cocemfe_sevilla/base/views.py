@@ -5,7 +5,7 @@ from .forms import AceptarTerminosForm
 
 @login_required
 def pagina_base(request):
-    return render(request, 'index.html')
+    return render(request, 'index.html') 
 
 def politica_terminos(request):
     if request.method == 'POST':
