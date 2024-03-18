@@ -61,6 +61,8 @@
             <div class="doc-comments">
                 {% if mensaje %}
                     <p style="color: red;">{{ mensaje }}</p>
+                {% elif pdf.suggestion_start_date is None %}
+                    <p>El documento aún no está disponible para comentarios.</p>
                 {% else %}
                     <p>El documento aún no está disponible para comentarios. Quedan:</p>
                     <div class="contador-container">
