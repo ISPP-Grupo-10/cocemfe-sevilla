@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Detalles{% endblock %}
+{% block title %}Modificar organización{% endblock %}
 {% block encabezado %}
 {% endblock %}
 {% block contenido %}
@@ -10,10 +10,38 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalles de la Organización</title>
-</head>
+    <title>Modificar Solicitud</title>
+    <style>
+        /* Estilos adicionales aquí si es necesario */
+        .container {
+            margin-top: 20px;
+        }
 
-<body>
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            width: 100%;
+        }
+    </style>
+
     <style>
         .center-box {
             width: 50%;
@@ -118,23 +146,34 @@
             /* Cambio de color al pasar el cursor */
         }
     </style>
+</head>
+
+<body>
     <div class="center-box">
-        <h2 class="text-center">Detalles de la Organización</h2>
-        <div class="card-body">
-            <p><strong>Nombre:</strong> {{ organization.name }}</p>
-            <p><strong>Número de Teléfono:</strong> {{ organization.telephone_number }}</p>
-            <p><strong>Dirección:</strong> {{ organization.address }}</p>
-            <p><strong>Correo Electrónico:</strong> {{ organization.email }}</p>
-            <p><strong>Código Postal:</strong> {{ organization.zip_code }}</p>
-        </div>
-        {% if request.user.is_superuser %}
-        <div class="btn-group" role="group">
-            <a href="{% url 'organizations:update_organization' pk=organization.pk %}" class="btn btn-primary">Editar</a>
-            <a href="{% url 'organizations:delete_organization' pk=organization.pk %}" class="btn btn-primary">Eliminar</a>
-        </div>
-        {% endif %}
+        <h2 class="form-heading">Modificar Solicitud</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_email">Correo Electrónico:</label>
+                <span>{{ email }}</span>
+            </div>
+            <div class="form-group">
+                <label for="id_description">Descripción:</label>
+                <span>{{ description }}</span>
+            </div>
+            
+            <div class="form-group">
+                <label for="id_status">Estado:</label>
+                {{ form.status }}
+                {% for error in form.status.errors %}
+                <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Modificar</button>
+        </form>
     </div>
+    
 </body>
 
 </html>
-{% endblock %}
+{% endblock %} 

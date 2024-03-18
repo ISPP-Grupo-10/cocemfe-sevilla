@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import PDFUploadForm
+from django.contrib.auth.decorators import login_required
 from .models import Document
 from suggestions.models import Suggestion
 from django.utils import timezone
@@ -13,31 +14,28 @@ from chat_messages.models import ChatMessage
 from chat_messages.forms import MessageForm
 from django.core.paginator import Paginator
 
+@login_required
 def upload_pdf(request):
     if request.user.is_superuser:
         professionals = Professional.objects.filter(is_superuser=False)
         if request.method == 'POST':
             form = PDFUploadForm(request.POST, request.FILES)
             if form.is_valid():
-                end_date = form.cleaned_data['end_date']
-                pdf_file = form.cleaned_data['pdf_file']
-                try:
-                    FileExtensionValidator(allowed_extensions=['pdf'])(pdf_file)
-                except ValidationError as e:
-                    form.add_error('pdf_file', e)
-                    messages.error(request, "El archivo debe ser un PDF.")
-                else:
-                    if end_date > timezone.now().date():
-                        document = form.save(commit=False)
-                        document.start_date = timezone.now().date()
-                        document.status = 'Abierto'
-                        professionals = form.cleaned_data['professionals']
-                        document.save()
-                        document.professionals.set(professionals)
-                        document.save()
-                        return redirect('list_pdf')
-                    else:
-                        messages.error(request, "La fecha de finalización debe ser posterior a la fecha actual.")
+                suggestion_end_date = form.cleaned_data['suggestion_end_date']
+                suggestion_start_date = form.cleaned_data['suggestion_start_date']
+                
+                document = form.save(commit=False)
+                document.voting_start_date = suggestion_end_date
+                if suggestion_start_date and suggestion_start_date.date() == timezone.now().date():
+                    document.status = 'Aportaciones'
+                if suggestion_end_date and suggestion_end_date.date() == timezone.now().date():
+                    document.status = 'Votaciones'
+                professionals = form.cleaned_data['professionals']
+                document.save()
+                document.professionals.set(professionals)
+                document.save()
+                return redirect('list_pdf')
+               
         else:
             form = PDFUploadForm()
         return render(request, 'upload_pdf.html', {'form': form, 'professionals_not_superuser': professionals})
@@ -57,6 +55,7 @@ def view_pdf(request, pk):
     else:
         return render(request, '403.html')
 
+@login_required
 def view_pdf_admin(request, pk):
     pdf = get_object_or_404(Document, pk=pk)
     suggestions = Suggestion.objects.filter(document=pdf)
@@ -65,37 +64,61 @@ def view_pdf_admin(request, pk):
     page_obj = paginator.get_page(page_number)
 
     if request.user.is_superuser:
-        return render(request, 'view_pdf.html', {'pdf': pdf, 'page_obj': page_obj})    
+        if pdf.status == 'Borrador':
+            if pdf.suggestion_start_date and pdf.suggestion_end_date and pdf.professionals.all():
+                mensaje = None
+            else:
+                mensaje = "Debe indicar las fechas de inicio y fin de sugerencia y seleccionar al menos un profesional."
+                
+            return render(request, 'view_pdf.html', {'pdf': pdf, 'mensaje': mensaje})
+        else:
+            return render(request, 'view_pdf.html', {'pdf': pdf})
+    elif request.user in pdf.professionals.all():
+        if pdf.status == 'Borrador':
+            if pdf.suggestion_start_date and pdf.suggestion_end_date and pdf.professionals.all():
+                mensaje = None
+            else:
+                mensaje = "Debe indicar las fechas de inicio y fin de sugerencia y seleccionar al menos un profesional."
+            return render(request, 'view_pdf.html', {'pdf': pdf, 'mensaje': mensaje})
+        else:
+            #Aquí iría la lógica para otros estados
+            return render(request, 'view_pdf.html', {'pdf': pdf})
     else:
         return render(request, '403.html')
     
-
+@login_required
 def update_pdf(request,pk):
     document = get_object_or_404(Document, pk=pk)
     professionals_not_superuser = Professional.objects.filter(is_superuser=False)
     if request.user.is_superuser:
         if request.method == 'POST':
-            form = PDFUploadForm(request.POST, instance=document)
+            form = PDFUploadForm(request.POST, request.FILES, instance=document)
             if form.is_valid():
-                end_date = form.cleaned_data['end_date']
-                professionals = form.cleaned_data['professionals']
-                for professional in professionals:
-                    if professional.is_superuser:
-                        messages.error(request, "Un administrador no puede ser seleccionado.")
-                if end_date > timezone.now().date():
-                    form.save()
-                    document.professionals.set(professionals)
-                    return redirect('list_pdf')
-                else:
-                    messages.error(request, "La fecha de finalización debe ser posterior a la fecha actual.")
-            else:
-                messages.error(request, "Por favor completa todos los campos del formulario.")
+                suggestion_start_date = form.cleaned_data['suggestion_start_date']
+                suggestion_end_date = form.cleaned_data['suggestion_end_date']
+                pdf = form.cleaned_data['pdf_file']
+
+                updated_document = form.save(commit=False)
+                updated_document.pdf_file = pdf
+                
+                if suggestion_start_date and suggestion_start_date.date() == timezone.now().date():
+                    updated_document.status = 'Aportaciones'
+                if suggestion_end_date and suggestion_end_date.date() == timezone.now().date():
+                    updated_document.status = 'Votaciones'
+                
+                updated_document.voting_start_date = suggestion_end_date
+
+                updated_document.save()
+                form.save_m2m() 
+                
+                return redirect('list_pdf')
         else:
             form = PDFUploadForm(instance=document)
         return render(request, 'update_pdf.html', {'form': form, 'document': document, 'professionals_not_superuser': professionals_not_superuser})
     else:
         return render(request, '403.html')
 
+@login_required
 def delete_pdf(request, pk):
     
     document = get_object_or_404(Document, pk=pk)
@@ -105,33 +128,33 @@ def delete_pdf(request, pk):
     else:
         return render(request, '403.html')
 
+@login_required
 def list_pdf(request):
     documentos = Document.objects.all()
 
     name = request.GET.get('name')
     status = request.GET.get('status')
-    start_date = request.GET.get('start_date')
+    suggestion_start_date = request.GET.get('suggestion_start_date')
 
     if name:
         documentos = documentos.filter(name__icontains=name)
     if status:
         documentos = documentos.filter(status=status)
-    if start_date:
+    if suggestion_start_date:
         try:
             # Intenta convertir la entrada del filtro de fecha en un objeto de fecha
-            start_date = timezone.datetime.strptime(start_date, '%Y-%m-%d').date()
+            suggestion_start_date = timezone.datetime.strptime(suggestion_start_date, '%Y-%m-%d').date()
         except ValueError:
             # Si la entrada no es una fecha válida, muestra un mensaje de error
             messages.error(request, "La fecha de inicio no es válida. Utilice el formato AAAA-MM-DD.")
             return render(request, "list_pdf.html", {'documentos': documentos, 'Document': Document})
 
-        # Ahora puedes usar start_date en tus filtros
-        documentos = documentos.filter(start_date=start_date)
+        # Ahora puedes usar suggestion_start_date en tus filtros
+        documentos = documentos.filter(suggestion_start_date=suggestion_start_date)
 
     return render(request, "list_pdf.html", {'documentos': documentos, 'Document': Document})
 
-
-
+@login_required
 def load_comments(request, pk):
     doc = get_object_or_404(Document, id=pk)
     if request.user in doc.professionals.all() or request.user.is_staff:
@@ -139,7 +162,6 @@ def load_comments(request, pk):
         return render(request, 'list_comments.html', {'doc': doc, 'chat_messages': comments})
     else:
         return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
-
 
 @login_required
 def publish_comment(request, pk):
@@ -159,4 +181,5 @@ def publish_comment(request, pk):
 
     comments = ChatMessage.objects.filter(document=doc)
     return render(request, 'list_comments.html', {'doc': doc, 'chat_messages': comments, 'form': form})
+
 
