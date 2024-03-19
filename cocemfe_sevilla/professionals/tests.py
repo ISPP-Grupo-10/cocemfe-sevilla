@@ -1,16 +1,16 @@
 # tests.py
 import uuid
 
+from django.utils import timezone
+from datetime import timedelta
+from django.urls import reverse
+from documents.models import Document
 from django.contrib.auth import get_user_model
 from django.test import RequestFactory, TestCase, Client
-from django.urls import reverse
 from professionals.views import create_professional
 from professionals.models import Professional
-from professionals.forms import ProfessionalCreationForm, ProfessionalForm
+from professionals.forms import ProfessionalCreationForm
 from organizations.models import Organization
-from django.core.files.uploadedfile import SimpleUploadedFile
-from django.contrib.auth.models import User
-from django.contrib.auth.models import AnonymousUser
 
 
 class ProfessionalViewTest(TestCase):
@@ -54,7 +54,7 @@ class ProfessionalListTestCase(TestCase):
             telephone_number='123456789',
             address='Test Address',
             email='test@example.com',
-            is_staff=True,
+            #is_staff=True,
             zip_code=12345,
         )
 
@@ -113,6 +113,69 @@ class ProfessionalListTestCase(TestCase):
         self.assertIn(self.professional1, response.context['professionals'])
         self.assertIn(self.professional2, response.context['professionals'])
 
+class ProfessionalChatTestCase(TestCase):
+    def setUp(self):
+        self.organization = Organization.objects.create(
+            name='Test Organization',
+            telephone_number='123456789',
+            address='Test Address',
+            email='test@example.com',
+            zip_code=12345,
+        )
+
+        self.professional1 = Professional.objects.create(
+            username='testuser1',
+            email='testuser1@example.com',
+            first_name='John',
+            last_name='Doe',
+            telephone_number='123456789',
+            license_number='12345',
+            organizations=self.organization,
+            terms_accepted=True
+        )
+
+        self.document1 = Document.objects.create(
+            name='Documento de prueba 1',
+            suggestion_start_date=timezone.now()+ timedelta(days=10),
+            suggestion_end_date=timezone.now() + timedelta(days=30),
+            voting_start_date=timezone.now() + timedelta(days=30),
+            voting_end_date=timezone.now() + timedelta(days=60),
+            ubication='Ubicación de prueba',
+            status='Cerrado'
+        )
+
+        self.document2 = Document.objects.create(
+            name='Documento de prueba 2',
+            suggestion_start_date=timezone.now()+ timedelta(days=10),
+            suggestion_end_date=timezone.now() + timedelta(days=30),
+            voting_start_date=timezone.now() + timedelta(days=30),
+            voting_end_date=timezone.now() + timedelta(days=60),
+            ubication='Ubicación de prueba',
+            status='Cerrado'
+        )
+
+        self.document3 = Document.objects.create(
+            name='Documento de prueba 3',
+            suggestion_start_date=timezone.now()+ timedelta(days=10),
+            suggestion_end_date=timezone.now() + timedelta(days=30),
+            voting_start_date=timezone.now() + timedelta(days=30),
+            voting_end_date=timezone.now() + timedelta(days=60),
+            ubication='Ubicación de prueba',
+            status='Cerrado'
+        )
+        self.document1.professionals.add(self.professional1)
+        self.document3.professionals.add(self.professional1)
+
+    def test_professional_list_documents(self):
+        self.client.force_login(self.professional1)
+        url = "/professionals/chats/"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Documento de prueba 1')
+        self.assertContains(response, 'Documento de prueba 3')
+        self.assertNotContains(response, 'Documento de prueba 2')
+        
+        
 class ProfessionalCreationTest(TestCase):
     def setUp(self):
         self.client = Client()
