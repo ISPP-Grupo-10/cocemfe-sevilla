@@ -77,8 +77,12 @@
                                     </div>
                                 </a>
                                 <ul>
-                                    <li>Votos a favor: {{ votes_info.2.favor_count }}</li>
-                                    <li>Votos en contra: {{ votes_info.suggestion_id.against_count }}</li>
+                                    {% for suggestion_id, vote_info in votes_info.items %}
+                                        {% if suggestion_id == suggestion.id %}
+                                            <li>Votos a favor: {{ vote_info.favor_count }}</li>
+                                            <li>Votos en contra: {{ vote_info.against_count }}</li>
+                                        {% endif %}
+                                    {% endfor %}
                                 </ul>
                             </div>
                         {% endwith %}
