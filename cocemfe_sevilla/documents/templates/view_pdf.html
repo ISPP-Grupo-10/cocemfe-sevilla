@@ -79,8 +79,8 @@
                                 <ul>
                                     {% for suggestion_id, vote_info in votes_info.items %}
                                         {% if suggestion_id == suggestion.id %}
-                                            <li>Votos a favor: {{ vote_info.favor_count }}</li>
-                                            <li>Votos en contra: {{ vote_info.against_count }}</li>
+                                            <li>{{ vote_info.favor_count }}<span aria-label="Like" role="img"> 👍</span></li>
+                                            <li>{{ vote_info.against_count }}<span aria-label="Dislike" role="img"> ❌</span></li>
                                         {% endif %}
                                     {% endfor %}
                                 </ul>
