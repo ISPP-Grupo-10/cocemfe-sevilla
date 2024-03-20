@@ -6,7 +6,7 @@ from organizations.models import Organization
 from .models import Professional, Request
 from django import forms
 from .models import Professional
-
+from django.contrib.auth.hashers import make_password 
 
 class ProfessionalForm(forms.ModelForm):
     class Meta:
@@ -99,16 +99,17 @@ class ProfessionalCreationForm(forms.ModelForm):
     license_number = forms.CharField(max_length=20)
     organizations = forms.ModelChoiceField(queryset=Organization.objects.all())
     profile_picture = forms.ImageField(required=False)
+    password = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     def save(self, commit=True):
         professional = super().save(commit=False)
-
-        password = ''.join(random.choices(string.ascii_letters + string.digits, k=12))
-        professional.set_password(password)
-
+        password = self.cleaned_data.get('password')
+        if not password:
+            password = ''.join(random.choices(string.ascii_letters + string.digits, k=12))
+            self.cleaned_data['password'] = password
+        professional.set_password(make_password(password))
         if commit:
             professional.save()
-
         return professional
 
     def clean(self):
