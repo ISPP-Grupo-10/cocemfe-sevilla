@@ -2,14 +2,21 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.contrib import messages
+from django.contrib.auth import logout, login, authenticate
 
+from documents.models import Document
 from .models import Professional, Request
 from .forms import ProfessionalCreationForm, ProfessionalForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import logout, login, authenticate
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 from .forms import ProfessionalForm, RequestCreateForm, RequestUpdateForm
+from django.contrib.auth.hashers import make_password 
+import random
+import string
 
 def custom_login(request):
     if request.method == 'POST':
@@ -39,22 +46,27 @@ def custom_logout(request):
 def is_admin(user):
     return user.is_authenticated and user.is_staff
 
-
 @user_passes_test(is_admin)
 def create_professional(request):
     if request.method == 'POST':
         form = ProfessionalCreationForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            #messages.success(request, 'Profesional creado exitosamente.')
+            professional = form.save(commit=False)  
+
+            password = ''.join(random.choices(string.ascii_letters + string.digits, k=12))
+            professional.password = make_password(password)  
+            professional.save() 
+
+            subject = '¡Bienvenida a COCEMFE Sevilla - Acceso al Sistema de Gestión de Documentos!'
+            from_email = 'cocemfesevillanotificaciones@gmail.com'
+            message = render_to_string('email/new_professional_notification.txt', {'professional': professional, 'password': password}) 
+            send_mail(subject, message, from_email, [professional.email], fail_silently=False)
+
             return redirect(reverse('professionals:professional_list'))
-        #else:
-            #messages.error(request, 'Error al crear el profesional. Por favor, corrija los errores en el formulario.')
     else:
         form = ProfessionalCreationForm()
 
     return render(request, 'professional_create.html', {'form': form})
-
 
 @login_required
 def edit_user_view(request, pk):
@@ -80,7 +92,7 @@ def edit_user_view(request, pk):
             return render(request, template_name, {'form': form, 'professional': professional})
 
 
-
+@user_passes_test(lambda u: u.is_authenticated)
 def professional_list(request):
     professionals = Professional.objects.filter(is_superuser=False)
 
@@ -109,21 +121,19 @@ def professional_list(request):
         'organization_filter': organization_filter,
     })
 
-@method_decorator(user_passes_test(lambda u: u.is_authenticated and (u.is_staff or u.is_superuser)), name='dispatch')
+@user_passes_test(lambda u: u.is_authenticated and (u.is_staff or u.is_superuser))
 def delete_professional(request, id):
-    professional = get_object_or_404(Professional, id=id)
-    professionals = Professional.objects.filter(is_superuser=False)
-
     if request.method == 'POST':
+        professional = get_object_or_404(Professional, id=id)
+        professionals = Professional.objects.filter(is_superuser=False)
+
         if request.user.is_superuser:
             professional.delete()
-            messages.success(request, 'Profesional eliminado exitosamente.')\
-            
             return render(request, 'professional_list.html', {'professionals': professionals})
         else:
             return render(request, '403.html')
-         
 
+    professionals = Professional.objects.filter(is_superuser=False)
     return render(request, 'professional_list.html', {'professionals': professionals})
 
 def create_request(request):
@@ -152,4 +162,18 @@ def update_request(request, pk):
 def request_list(request):
     requests = Request.objects.all()
     return render(request, 'list_requests.html', {'requests': requests})
+
+
+def request_document_chats(request):
+    if request.method == 'GET':
+        professional = request.user
+        possessed_documents = []
+        all_documents = Document.objects.all()
+        if request.user.is_superuser:
+            possessed_documents = Document.objects.all()
+        else:
+            for document in all_documents:
+                if professional in document.professionals.all():
+                    possessed_documents.append(document)
+        return render(request, 'list_chats.html', {'possessed_documents': possessed_documents})
 

@@ -1,0 +1,13 @@
+Estimado/a {{ professional.first_name }},
+
+Le informamos que se ha añadido un nuevo comentario en el documento "{{ doc.name }}". A continuación, encontrará los detalles del comentario:
+
+Título del comentario: {{ sugerencia.main }}
+Contenido del comentario: {{ sugerencia.justification }}
+
+Puede acceder al documento en el sistema para revisarlo y realizar las acciones correspondientes. 
+
+Si tiene alguna pregunta o necesita más información, no dude en ponerse en contacto con nosotros.
+
+Atentamente,
+El equipo de COCEMFE Sevilla
