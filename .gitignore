@@ -2,13 +2,14 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*_initial.py
+__init__.py
 
 # C extensions
 *.so
 
 # Distribution / packaging
 .Python
-build/
 develop-eggs/
 dist/
 downloads/
@@ -158,3 +159,18 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+codenfe_sevilla/base/__init__.py
+codenfe_sevilla/base/migrations/__init__.py
+codenfe_sevilla/documents/migrations/0002_document_professionals.py
+codenfe_sevilla/organizations/__init__.py
+codenfe_sevilla/organizations/migrations/__init__.py
+codenfe_sevilla/organizations/migrations/0001_initial.py
+codenfe_sevilla/professionals/migrations/0002_delete_organization_professional_organizations.py
+codenfe_sevilla/suggestions/migrations/0002_suggestion_document_suggestion_professional.py
+codenfe_sevilla/votings/migrations/0002_voting_professional_voting_suggestion.py
+
+# Ignorar archivos de migración de Django
+
+**/migrations/*.py
+**/migrations/*.pyc
+!**/migrations/__init__.py

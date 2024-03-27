@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block contenido %}
+<link rel="stylesheet" href="{% static 'css/list_pdf.css' %}"/>
+
+<div class="flex flex-col w-full min-h-screen bg-white">
+  <div class="border-b dark:border-gray-700">
+    <div class="container px-4 py-4 sm:py-6 lg:py-8">
+      <div class="space-y-2">
+        <h1 class="text-2xl font-bold text-[#00bfa5]">Organizaciones</h1>
+        <p class="text-[#00bfa5] dark:text-gray-400">Lista de organizaciones registradas</p>
+      </div>
+      
+    </div>
+  </div>
+  <div class="flex-1 overflow-y-auto">
+    <div class="container flex flex-col gap-4 px-0 py-6 sm:gap-6"> <!-- Ajuste de los márgenes -->
+      <div class="w-full px-4 space-y-4 d-flex flex-row justify-content-between">
+        <div class="col-4 max-w-lg space-y-1 mb-4 d-flex flex-col">
+          <div class="input-group mb-3 col-3">
+            <button class="btn btn-outline-secondary" type="button" id="button-addon1">Buscar</button>
+            <input type="text" class="form-control form-control-xs" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" style="width: 200px;">
+          </div>
+        </div>
+        {% if request.user.is_superuser %}
+        <div>
+          <a href="{% url 'organizations:create_organization' %}" class="btn btn-orange">+ Añadir organización</a>
+        </div>
+        {% endif %}
+      </div>
+      <div class="mt-8"></div>
+      <div class="w-full">
+        <div class="relative w-full overflow-auto">
+          <table class="w-full caption-bottom text-sm">
+            <thead class="[&amp;_tr]:border-b">
+              <tr class="border-b border-gray-200 transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
+                  Nombre
+                </th>
+                <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
+                  Teléfono
+                </th>
+                <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
+                  Email
+                </th>
+                {% if request.user.is_superuser %}
+                <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
+                  Acciones
+                </th>
+                {% endif %}
+              </tr>
+            </thead>
+            <tbody class="[&amp;_tr:last-child]:border-0">
+              <hr>
+              {% if organizations %}
+                {% for org in organizations %}
+                  {% if forloop.counter|divisibleby:2 %}
+                    <tr class="bg-gray-100 border-b border-gray-200 transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                  {% else %}
+                    <tr class="border-b border-gray-200 transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                  {% endif %}
+                    <td class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 font-semibold text-[#00bfa5]">
+                      <a href="{% url 'organizations:get_organization' pk=org.pk %}" style="color: black;">{{ org.name }}</a>
+                    </td>
+                    <td class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">{{ org.telephone_number }}</td>
+                    <td class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">{{ org.email }}</td>
+                    {% if request.user.is_superuser %}
+                    <td class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">
+                      <div class="d-flex space-x-2">
+                        <a href="{% url 'organizations:update_organization' pk=org.pk %}" class="btn btn-outline-primary mx-2">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+                            <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
+                          </svg>
+                        </a>
+                        <a href="{% url 'organizations:delete_organization' pk=org.pk %}" class="btn btn-outline-danger">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                          </svg>
+                        </a>
+                      </div>
+                    </td>
+                    {% endif %}
+                  </tr>
+                {% endfor %}
+              {% else %}
+                <tr>
+                  <td colspan="4" class="p-4 text-center">No hay organizaciones que mostrar.</td>
+                </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var toggleFiltersBtn = document.getElementById('toggleFiltersBtn');
+        var filtersContainer = document.getElementById('filtersContainer');
+    
+        toggleFiltersBtn.addEventListener('click', function() {
+            if (filtersContainer.style.display === 'none' || filtersContainer.style.display === '') {
+                filtersContainer.style.display = 'block';
+            } else {
+                filtersContainer.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+{% endblock %}

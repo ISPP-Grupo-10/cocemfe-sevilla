@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+{% block title %}Crear Professional{% endblock %}
+{% block encabezado %}{% endblock %}
+{% block contenido %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-ZAElWN6PqB8kyByGWGdIV6yB/wWw+2sBOnTgCZlb5B5KZl3IFIKo3sggs2pihGzwCwPbLjBOvDT6xg6lL7sR7Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+  <title>Create Professional</title>
+</head>
+<body>
+  <style>
+      body {
+          color: #000;
+          overflow-x: hidden;
+          height: 100%;
+          background-repeat: no-repeat;
+          background-size: 100% 100%;
+      }
+
+      .card {
+          padding: 30px 40px;
+          margin-top: 60px;
+          margin-bottom: 60px;
+          border: none !important;
+          box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.2);
+      }
+
+      .blue-text {
+          color: #00BCD4;
+      }
+
+      .form-control-label {
+          margin-bottom: 0;
+      }
+
+      input,
+      textarea,
+      button {
+          padding: 8px 15px;
+          border-radius: 5px !important;
+          margin: 5px 0px;
+          box-sizing: border-box;
+          border: 1px solid #ccc;
+          font-size: 18px !important;
+          font-weight: 300;
+      }
+
+      input:focus,
+      textarea:focus {
+          -moz-box-shadow: none !important;
+          -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+          border: 3px solid #00BCD4;
+          outline-width: 0;
+          font-weight: 400;
+      }
+
+      .btn-block {
+          text-transform: uppercase;
+          font-size: 15px !important;
+          font-weight: 400;
+          height: 43px;
+          cursor: pointer;
+          background-color: rgba(0, 162, 151, 0.842); /* Color del botón "Crear" */
+
+      }
+
+      .btn-block:hover {
+          color: #fff !important;
+      }
+
+      button:focus {
+          -moz-box-shadow: none !important;
+          -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+          outline-width: 0;
+      }
+
+      .form-container {
+          padding: 20px;
+          border: 50px solid rgba(0, 165, 153, 0.3);
+          border-radius: 10px;
+          box-shadow: 0 0 10px rgba(0, 165, 153, 0.3);
+      }
+
+      /* Hacer el formulario más estrecho */
+      .col-xl-7,
+      .col-lg-8,
+      .col-md-9,
+      .col-11 {
+          max-width: 600px; /* Ajusta el ancho según tus necesidades */
+      }
+  </style>
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-danger" role="alert">
+      {{ message }}
+  </div>
+  {% endfor %}
+  {% endif %}
+  <div class="container-fluid px-1 py-5 mx-auto text-center">
+    <h1 class="form-heading mb-4" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+        Nuevo Professional
+    </h1>
+    <div class="row d-flex justify-content-center">
+        <div class="col-xl-7 col-lg-8 col-md-9 col-11 text-center card form-container">
+            <form method="post" class="form-card">
+                {% csrf_token %}
+                <div class="row justify-content-between text-left">
+                    <div class="form-group col-12 flex-column d-flex mb-4">
+                        <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                            <i class="fas fa-user"></i> Nombre de usuario<span class="text-danger"> *</span>
+                        </label>
+                        {{ form.username }}
+                        {% for error in form.username.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="row justify-content-between text-left">
+                  <div class="form-group col-12 flex-column d-flex mb-4">
+                      <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                          <i class="fas fa-user"></i> Nombre<span class="text-danger"> *</span>
+                      </label>
+                      {{ form.first_name }}
+                      {% for error in form.first_name.errors %}
+                          <span class="error">{{ error }}</span>
+                      {% endfor %}
+                  </div>
+              </div>
+              <div class="row justify-content-between text-left">
+                <div class="form-group col-12 flex-column d-flex mb-4">
+                    <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                        <i class="fas fa-user"></i> Apellidos<span class="text-danger"> *</span>
+                    </label>
+                    {{ form.last_name }}
+                    {% for error in form.last_name.errors %}
+                        <span class="error">{{ error }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="row justify-content-between text-left">
+              <div class="form-group col-12 flex-column d-flex mb-4">
+                  <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                      <i class="fa fa-envelope"></i> Dirección de correo electrónico<span class="text-danger"> *</span>
+                  </label>
+                  {{ form.email }}
+                  {% for error in form.email.errors %}
+                      <span class="error">{{ error }}</span>
+                  {% endfor %}
+              </div>
+          </div>
+          <div class="row justify-content-between text-left">
+            <div class="form-group col-12 flex-column d-flex mb-4">
+                <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                    <i class="fa fa-phone"></i> Teléfono<span class="text-danger"> *</span>
+                </label>
+                {{ form.telephone_number }}
+                {% for error in form.telephone_number.errors %}
+                    <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row justify-content-between text-left">
+          <div class="form-group col-12 flex-column d-flex mb-4">
+              <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                  <i class="fa fa-address-card"></i> Número de licencia<span class="text-danger"> *</span>
+              </label>
+              {{ form.license_number }}
+              {% for error in form.license_number.errors %}
+                  <span class="error">{{ error }}</span>
+              {% endfor %}
+          </div>
+      </div>
+      <div class="row justify-content-between text-left">
+        <div class="form-group col-12 flex-column d-flex mb-4">
+            <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                <i class="fas fa-building"></i> Organización<span class="text-danger"> *</span>
+            </label>
+            {{ form.organizations }}
+            {% for error in form.organizations.errors %}
+                <span class="error">{{ error }}</span>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row justify-content-between text-left">
+      <div class="form-group col-12 flex-column d-flex mb-4">
+          <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+              <i class="fa fa-picture-o"></i> Foto de Perfil<span class="text-danger"> *</span>
+          </label>
+          {{ form.profile_picture }}
+          {% for error in form.profile_picture.errors %}
+              <span class="error">{{ error }}</span>
+          {% endfor %}
+      </div>
+  </div>
+  <button type="submit">Create Professional</button>
+</form>
+
+</body>
+</html>
+{% endblock %}
+
+
