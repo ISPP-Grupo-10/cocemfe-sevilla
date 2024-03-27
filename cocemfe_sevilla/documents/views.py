@@ -150,7 +150,10 @@ def delete_pdf(request, pk):
 
 @login_required
 def list_pdf(request):
-    documentos = Document.objects.all()
+    if request.user.is_superuser:
+        documentos = Document.objects.all()
+    else:
+        documentos = Document.objects.filter(professionals=request.user)
 
     name = request.GET.get('name')
     status = request.GET.get('status')
@@ -186,7 +189,6 @@ def load_comments(request, pk):
 @login_required
 def publish_comment(request, pk):
     doc = get_object_or_404(Document, id=pk)
-
     if request.method == 'POST':
         form = MessageForm(request.POST)
         if form.is_valid():
@@ -198,8 +200,5 @@ def publish_comment(request, pk):
             return redirect('view_pdf_chat', pk=doc.id)
     else:
         form = MessageForm()
-
     comments = ChatMessage.objects.filter(document=doc)
     return render(request, 'list_comments.html', {'doc': doc, 'chat_messages': comments, 'form': form})
-
-
