@@ -1,5 +1,7 @@
 # Cocemfe Web
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7582c56abb014e41a55545fea23e639f)](https://app.codacy.com/gh/ISPP-Grupo-10/cocemfe-sevilla?utm_source=github.com&utm_medium=referral&utm_content=ISPP-Grupo-10/cocemfe-sevilla&utm_campaign=Badge_Grade)
+
 - [Description](#description)
 - [Installation](#installation)
 - [Contribution](#contribution)
