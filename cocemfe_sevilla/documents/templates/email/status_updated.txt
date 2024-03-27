@@ -1,0 +1,11 @@
+Estimado/a {{ professional.first_name }},
+
+Queremos informarte que ha habido un cambio en el estado del documento "{{ document.name }}":
+
+- Estado anterior: {{ document.status }}
+- Nuevo estado: {{ document.status }}
+
+Por favor, revisa el documento y realiza tus aportes o votaciones si corresponde.
+
+Atentamente,
+El equipo de COCEMFE Sevilla
