@@ -5,6 +5,10 @@ on:
     branches: ["main", "develop"]
   pull_request:
     branches: ["main", "develop"]
+  workflow_call:
+    secrets:
+      CODACY_PROJECT_TOKEN:
+        required: true
 
 jobs:
   build:
