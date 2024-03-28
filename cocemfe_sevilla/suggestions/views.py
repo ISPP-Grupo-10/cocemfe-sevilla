@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import SuggestionForm
 from documents.models import Document
 from django.core.exceptions import ValidationError
@@ -7,7 +7,6 @@ from django.contrib import messages
 from django.utils import timezone
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
-from django.shortcuts import render, redirect
 from .models import Suggestion
 from datetime import date
 
@@ -60,3 +59,10 @@ def crear_sugerencia(request, document_id):
     # Redirecciona a la misma página de detalles del documento
     return redirect('view_pdf_admin', pk=document_id)
 
+
+
+
+def view_suggestion(request, pk):
+    suggestion = Suggestion.objects.get(pk=pk)
+    votes = suggestion.votings.all()  # Recuperar todos los votos asociados a la sugerencia
+    return render(request, 'view_suggestion.html', {'suggestion': suggestion, 'votes': votes})

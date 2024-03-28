@@ -2,6 +2,8 @@ from django.urls import path
 from .views import *
 from suggestions.views import *
 
+
+
 urlpatterns = [
     path("", list_pdf, name="list_pdf"),
     path('upload_pdf', upload_pdf, name='upload_pdf'),
