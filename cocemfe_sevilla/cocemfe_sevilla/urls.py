@@ -24,6 +24,7 @@ from professionals import views as profViews
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('', include('base.urls', namespace='base')),
+    path('', include('authentication.urls')),
     path('documents/', include('documents.urls')),
     path('professionals/', include('professionals.urls')),
     path('organizations/', include('organizations.urls')),

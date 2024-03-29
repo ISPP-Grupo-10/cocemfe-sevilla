@@ -2,96 +2,88 @@
 {% load static %}
 
 {% block contenido %}
-<style>
-    .contenedor-table {
-        border-radius: 10px;
-        background-color: rgba(0, 162, 152, 0.25);
-        padding: 10px;
-        margin: 0 25px; /* Se aplica el margen a ambos lados */
-    }
 
-    .tabla-personalizada th {
-        font-size: large;
-    }
+<link rel="stylesheet" href="{% static 'css/list_pdf.css' %}"/>
 
-    .tabla-personalizada td {
-        background-color: white;
-        font-size: large;
-    }
-
-    td:first-child {
-        border-top-left-radius: 10px;
-        border-bottom-left-radius: 10px;
-    }
-
-    td:last-child {
-        border-top-right-radius: 10px;
-        border-bottom-right-radius: 10px;
-    }
-
-    .tabla-personalizada {
-        border-collapse: separate;
-        border-spacing: 0 15px;
-    }
-</style>
-<div class="container-fluid">
-    <h2 class="text-center">Requests</h2>
-    {% if messages %}
-    <div class="container mt-3">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div id="errorMessage" class="alert alert-danger" role="alert">
-                    {% for message in messages %}
-                        <small>{{ message }}</small><br>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
+<div class="flex flex-col w-full min-h-screen bg-white">
+  <div class="border-b dark:border-gray-700">
+    <div class="container px-4 py-4 sm:py-6 lg:py-8">
+      <div class="space-y-2">
+        <h1 class="text-2xl font-bold text-[#00bfa5]">Solicitudes</h1>
+        <p class="text-[#00bfa5] dark:text-gray-400">Lista de solicitudes registradas</p>
+      </div>
     </div>
-
-    <script>
-        setTimeout(function() {
-            var errorMessage = document.getElementById('errorMessage');
-            errorMessage.style.display = 'none';
-        }, 20000);
-    </script>
-    {% endif %}
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="contenedor-table">
-                <table class="table table-borderless text-center tabla-personalizada">
-                    <thead>
-                        <tr>
-                            <th scope="col">Email</th>
-                            <th scope="col">Descripción</th>
-                            <th scope="col">Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% if requests %}
-                            {% for req in requests %}
-                            <tr class="spaceUnder">
-                                <td>
-                                    <a href="{% url 'professionals:update_request' pk=req.pk %}" style="color: black;"> {{ req.email }} </a>
-                                </td>
-                                <td>{{ req.description }}</td>
-                                <td>{{ req.status }}</td>
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <a href="{% url 'professionals:update_request' pk=req.pk %}" class="btn btn-primary" style="border-radius: 0px; border-color: transparent; background-color: transparent;">&#9998;</a>
-                                    </div>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        {% else %}
-                            <tr>
-                                <td colspan="4" class="text-center">No hay solicitudes que mostrar</td>
-                            </tr>
-                        {% endif %}
-                    </tbody>
-                </table>
-            </div>
+  </div>
+  <div class="flex-1 overflow-y-auto">
+    <div class="container flex flex-col gap-4 px-0 py-6 sm:gap-6">
+      <div class="w-full px-4 space-y-4 d-flex flex-row justify-content-between">
+        <div class="col-4 max-w-lg space-y-1 mb-4 d-flex flex-col">
+          <div class="input-group mb-3 col-3">
+            <button class="btn btn-outline-secondary" type="button" id="button-addon1">Buscar</button>
+            <input type="text" class="form-control form-control-xs" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" style="width: 200px;">
+          </div>
         </div>
+        <!-- Añade aquí el botón de subir documento si es necesario -->
+      </div>
+      <hr>
+      <div class="mt-8"></div>
+      <div class="w-full">
+        <div class="relative w-full overflow-auto">
+          <table class="w-full caption-bottom text-sm">
+            <thead class="[&amp;_tr]:border-b">
+              <tr class="border-b border-gray-200 transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 style="color: black;">
+                    Email
+                  </th>
+                <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
+                  Descripción
+                </th>
+                <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
+                  Estado
+                </th>
+              </tr>
+            </thead>
+            <tbody class="[&amp;_tr:last-child]:border-0">
+              {% if requests %}
+                {% for req in requests %}
+                  {% if forloop.counter|divisibleby:2 %}
+                    <tr class="bg-gray-100 border-b border-gray-200 transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                  {% else %}
+                    <tr class="border-b border-gray-200 transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                  {% endif %}
+                    <td class="p-4 align-middle">
+                      <a href="{% url 'professionals:update_request' pk=req.pk %}" class="font-semibold text-[#00bfa5]" style="max-width: 400px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block;">{{ req.email }}</a>
+                    </td>
+                    <td class="p-4 align-middle">{{ req.description }}</td>
+                    <td class="p-4 align-middle">{{ req.status }}</td>
+                  </tr>
+                {% endfor %}
+              {% else %}
+                <tr>
+                  <td colspan="3" class="p-4 text-center">No hay solicitudes que mostrar</td>
+                </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var toggleFiltersBtn = document.getElementById('toggleFiltersBtn');
+        var filtersContainer = document.getElementById('filtersContainer');
+    
+        toggleFiltersBtn.addEventListener('click', function() {
+            if (filtersContainer.style.display === 'none' || filtersContainer.style.display === '') {
+                filtersContainer.style.display = 'block';
+            } else {
+                filtersContainer.style.display = 'none';
+            }
+        });
+    });
+</script>
+
 {% endblock %}
