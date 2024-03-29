@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import *
+from .models import Voting
 from suggestions.models import Suggestion
 from datetime import date
 

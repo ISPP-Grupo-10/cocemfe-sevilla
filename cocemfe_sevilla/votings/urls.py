@@ -1,6 +1,6 @@
 # En el archivo urls.py de tu aplicación 'votings'
 from django.urls import path
-from .views import *
+from .views import voting_vote
 
 app_name = "votings"
 
