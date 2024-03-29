@@ -95,7 +95,7 @@ def view_pdf_admin(request, pk):
                 'page_obj': page_obj,
                 'votes_info': votes_info,
                 'mensaje': mensaje,
-            }    
+            }
             return render(request, 'view_pdf.html', context)
         else:
             #El page_obj son los comentarios que se han hecho del doc, si que es verdad que si esta en Borrador no deberia haber nignuno.
