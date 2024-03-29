@@ -131,7 +131,7 @@
                                 <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
                                     <i class="far fa-calendar-alt"></i> Inicio de aportaciones
                                 </label>
-                                {{ form.suggestion_start_date }}
+                                <input type="date" name="suggestion_start_date" value="{{ document.suggestion_start_date|date:'Y-m-d' }}">
                                 {% for error in form.suggestion_start_date.errors %}
                                     <span class="error text-danger">{{ error }}</span>
                                 {% endfor %}
@@ -140,7 +140,7 @@
                                 <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
                                     <i class="far fa-calendar-alt"></i> Cierre de aportaciones
                                 </label>
-                                {{ form.suggestion_end_date }}
+                                <input type="date" name="suggestion_end_date" value="{{ document.suggestion_end_date|date:'Y-m-d' }}">
                                 {% for error in form.suggestion_end_date.errors %}
                                     <span class="error text-danger">{{ error }}</span>
                                 {% endfor %}
@@ -149,7 +149,7 @@
                                 <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
                                     <i class="far fa-calendar-alt"></i> Cierre de votaciones
                                 </label>
-                                {{ form.voting_end_date }}
+                                <input type="date" name="voting_end_date" value="{{ document.voting_end_date|date:'Y-m-d' }}">
                                 {% for error in form.voting_end_date.errors %}
                                     <span class="error text-danger">{{ error }}</span>
                                 {% endfor %}
@@ -184,7 +184,7 @@
                                 </label>
                                 {% for professional in form.professionals.field.queryset %}
                                     {% if professional in professionals_not_superuser %}
-                                        <input type="checkbox" id="id_professional_{{ professional.id }}" name="professionals" value="{{ professional.id }}">
+                                        <input type="checkbox" id="id_professional_{{ professional.id }}" name="professionals" value="{{ professional.id }}" {% if professional in document.professionals.all %}checked{% endif %}>
                                         <label for="id_professional_{{ professional.id }}">{{ professional.username }}</label><br>
                                     {% endif %}
                                 {% endfor %}

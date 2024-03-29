@@ -42,7 +42,7 @@ def upload_pdf(request):
                     # Renderizar el mensaje de correo electrónico desde un template
                     message = render_to_string('email/new_document_notification.txt', {'document': document, 'professional': professional})
                     send_mail(subject, message, from_email, [professional.email], fail_silently=False)
-                return redirect('list_pdf')
+                return redirect('view_pdf_admin', document.id)
         else:
             form = PDFUploadForm()
         return render(request, 'upload_pdf.html', {'form': form, 'professionals_not_superuser': professionals})
@@ -93,7 +93,7 @@ def view_pdf_admin(request, pk):
         return render(request, '403.html')
     
 @login_required
-def update_pdf(request,pk):
+def update_pdf(request, pk):
     document = get_object_or_404(Document, pk=pk)
     professionals_not_superuser = Professional.objects.filter(is_superuser=False)
     if request.user.is_superuser:
@@ -117,8 +117,9 @@ def update_pdf(request,pk):
                 updated_document.save()
                 form.save_m2m() 
                 
-                return redirect('list_pdf')
+                return redirect('view_pdf_admin', updated_document.id)
         else:
+            # Aquí pasamos la instancia del documento para que el formulario se inicialice con los datos del documento.
             form = PDFUploadForm(instance=document)
         return render(request, 'update_pdf.html', {'form': form, 'document': document, 'professionals_not_superuser': professionals_not_superuser})
     else:
