@@ -1,42 +1,175 @@
 {% extends 'base.html' %}
-{% load static %}
+{% block title %}Login - Cocemfe{% endblock %}
 {% block contenido %}
+<!DOCTYPE html>
+<html lang="en">
 
-<div class="container mt-5 mb-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h2 class="text-center text-primary mb-4">Login - Cocemfe</h2>
-                    {% if error_message %}
-                    <div class="alert alert-danger" role="alert">
-                        {{ error_message }}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Cocemfe</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
+    <style>
+        body {
+            color: #000;
+            overflow-x: hidden;
+            height: 100%;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+
+        .card {
+            padding: 30px 40px;
+            margin-top: 60px;
+            margin-bottom: 60px;
+            border: none !important;
+            box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .blue-text {
+            color: #00BCD4;
+        }
+
+        .form-control-label {
+            margin-bottom: 0;
+        }
+
+        input,
+        textarea,
+        button {
+            padding: 8px 15px;
+            border-radius: 5px !important;
+            margin: 5px 0px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            font-size: 18px !important;
+            font-weight: 300;
+        }
+
+        input:focus,
+        textarea:focus {
+            -moz-box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+            border: 3px solid #00BCD4;
+            outline-width: 0;
+            font-weight: 400;
+        }
+
+        .btn-block {
+            text-transform: uppercase;
+            font-size: 15px !important;
+            font-weight: 400;
+            height: 43px;
+            cursor: pointer;
+            background-color: rgba(0, 162, 151, 0.842); /* Color del botón "Iniciar sesión" */
+        }
+
+        .btn-block:hover {
+            color: #fff !important;
+        }
+
+        button:focus {
+            -moz-box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+            outline-width: 0;
+        }
+
+        .form-container {
+            padding: 20px;
+            border: 50px solid rgba(0, 165, 153, 0.3);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 165, 153, 0.3);
+        }
+
+        /* Hacer el formulario más estrecho */
+        .col-xl-7,
+        .col-lg-8,
+        .col-md-9,
+        .col-11 {
+            max-width: 600px; /* Ajusta el ancho según tus necesidades */
+        }
+    </style>
+
+</head>
+
+<body>
+    {% if error_message %}
+    <div class="alert alert-danger" role="alert">
+        {{ error_message }}
+    </div>
+    {% endif %}
+    
+    <div class="container-fluid px-1 py-5 mx-auto text-center">
+        <h1 class="form-heading mb-4" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+            Login - Cocemfe
+        </h1>
+        <div class="row d-flex justify-content-center">
+            <div class="col-xl-7 col-lg-8 col-md-9 col-11 text-center card form-container">
+                <form action="{% url 'professionals:login' %}" method="post" class="form-card">
+                    {% csrf_token %}
+                    <div class="row justify-content-between text-left">
+                        <div class="form-group col-12 flex-column d-flex mb-4">
+                            <label for="email" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                <i class="fas fa-envelope"></i> Correo electrónico:
+                            </label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="email" name="email" required>
+                            </div>
+                        </div>
                     </div>
-                    {% endif %}
-                    <form action="{% url 'professionals:login' %}" method="post">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label for="email">Correo electrónico:</label>
-                            <input type="text" class="form-control" id="email" name="email" required>
+                    <div class="row justify-content-between text-left">
+                        <div class="form-group col-12 flex-column d-flex mb-4">
+                            <label for="password" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                <i class="fas fa-key"></i> Contraseña:
+                            </label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="password">Contraseña:</label>
-                            <input type="password" class="form-control" id="password" name="password" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="submit" class="btn btn-primary btn-block" value="Iniciar sesión">
-                        </div>
-                    </form>
-                    <p class="text-center">¿No tienes una cuenta? Envía un mensaje al administrador</p>
+                    </div>
                     <div class="row justify-content-center">
-                        <div class="col-md-6">
-                            <a href="/professionals/requests/create" class="btn btn-success btn-block">Crear una nueva solicitud</a>
+                        <div class="form-group col-sm-12">
+                            <div class="row justify-content-center">
+                                <div class="form-group col-sm-6">
+                                    <button type="submit" class="btn-block btn-primary">Iniciar sesión</button>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                </form>
+                <div class="row justify-content-center">
+                    <div class="form-group col-sm-12">
+                        <div class="row justify-content-center">
+                            <div class="form-group col-sm-6">
+                                <a href="#" id="create-request-link" class="btn btn-link">¿No tienes cuenta?</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="form-group col-sm-12">
+                        <div class="row justify-content-center">
+                            <div class="form-group col-sm-6">
+                                <a href="/reset_password" class="btn btn-link">¿Has olvidado tu contraseña?</a>
+                            </div>
+                        </div>
+                        <br>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
+    <script>
+        document.getElementById("create-request-link").addEventListener("click", function(event) {
+            event.preventDefault();
+            window.location.href = "/professionals/requests/create";
+        });
+    </script>
+</body>
+
+</html>
 {% endblock %}
