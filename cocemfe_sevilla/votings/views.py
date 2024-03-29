@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import Voting
 from suggestions.models import Suggestion
 from datetime import date
+from .models import Voting
 
 def voting_vote(request, suggestion_id):
     if request.method == 'POST':
@@ -18,14 +18,13 @@ def voting_vote(request, suggestion_id):
             existing_vote.save()
             messages.success(request, 'Voto actualizado exitosamente.')
         else:
-            # Si el usuario no ha votado aún, crear un nuevo voto
             new_vote = Voting.objects.create(
                 vote=vote,
                 date=date.today(),
                 justification=justification,
                 professional=request.user,
                 suggestion=suggestion
-            )
+            ).save
             messages.success(request, 'Voto registrado exitosamente.')
         return redirect('view_pdf_admin', pk=document_id)
     else:
