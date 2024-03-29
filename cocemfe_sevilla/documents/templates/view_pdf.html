@@ -366,8 +366,8 @@
     }
     
     // Evento para capturar la selección al hacer clic en un botón o realizar alguna acción específica
-    var pdf = '{{ pdf }}';
-    if (pdf.status === 'Aportaciones') {
+    var pdf = '{{ pdf.status }}';
+    if (pdf === 'Aportaciones') {
         document.getElementById('captureButton').addEventListener('click', function() {
         captureSelection();
         });
