@@ -24,7 +24,8 @@ def voting_vote(request, suggestion_id):
                 justification=justification,
                 professional=request.user,
                 suggestion=suggestion
-            ).save
+            )
+            new_vote = new_vote
             messages.success(request, 'Voto registrado exitosamente.')
         return redirect('view_pdf_admin', pk=document_id)
     else:
