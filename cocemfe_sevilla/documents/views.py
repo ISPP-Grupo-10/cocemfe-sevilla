@@ -112,7 +112,7 @@ def view_pdf_admin(request, pk):
                 'page_obj': page_obj,
                 'votes_info': votes_info,
                 'mensaje': mensaje,
-            } 
+            }
 
             return render(request, 'view_pdf.html', context)
         else:
@@ -159,7 +159,7 @@ def update_pdf(request, pk):
                         })
                         send_mail(subject, message, from_email, [professional.email], fail_silently=False)
 
-                form.save_m2m() 
+                form.save_m2m()
                 
                 return redirect('view_pdf_admin', updated_document.id)
         else:
@@ -175,7 +175,7 @@ def delete_pdf(request, pk):
     document = get_object_or_404(Document, pk=pk)
     if request.user.is_superuser:
         document.delete()
-        return redirect('list_pdf')   
+        return redirect('list_pdf')
     else:
         return render(request, '403.html')
 
