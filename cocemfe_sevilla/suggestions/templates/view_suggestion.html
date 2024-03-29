@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block contenido %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de la Sugerencia</title>
+    <style>
+        /* Estilos para el título */
+        h1 {
+            text-align: center; /* Centrar el texto */
+        }
+        .btn-favor {
+            background-color: green;
+            color: white;
+        }
+        .btn-contra {
+            background-color: red;
+            color: white;
+        }
+        .documento-box {
+            background-color: #f0f0f0; /* Color de fondo del recuadro */
+            border: 2px solid orange; /* Borde del recuadro */
+            border-radius: 5px; /* Bordes redondeados */
+            padding: 10px; /* Relleno del recuadro */
+            margin-top: 20px; /* Espacio entre el recuadro y el contenido anterior */
+            display: inline-block; /* Mostrar como bloque en línea */
+            text-align: justify; /* Alinear el texto al centro */
+            cursor: pointer; /* Cambiar el cursor al pasar el mouse */
+            transition: background-color 0.3s ease; /* Transición suave para el color de fondo */
+            margin-bottom: 0px;
+            margin-left: 20px;
+        }
+        .documento-box a {
+            text-decoration: none; /* Quitar subrayado del enlace */
+            color: #333; /* Color del texto */
+            font-weight: bold; /* Texto en negrita */
+            flex-basis: 50%; /* Ancho del 50% para el botón de ver documento */
+        }
+        .documento-box:hover {
+            background-color: #e0e0e0; /* Cambiar color de fondo al pasar el mouse */
+        }
+
+        /* Estilos para el div que contiene la información */
+        .info-container {
+            background-color: #ffffff; /* Fondo verde */
+            color: rgb(0, 0, 0); /* Texto blanco */
+            border-radius: 10px; /* Bordes redondeados */
+            padding: 20px; /* Relleno */
+            margin: 0 auto; /* Margen automático para centrar horizontalmente */
+            max-width: 800px; /* Ancho máximo del contenedor */
+            padding: 20px;
+            border: 1px solid rgba(0, 165, 153, 0.3);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 165, 153, 0.3);
+        }
+        .info-item {
+            margin-bottom: 20px; /* Espacio entre los elementos */
+        }
+        .info-item p {
+            margin: 0; /* Eliminar el margen interior de los párrafos */
+        }
+        .divider-line {
+            width: 100%; /* Ancho completo */
+            height: 1px; /* Grosor de la línea */
+            background-color: #ccc; /* Color de la línea */
+            margin-bottom: 20px; /* Espacio entre la línea y los elementos debajo */
+            margin-top: 0;
+        }
+        .date-professional-container {
+            display: flex; /* Usar flexbox */
+            justify-content: space-between; /* Distribuir los elementos de forma equitativa */
+            margin-bottom: 20px; /* Espacio entre la fecha, el profesional y los otros elementos */
+            margin-left: 20px;
+            text-align: justify;
+        }
+        .date-professional-container .info-item {
+            flex-basis: 48%; /* Ancho del 48% para cada elemento */
+        }
+        .content-container {
+            display: flex;
+            align-items: flex-start;
+            margin-left: 20px;
+            text-align: justify;
+        }
+        .content {
+            flex: 1;
+        }
+        .votes-container {
+            margin-left: 50px; /* Espacio entre el contenido principal y la lista de votos */
+            width: 300px; /* Ancho fijo para la lista de votos */
+        }
+        .votes-scroll {
+            max-height: 100px; /* Altura máxima del contenedor de votos */
+            overflow-y: auto; /* Habilitar el desplazamiento vertical */
+        }
+
+        .votes-scroll ul {
+            padding-left: 20px; /* Añadir un poco de espacio a la lista de votos */
+        }
+        .voting-container {
+            flex-basis: 50%; /* Ancho del 50% para el formulario de votación */
+            margin-right: 100px; /* Espacio entre el formulario de votación y el botón de ver documento */
+        }
+        .voting-document-container {
+            display: flex;
+            align-items: center; /* Alinear verticalmente */
+            margin-left: 20px;
+            text-align: justify;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid px-1 py-5 mx-auto ">
+
+    <h1 class="form-heading mb-4" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+        Detalles de la Sugerencia
+    </h1>
+
+    <div class="info-container" > <!-- Nuevo div contenedor -->
+
+        <div class="date-professional-container">
+            <div class="info-item">
+                <p><strong>Fecha:</strong> {{ suggestion.date }}</p>
+            </div>
+            <div class="info-item">
+                <p><strong>Profesional:</strong> {{ suggestion.professional }}</p>
+            </div>
+        </div>
+        <div class="divider-line"></div> <!-- Línea divisoria -->
+        <div class="content-container">
+            <!-- Contenido principal -->
+            <div class="content">
+                <div>
+                    <p><strong>Principal:</strong> {{ suggestion.main }}</p>
+                </div>
+                <div>
+                    <p><strong>Justificación:</strong> {{ suggestion.justification }}</p>
+                </div>
+                <div>
+                    <p><strong>Relevancia:</strong> {{ suggestion.get_relevance_display }}</p>
+                </div>
+                <div>
+                    <p><strong>Sección:</strong> {{ suggestion.section }}</p>
+                </div>
+                <div>
+                    <p><strong>Página:</strong> {{ suggestion.page }}</p>
+                </div>
+            </div>
+            <!-- Lista de votos realizados -->
+            <div class="votes-container">
+                <h3>Votos Realizados</h3>
+                <div class="votes-scroll">
+                    
+                    <ul>
+                        {% for vote in votes %}
+                        <li>{{ vote.professional }} - {% if vote.vote %}A Favor{% else %}En Contra{% endif %}</li>
+                        {% empty %}
+                        <li>No se han registrado votos aún.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="voting-document-container">
+            <div class="voting-container">
+                {% if not request.user.is_superuser %}
+                <h2>Deja tu voto:</h2>
+                <!-- Botones de votación -->
+                <form method="post" action="{% url 'votings:voting_vote' suggestion.id %}">
+                    {% csrf_token %}
+                    <label for="justificacion"><strong>Justificación:</strong></label><br>
+                    <!-- Aplicar el estilo para deshabilitar la redimensión -->
+                    <textarea id="justificacion" name="justificacion" rows="4" cols="50" style="resize: none;"></textarea><br>
+                    <button type="submit" name="vote" value="True" class="btn-favor">A Favor</button>
+                    <button type="submit" name="vote" value="False" class="btn-contra">En Contra</button>
+                </form>
+                {% endif %}
+            </div>
+            <div class="documento-box">
+                <a href="{% url 'view_pdf_admin' suggestion.document_id %}">Ver Documento</a>
+            </div>
+        </div>
+        
+
+    </div> <!-- Cierre del div contenedor -->
+</div>
+</body>
+</html>
+
+{% endblock %}
