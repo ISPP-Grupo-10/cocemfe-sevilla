@@ -68,26 +68,57 @@ def view_pdf_admin(request, pk):
     paginator = Paginator(suggestions, 5)  # Divide los comentarios en páginas de 10 comentarios cada una
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    print(pdf.professionals.all())
+    votes_info = {}
+
+    for suggestion in suggestions:
+        votes = suggestion.votings.all()  # Recupera todos los votos asociados a la sugerencia
+        favor_count = votes.filter(vote=True).count()  # Cuenta los votos a favor
+        against_count = votes.filter(vote=False).count()  # Cuenta los votos en contra
+        votes_info[suggestion.id] = {'favor_count': favor_count, 'against_count': against_count}
+    
+        
+    context = {
+        'pdf': pdf,
+        'page_obj': page_obj,
+        'votes_info': votes_info,
+    }
+
     if request.user.is_superuser:
         if pdf.status == 'Borrador':
             if pdf.suggestion_start_date and pdf.suggestion_end_date and pdf.professionals.all():
                 mensaje = None
             else:
-                mensaje = f"Debe indicar las fechas de inicio y fin de aportaciones y seleccionar al menos un profesional. Ahora mismo hay seleccionados {pdf.professionals.all().count()} profesionales."
-                
-            return render(request, 'view_pdf.html', {'pdf': pdf, 'mensaje': mensaje})
+                mensaje = "Debe indicar las fechas de inicio y fin de sugerencia y seleccionar al menos un profesional."
+
+            context = {
+                'pdf': pdf,
+                'page_obj': page_obj,
+                'votes_info': votes_info,
+                'mensaje': mensaje,
+            }
+            return render(request, 'view_pdf.html', context)
         else:
             #El page_obj son los comentarios que se han hecho del doc, si que es verdad que si esta en Borrador no deberia haber nignuno.
-            return render(request, 'view_pdf.html', {'pdf': pdf, 'page_obj': page_obj})
-    
+            return render(request, 'view_pdf.html', context)
     elif request.user in pdf.professionals.all():
         if pdf.status == 'Borrador':
-            return render(request, 'view_pdf.html', {'pdf': pdf})
+            if pdf.suggestion_start_date and pdf.suggestion_end_date and pdf.professionals.all():
+                mensaje = None
+            else:
+                mensaje = "Debe indicar las fechas de inicio y fin de sugerencia y seleccionar al menos un profesional."
+
+            context = {
+                'pdf': pdf,
+                'page_obj': page_obj,
+                'votes_info': votes_info,
+                'mensaje': mensaje,
+            }
+
+            return render(request, 'view_pdf.html', context)
         else:
             #Aquí iría la lógica para otros estados
             #De momento solo esta aportaciones que se deben ver los comentarios del pdf por eso se pode page_obj
-            return render(request, 'view_pdf.html', {'pdf': pdf, 'page_obj': page_obj})
+            return render(request, 'view_pdf.html', context)
     else:
         return render(request, '403.html')
     
@@ -128,7 +159,7 @@ def update_pdf(request, pk):
                         })
                         send_mail(subject, message, from_email, [professional.email], fail_silently=False)
 
-                form.save_m2m() 
+                form.save_m2m()
                 
                 return redirect('view_pdf_admin', updated_document.id)
         else:
@@ -144,7 +175,7 @@ def delete_pdf(request, pk):
     document = get_object_or_404(Document, pk=pk)
     if request.user.is_superuser:
         document.delete()
-        return redirect('list_pdf')   
+        return redirect('list_pdf')
     else:
         return render(request, '403.html')
 
