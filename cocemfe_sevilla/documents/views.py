@@ -91,8 +91,6 @@ def view_pdf_admin(request, pk):
     else:
         return render(request, '403.html')
     
-from django.core.mail import send_mail
-
 @login_required
 def update_pdf(request, pk):
     document = get_object_or_404(Document, pk=pk)
