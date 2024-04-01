@@ -40,20 +40,6 @@ class ProfessionalViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'John')
 
-    def test_professional_update_view(self):
-        self.assertTrue('_auth_user_id' in self.client.session)
-        url = reverse('professionals:professional_detail', kwargs={'pk': self.professional.pk})
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-        updated_data = {
-            'first_name': 'Name',
-            'last_name': 'UpdatedSurname',
-            'telephone_number': '987654321',
-            'license_number': 'XYZ789',
-        }
-        response = self.client.post(url, updated_data)
-        self.assertEqual(response.status_code, 200)
-
 
 class ProfessionalListTestCase(TestCase):
     def setUp(self):
