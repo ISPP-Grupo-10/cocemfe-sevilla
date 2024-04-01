@@ -2,7 +2,7 @@
 ****
 | NOMBRE DEL PROYECTO | CLIENTE  | EQUIPO DE TRABAJO | FECHA DE ELABORACIÓN | FASE DEL PROYECTO  |
 |---------------------|----------|-------------------|----------------------|--------------------|
-| Cocemfe-Web         | COCEMFE  | Grupo 10          | 16/02/2024           | Devising a project |
+| Cocemfe-Web         | COCEMFE  | Grupo 10          | 16/02/2024           | Sprint 1 |
 
 
 | MIEMBROS DEL EQUIPO DE TRABAJO | MIEMBROS DEL EQUIPO DE TRABAJO |
