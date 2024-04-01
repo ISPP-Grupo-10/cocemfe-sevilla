@@ -56,8 +56,8 @@ Para nuestra aplicación web contamos con dos tipos distintos de usuarios piloto
 
 ## Planificación temporal
 
-![Planificación para Marzo](../../static/images/usuarios_pilotos_1.png)
-![Planificación para Abril](../../static/images/usuarios_pilotos_2.png)
+![Planificación para Marzo](images/usuarios_pilotos_1.png)
+![Planificación para Abril](images/usuarios_pilotos_2.png)
 
 
 Como vemos, para los dos primeros Sprints, el cierre del feedback para el Grupo 4 (grupo de alumnos de la mañana) es el lunes antes de la entrega, ya que entendemos que, al ser futuros ingenieros del software, tendrán más facilidad a la hora de probar una aplicación web, por lo que no necesitarán de más de 2 días para ello. Sin embargo, para los usuarios piloto de la ONG se les da más tiempo de margen, ya que entendemos que pueden estar más ocupados con su trabajo particular y querrán dedicarle más tiempo y cuidado a probar la aplicación, dado que serán ellos los que la tendrán que usar.
