@@ -54,5 +54,11 @@ def delete_organization(request, pk):
 
 @user_passes_test(is_admin)
 def organization_list(request):
+    name_query = request.GET.get('name')
+    if name_query:
+        organizations = Organization.objects.filter(name__icontains=name_query)
+    else:
+        organizations = Organization.objects.all()
+    return render(request, 'organizations_list.html', {'organizations': organizations})
     organizations = Organization.objects.all()
     return render(request, 'organizations_list.html', {'organizations': organizations})

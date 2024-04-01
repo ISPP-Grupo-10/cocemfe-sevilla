@@ -76,13 +76,63 @@
                     </div>
                 {% endif %}
             </div>
+        {% elif pdf.status == 'Revisado' %}
+            <div class="doc-comments">
+                <h3>Verificado por:</h3>
+                <ul>
+                    {% for professional in pdf.checked_professionals.all %}
+                        {% if professional.first_name != 'admin' %}
+                            <p>✅ {{ professional.first_name }} {{ professional.last_name }}</p>
+                        {% endif %}
+                    {% empty %}
+                        <p>Ningún profesional ha verificado el documento aún</p>
+                    {% endfor %}
+                </ul>
+                {% if not request.user.is_staff %}
+                    {% if request.user not in pdf.checked_professionals.all %}
+                        </form>
+                        <a href="{% url 'check_pdf' pk=pdf.pk %}">
+                            <button type="button" class="btn btn-primary">Verificar Documento</button>
+                        </a>
+                    {% else %}
+                        <p>Ya has verificado este documento</p>
+                    {% endif %}
+                {% endif %}
+                
+            </div>
         {% else %}
 
+        
         <div class="doc-comments">
             <!-- Aquí puedes colocar el contenido de los comentarios -->
             <h3>Comentarios</h3>
             <div class="comments-container">
                 {% for suggestion in page_obj %}
+                    {% if pdf.status == 'Votaciones' %}
+                        {% with suggestion_id=suggestion.id %}
+                            <div class="comment-box">
+                                <a href="{% url 'view_suggestion' suggestion.id %}">
+                                    <div class="comment-header">
+                                        <span>{{ suggestion.professional }}</span>
+                                        <span>{{ suggestion.date }}</span>
+                                    </div>
+                                    <div class="comment-content">
+                                        <p style="font-size: 19px;">{{ suggestion.main }}</p>
+                                        <p style="color: #4b4a4a;">{{ suggestion.justification }}</p>
+                                        <!-- Agrega más contenido si es necesario -->
+                                    </div>
+                                </a>
+                                <ul>
+                                    {% for suggestion_id, vote_info in votes_info.items %}
+                                        {% if suggestion_id == suggestion.id %}
+                                            <li>{{ vote_info.favor_count }}<span aria-label="Like" role="img"> 👍</span></li>
+                                            <li>{{ vote_info.against_count }}<span aria-label="Dislike" role="img"> ❌</span></li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endwith %}
+                    {% else %}
                     <div class="comment-box" onclick="goToSuggestionPage(parseInt('{{ suggestion.page }}'), '{{ pdf.pdf_file.url }}', '{{ suggestion.section }}')">
                         <div class="comment-header">
                             <span>{{ suggestion.professional }}</span>
@@ -94,6 +144,7 @@
                             <!-- Agrega más contenido si es necesario -->
                         </div>
                     </div>
+                    {% endif %}
                 {% empty %}
                     <b>No hay comentarios</b>
                 {% endfor %}
@@ -340,8 +391,8 @@
     }
     
     // Evento para capturar la selección al hacer clic en un botón o realizar alguna acción específica
-    var pdf = '{{ pdf }}';
-    if (pdf.status === 'Aportaciones') {
+    var pdf = '{{ pdf.status }}';
+    if (pdf === 'Aportaciones') {
         document.getElementById('captureButton').addEventListener('click', function() {
         captureSelection();
         });
@@ -432,5 +483,3 @@
 </style>
 
 {% endblock %}
-
-

@@ -167,13 +167,26 @@ def request_list(request):
 def request_document_chats(request):
     if request.method == 'GET':
         professional = request.user
+        query = request.GET.get('q')  # Obtener el valor de búsqueda del parámetro 'q'
         possessed_documents = []
-        all_documents = Document.objects.all()
-        if request.user.is_superuser:
-            possessed_documents = Document.objects.all()
-        else:
-            for document in all_documents:
-                if professional in document.professionals.all():
-                    possessed_documents.append(document)
+
+        if query:  # Si se proporciona un término de búsqueda
+            # Filtrar documentos por nombre que contenga el término de búsqueda
+            if request.user.is_superuser:
+                possessed_documents = Document.objects.filter(name__icontains=query)
+            else:
+                all_documents = Document.objects.filter(professionals=professional)
+                possessed_documents = all_documents.filter(name__icontains=query)
+        else:  # Si no hay término de búsqueda, mostrar todos los documentos del usuario
+            if request.user.is_superuser:
+                possessed_documents = Document.objects.all()
+            else:
+                possessed_documents = Document.objects.filter(professionals=professional)
+
         return render(request, 'list_chats.html', {'possessed_documents': possessed_documents})
+   
+
+
+    
+    
 

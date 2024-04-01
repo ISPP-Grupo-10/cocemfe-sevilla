@@ -21,6 +21,7 @@ class Document(models.Model):
     ubication = models.CharField(max_length=100, null=True, blank=True)
     status = models.CharField(max_length=40, choices=STATUS, default='Borrador')
     professionals = models.ManyToManyField(Professional, related_name='document_professionals')
+    checked_professionals = models.ManyToManyField(Professional, related_name='checked_professionals', blank=True)
     suggestion_start_date  = models.DateTimeField(null=True, blank=True)
     suggestion_end_date = models.DateTimeField(null=True, blank=True)
     voting_start_date = models.DateTimeField(null=True, blank=True)
