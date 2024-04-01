@@ -12,5 +12,6 @@ urlpatterns = [
     path('view_pdf/<int:pk>/chat/post', publish_comment, name='publish_comment'),
     path('update_pdf/<int:pk>/', update_pdf, name='update_pdf'),
     path('delete_pdf/<int:pk>/', delete_pdf, name='delete_pdf'),
+    path('check_pdf/<int:pk>/', check_pdf, name='check_pdf'),
     path('create-suggestion/<int:document_id>/', crear_sugerencia, name='create_suggestion'),
 ]

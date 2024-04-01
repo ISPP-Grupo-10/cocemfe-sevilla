@@ -76,8 +76,33 @@
                     </div>
                 {% endif %}
             </div>
+        {% elif pdf.status == 'Revisado' %}
+            <div class="doc-comments">
+                <h3>Verificado por:</h3>
+                <ul>
+                    {% for professional in pdf.checked_professionals.all %}
+                        {% if professional.first_name != 'admin' %}
+                            <p>✅ {{ professional.first_name }} {{ professional.last_name }}</p>
+                        {% endif %}
+                    {% empty %}
+                        <p>Ningún profesional ha verificado el documento aún</p>
+                    {% endfor %}
+                </ul>
+                {% if not request.user.is_staff %}
+                    {% if request.user not in pdf.checked_professionals.all %}
+                        </form>
+                        <a href="{% url 'check_pdf' pk=pdf.pk %}">
+                            <button type="button" class="btn btn-primary">Verificar Documento</button>
+                        </a>
+                    {% else %}
+                        <p>Ya has verificado este documento</p>
+                    {% endif %}
+                {% endif %}
+                
+            </div>
         {% else %}
 
+        
         <div class="doc-comments">
             <!-- Aquí puedes colocar el contenido de los comentarios -->
             <h3>Comentarios</h3>

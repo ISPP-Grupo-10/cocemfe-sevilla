@@ -233,3 +233,11 @@ def publish_comment(request, pk):
         form = MessageForm()
     comments = ChatMessage.objects.filter(document=doc)
     return render(request, 'list_comments.html', {'doc': doc, 'chat_messages': comments, 'form': form})
+
+@login_required
+def check_pdf(request, pk):
+    doc = get_object_or_404(Document, pk=pk)
+    if request.user not in doc.checked_professionals.all():
+        doc.checked_professionals.add(request.user)
+    doc.save()
+    return redirect('view_pdf_admin', pk=pk)
