@@ -97,6 +97,7 @@ Credenciales de un profesional: correo: luis@pla.com / contraseña: ama
 Landing Page: https://cocemfe-web-landing-page.vercel.app/
 Clockify: https://app.clockify.me/shared/6606cc5e1e41eb36ffccaba0
 GitHub: https://github.com/ISPP-Grupo-10/cocemfe-sevilla
+Demo de la aplicación: https://github.com/ISPP-Grupo-10/cocemfe-sevilla/blob/main/docs/Sprint%202/demo.mp4
 
 
 
