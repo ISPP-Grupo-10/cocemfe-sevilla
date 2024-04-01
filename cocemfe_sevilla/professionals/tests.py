@@ -1,5 +1,4 @@
 # tests.py
-import unittest
 import uuid
 from datetime import timedelta
 
@@ -47,14 +46,14 @@ class ProfessionalViewTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         updated_data = {
-            'first_name': 'UpdatedName',
+            'first_name': 'Name',
             'last_name': 'UpdatedSurname',
             'telephone_number': '987654321',
             'license_number': 'XYZ789',
         }
         response = self.client.post(url, updated_data)
         self.assertEqual(response.status_code, 200)
-        updated_professional = Professional.objects.get(pk=self.professional.pk)
+
 
 class ProfessionalListTestCase(TestCase):
     def setUp(self):
