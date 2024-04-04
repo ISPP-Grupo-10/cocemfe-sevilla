@@ -16,4 +16,5 @@ urlpatterns = [
     path('requests/create/', create_request, name='create_request'),
     path('requests/<int:pk>/update', update_request, name='update_request'),
     path('chats/', request_document_chats, name="chats"),
+    path('change_password/', change_password, name='update_password'), # URL TEMPORAL, INTEGRAR CON PANTALLA PERFIL USUARIO
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

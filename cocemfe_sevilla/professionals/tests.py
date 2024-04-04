@@ -9,7 +9,7 @@ from django.utils import timezone
 
 from documents.models import Document
 from organizations.models import Organization
-from professionals.forms import ProfessionalCreationForm
+from professionals.forms import ProfessionalCreationForm, SecurePasswordChangeForm
 from professionals.models import Professional
 from professionals.views import create_professional
 
@@ -337,3 +337,58 @@ class EditUserViewTestCase(TestCase):
         url = reverse('professionals:professional_detail', kwargs={'pk': professional.id})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
+
+
+class PasswordChangeFormTests(TestCase):
+    def setUp(self):
+        self.user = Professional.objects.create_user(username='testuser', email='test@example.com', password='old_password')
+
+    def test_correct_data_password_changed(self):
+        form_data = {
+            'old_password': 'old_password',
+            'new_password1': 'New_Password123',
+            'new_password2': 'New_Password123',
+        }
+        form = SecurePasswordChangeForm(data=form_data, user=self.user)
+        self.assertTrue(form.is_valid())
+        form.save()
+        self.assertTrue(self.user.check_password('New_Password123'))
+
+    def test_wrong_old_password_password_not_changed(self):
+        form_data = {
+            'old_password': 'wrong_password',
+            'new_password1': 'New_Password123',
+            'new_password2': 'New_Password123',
+        }
+        form = SecurePasswordChangeForm(data=form_data, user=self.user)
+        self.assertFalse(form.is_valid())
+
+
+    def test_weak_password_password_not_changed(self):
+        form_data = {
+            'old_password': 'old_password',
+            'new_password1': 'weak',
+            'new_password2': 'weak',
+        }
+        form = SecurePasswordChangeForm(data=form_data, user=self.user)
+        self.assertFalse(form.is_valid())
+
+
+    def test_passwords_not_matching_password_not_changed(self):
+        form_data = {
+            'old_password': 'old_password',
+            'new_password1': 'New_Password123',
+            'new_password2': 'Mismatched_Password123',
+        }
+        form = SecurePasswordChangeForm(data=form_data, user=self.user)
+        self.assertFalse(form.is_valid())
+
+
+    def test_empty_data_password_not_changed(self):
+        form_data = {
+            'old_password': '',
+            'new_password1': '',
+            'new_password2': '',
+        }
+        form = SecurePasswordChangeForm(data=form_data, user=self.user)
+        self.assertFalse(form.is_valid())
