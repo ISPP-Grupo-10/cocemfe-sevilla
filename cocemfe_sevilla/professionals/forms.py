@@ -183,6 +183,8 @@ class SecurePasswordChangeForm(forms.Form):
 
     def clean_old_password(self):
         old_password = self.cleaned_data.get('old_password')
+        if self.user is None or not self.user.check_password(old_password):
+            raise forms.ValidationError('El usuario no está autenticado.')
         if not self.user.check_password(old_password):
             raise forms.ValidationError('La contraseña antigua es incorrecta.')
         return old_password
