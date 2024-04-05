@@ -15,7 +15,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from .forms import ProfessionalForm, RequestCreateForm, RequestUpdateForm
 from django.contrib.auth.hashers import make_password 
-from django.http import Http404, HttpResponseForbidden
+from django.http import HttpResponseForbidden
 import random
 import string
 

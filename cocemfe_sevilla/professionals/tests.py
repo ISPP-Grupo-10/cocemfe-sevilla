@@ -12,7 +12,7 @@ from organizations.models import Organization
 from professionals.forms import ProfessionalCreationForm
 from professionals.models import Professional
 from professionals.views import create_professional
-from django.contrib.auth.models import User
+
 
 
 class ProfessionalViewTest(TestCase):
@@ -353,7 +353,7 @@ class ProfessionalDataViewTest(TestCase):
         self.professional_normal = Professional.objects.create(username='normal_user',
                                                                 telephone_number='987654321',
                                                                 terms_accepted=True, license_number='XYZ789')
-        
+
 
     def test_view_raises_403_for_unauthorized_user(self):
         unauthorized_user = Professional.objects.create(username='unauthorizeduser',
@@ -370,7 +370,7 @@ class ProfessionalDataViewTest(TestCase):
         self.client.force_login(self.professional_staff)
         response = self.client.get(reverse('professionals:professional_data', kwargs={'professional_id': self.professional_normal.pk}))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'professional_data.html') 
+        self.assertTemplateUsed(response, 'professional_data.html')
 
     def test_view_displays_for_professional_owner(self):
         self.client.force_login(self.professional_normal)
@@ -380,6 +380,6 @@ class ProfessionalDataViewTest(TestCase):
 
     def test_view_redirects_for_non_authenticated_user(self):
         response = self.client.get(reverse('professionals:professional_data', kwargs={'professional_id': self.professional_normal.pk}))
-        self.assertEqual(response.status_code, 302) 
+        self.assertEqual(response.status_code, 302)
 
 

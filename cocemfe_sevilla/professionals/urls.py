@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.urls import path
-from .views import *
+from .views import professional_list, create_professional, professional_data, delete_professional, edit_user_view, custom_login, custom_logout, request_list, create_request, update_request, request_document_chats
 from django.conf.urls.static import static
 
 app_name = 'professionals'
