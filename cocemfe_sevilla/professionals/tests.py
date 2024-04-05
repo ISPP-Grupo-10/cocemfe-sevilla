@@ -477,7 +477,7 @@ class PasswordChangeFormTests(TestCase):
         self.assertIn('new_password1', form.errors)
         self.assertEquals(form.errors['new_password1'], ['La contraseña debe contener al menos un dígito.'])
 
-    def test_password_strength_validation_no_digits(self):
+    def test_password_strength_validation_no_special_character(self):
         self.client.login(username='testuser', password='old_password')
         form = SecurePasswordChangeForm(user=self.user, data={
             'old_password': 'old_password',
