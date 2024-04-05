@@ -183,7 +183,7 @@ class SecurePasswordChangeForm(forms.Form):
     new_password1 = forms.CharField(
         label='Nueva contraseña',
         widget=forms.PasswordInput(attrs={'class': 'form-control'}),
-        validators=[validate_password_strength, password_validation.validate_password]
+        validators=[validate_password_strength]
     )
     new_password2 = forms.CharField(
         label='Confirmar nueva contraseña',
@@ -192,9 +192,9 @@ class SecurePasswordChangeForm(forms.Form):
 
     def clean_old_password(self):
         old_password = self.cleaned_data.get('old_password')
-        if self.user is None or not self.user.check_password(old_password):
+        if self.user is None:
             raise forms.ValidationError('El usuario no está autenticado.')
-        if not self.user.check_password(old_password):
+        elif not self.user.check_password(old_password):
             raise forms.ValidationError('La contraseña antigua es incorrecta.')
         return old_password
 
