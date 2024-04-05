@@ -8,6 +8,7 @@ app_name = 'professionals'
 urlpatterns = [
     path('', professional_list, name='professional_list'),
     path('create_professional/', create_professional, name='create_professional'),
+    path('professional_data/<int:professional_id>/', professional_data, name='professional_data'),
     path('<int:id>/delete/', delete_professional, name='delete_professional'),
     path('<int:pk>/', edit_user_view, name='professional_detail'),
     path('login/', custom_login, name='login'),
