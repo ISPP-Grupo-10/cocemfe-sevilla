@@ -139,10 +139,11 @@ class RequestUpdateForm(forms.ModelForm):
 
 class SecurePasswordChangeForm(forms.Form):
 
+    @staticmethod
     def validate_password_strength(password):
-        if len(password) < 8:
+        if len(password) < 12:
             raise ValidationError(
-                ("La contraseña debe tener al menos 8 caracteres."),
+                ("La contraseña debe tener al menos 12 caracteres."),
                 code='password_too_short'
             )
         if not any(char.isupper() for char in password):
@@ -160,6 +161,13 @@ class SecurePasswordChangeForm(forms.Form):
                 ("La contraseña debe contener al menos un dígito."),
                 code='password_no_digit'
             )
+
+        if not any(char in "!@#$%^&*()-_=+[]{};:'\"<>,.?/" for char in password):
+            raise ValidationError(
+                ("La contraseña debe contener al menos un carácter especial."),
+                code='password_no_special_char'
+            )
+
 
     def __init__(self, data=None, user=None, *args, **kwargs):
         self.user = user
@@ -202,7 +210,16 @@ class SecurePasswordChangeForm(forms.Form):
 
     def save(self, commit=True):
         password = self.cleaned_data["new_password1"]
+        
+        try:
+            self.validate_password_strength(password)
+        except forms.ValidationError as e:
+            self.add_error('new_password1', e) 
+            raise
+
         self.user.set_password(password)
+
         if commit:
             self.user.save()
+
         return self.user

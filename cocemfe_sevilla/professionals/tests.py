@@ -9,7 +9,7 @@ from django.utils import timezone
 
 from documents.models import Document
 from organizations.models import Organization
-from professionals.forms import ProfessionalCreationForm, SecurePasswordChangeForm
+from professionals.forms import ProfessionalCreationForm
 from professionals.models import Professional
 from professionals.views import create_professional
 
