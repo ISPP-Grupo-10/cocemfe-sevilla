@@ -8,6 +8,7 @@ from django import forms
 from .models import Professional
 from django.contrib.auth.hashers import make_password 
 from django.forms import ValidationError
+from django.contrib.auth import password_validation
 
 class ProfessionalForm(forms.ModelForm):
     class Meta:
@@ -174,7 +175,7 @@ class SecurePasswordChangeForm(forms.Form):
     new_password1 = forms.CharField(
         label='Nueva contraseña',
         widget=forms.PasswordInput(attrs={'class': 'form-control'}),
-        validators=[validate_password_strength]
+        validators=[validate_password_strength, password_validation.validate_password]
     )
     new_password2 = forms.CharField(
         label='Confirmar nueva contraseña',
