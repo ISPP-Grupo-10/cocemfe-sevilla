@@ -341,87 +341,94 @@ class EditUserViewTestCase(TestCase):
 
 class PasswordChangeFormTests(TestCase):
     def setUp(self):
-        self.user = Professional.objects.create_user(username='testuser', email='test@example.com', password='old_password')
+        self.user = Professional.objects.create_user(username='testuser', email='test@example.com', password='old_password', terms_accepted=True)
 
-    def test_correct_data_password_changed(self):
-        form_data = {
+    def test_change_password_page_rendered_correctly(self):
+        self.client.login(username='testuser', password='old_password')
+        response = self.client.get(reverse('professionals:update_password'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'update_password.html')
+
+    def test_change_password_with_correct_data(self):
+        self.client.login(username='testuser', password='old_password')
+        response = self.client.post(reverse('professionals:update_password'), {
             'old_password': 'old_password',
             'new_password1': 'New_Password123',
             'new_password2': 'New_Password123',
-        }
-        form = SecurePasswordChangeForm(data=form_data, user=self.user)
-        self.assertTrue(form.is_valid())
-        form.save()
-        self.assertTrue(self.user.check_password('New_Password123'))
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(Professional.objects.get(username='testuser').check_password('New_Password123'))
 
-    def test_wrong_old_password_password_not_changed(self):
-        form_data = {
+    def test_change_password_with_wrong_old_password(self):
+        self.client.login(username='testuser', password='old_password')
+        response = self.client.post(reverse('professionals:update_password'), {
             'old_password': 'wrong_password',
             'new_password1': 'New_Password123',
             'new_password2': 'New_Password123',
-        }
-        form = SecurePasswordChangeForm(data=form_data, user=self.user)
-        self.assertFalse(form.is_valid())
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(Professional.objects.get(username='testuser').check_password('New_Password123'))
 
     def test_weak_password_password_not_changed(self):
-        form_data = {
+        self.client.login(username='testuser', password='old_password')
+        response = self.client.post(reverse('professionals:update_password'), {
             'old_password': 'old_password',
             'new_password1': 'weak',
             'new_password2': 'weak',
-        }
-        form = SecurePasswordChangeForm(data=form_data, user=self.user)
-        self.assertFalse(form.is_valid())
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(Professional.objects.get(username='testuser').check_password('weak'))
 
     def test_passwords_not_matching_password_not_changed(self):
-        form_data = {
+        self.client.login(username='testuser', password='old_password')
+        response = self.client.post(reverse('professionals:update_password'), {
             'old_password': 'old_password',
             'new_password1': 'New_Password123',
             'new_password2': 'Mismatched_Password123',
-        }
-        form = SecurePasswordChangeForm(data=form_data, user=self.user)
-        self.assertFalse(form.is_valid())
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(Professional.objects.get(username='testuser').check_password('old_password'))
 
     def test_empty_data_password_not_changed(self):
-        form_data = {
+        self.client.login(username='testuser', password='old_password')
+        response = self.client.post(reverse('professionals:update_password'), {
             'old_password': '',
             'new_password1': '',
             'new_password2': '',
-        }
-        form = SecurePasswordChangeForm(data=form_data, user=self.user)
-        self.assertFalse(form.is_valid())
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(Professional.objects.get(username='testuser').check_password('old_password'))
 
     def test_same_old_and_new_password_password_not_changed(self):
-        form_data = {
+        self.client.login(username='testuser', password='old_password')
+        response = self.client.post(reverse('professionals:update_password'), {
             'old_password': 'old_password',
             'new_password1': 'old_password',
             'new_password2': 'old_password',
-        }
-        form = SecurePasswordChangeForm(data=form_data, user=self.user)
-        self.assertFalse(form.is_valid())
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(Professional.objects.get(username='testuser').check_password('old_password'))
 
     def test_new_password_not_meeting_security_policies_password_not_changed(self):
-        form_data = {
+        self.client.login(username='testuser', password='old_password')
+        response = self.client.post(reverse('professionals:update_password'), {
             'old_password': 'old_password',
             'new_password1': 'weakpassword',
             'new_password2': 'weakpassword',
-        }
-        form = SecurePasswordChangeForm(data=form_data, user=self.user)
-        self.assertFalse(form.is_valid())
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(Professional.objects.get(username='testuser').check_password('old_password'))
 
     def test_invalid_data_in_password_fields_password_not_changed(self):
-        form_data = {
+        self.client.login(username='testuser', password='old_password')
+        response = self.client.post(reverse('professionals:update_password'), {
             'old_password': 'old_password',
             'new_password1': 'invalid*password',
             'new_password2': 'invalid*password',
-        }
-        form = SecurePasswordChangeForm(data=form_data, user=self.user)
-        self.assertFalse(form.is_valid())
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(Professional.objects.get(username='testuser').check_password('old_password'))
 
     def test_unauthenticated_user_password_not_changed(self):
-        form_data = {
-            'old_password': 'old_password',
-            'new_password1': 'New_Password123',
-            'new_password2': 'New_Password123',
-        }
-        form = SecurePasswordChangeForm(data=form_data, user=None)
-        self.assertFalse(form.is_valid())
+        response = self.client.get(reverse('professionals:update_password'))
+        self.assertEqual(response.status_code, 302)
