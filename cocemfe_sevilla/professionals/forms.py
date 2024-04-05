@@ -213,11 +213,10 @@ class SecurePasswordChangeForm(forms.Form):
         
         try:
             self.validate_password_strength(password)
+            self.user.set_password(password)
         except forms.ValidationError as e:
-            self.add_error('new_password1', e) 
+            self.add_error('new_password1', e)
             raise
-
-        self.user.set_password(password)
 
         if commit:
             self.user.save()
