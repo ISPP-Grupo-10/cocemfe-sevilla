@@ -18,9 +18,17 @@ def map_index(request):
             Coordinates.objects.create(location=city, latitude=latitude, longitude=longitude)
         else:
             latitude, longitude = coordinate.latitude, coordinate.longitude
-
-        folium.Marker(location=[latitude, longitude], popup=city).add_to(mapa)
-        documents_by_city[city] = documents
+            
+        marker = folium.Marker(location=[latitude, longitude], popup=city)
+        marker.add_to(mapa)
+        
+        # Crear un control de tipo Popup con el listado de documentos
+        popup_content = "<h3>{}</h3><ul>".format(city)
+        for document in documents:
+            popup_content += "<li><a href='/documents/view_pdf/{0}' target='_top'>{1}</a></li>".format(document.id, document.name)
+        popup_content += "</ul>"
+        
+        folium.Popup(popup_content).add_to(marker)
 
     mapa_html = mapa._repr_html_()
 
@@ -43,7 +51,16 @@ def map_search(request, latitude, longitude):
         else:
             latitude, longitude = coordinate.latitude, coordinate.longitude
 
-        folium.Marker(location=[latitude, longitude], popup=city).add_to(mapa)
+        marker = folium.Marker(location=[latitude, longitude], popup=city)
+        marker.add_to(mapa)
+        
+        # Crear un control de tipo Popup con el listado de documentos
+        popup_content = "<h3>{}</h3><ul>".format(city)
+        for document in documents:
+            popup_content += "<li><a href='/documents/view_pdf/{0}' target='_top'>{1}</a></li>".format(document.id, document.name)
+        popup_content += "</ul>"
+        
+        folium.Popup(popup_content).add_to(marker)
         documents_by_city[city] = documents
 
     mapa_html = mapa._repr_html_()
