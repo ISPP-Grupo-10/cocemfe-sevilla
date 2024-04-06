@@ -2,12 +2,19 @@ from django.shortcuts import render
 import folium
 import requests
 from documents.models import Document
+from .models import Coordinates
 
 def map_index(request):
     mapa = folium.Map(location=[37.3896, -5.9845], zoom_start=10, zoom_control=True, scrollWheelZoom=True)
     documents = Document.objects.all()
     for document in documents:
-        latitude, longitude = get_coordinates_openstreetmap(document.ubication)
+        coordinate = Coordinates.objects.filter(location=document.ubication).first()
+        if coordinate:
+            latitude = coordinate.latitude
+            longitude = coordinate.longitude
+        else:
+            latitude, longitude = get_coordinates_openstreetmap(document.ubication)
+            Coordinates.objects.create(location=document.ubication,latitude=latitude,longitude=longitude)
         folium.Marker(location=[latitude, longitude], popup=document.name).add_to(mapa)
 
 
