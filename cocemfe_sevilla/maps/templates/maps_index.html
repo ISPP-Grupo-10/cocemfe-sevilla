@@ -21,7 +21,6 @@
         padding: 0;
     }
 
- 
     .document-item {
         margin-bottom: 10px;
     }
@@ -37,19 +36,36 @@
         {{ mapa_html | safe }}
     </div>
     <div class="list-container">
-        {% for city, documents in documents_by_city.items %}
-        {% for coordinate in coordinates %}
-            {% if coordinate.location == city %}
-                <a href="{% url 'maps:map_search' coordinate.latitude coordinate.longitude %}">{{ city }}</a>
-            {% endif %}
-        {% endfor %}
-            <ul class="document-list">
-                {% for document in documents %}
-                    <li class="document-item">{{ document.name }}</li>
-                {% endfor %}
-            </ul>
-        {% endfor %}
+        <div id="accordion">
+            {% for city, documents in documents_by_city.items %}
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="true" aria-controls="collapse{{ forloop.counter }}">
+                        {{ city }}
+                    </button>
+                </h2>
+                <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse show" aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#accordion">
+                    <div class="accordion-body">
+                        <ul class="document-list">
+                            {% for document in documents %}
+                            {% for coordinate in coordinates %}
+                            {% if coordinate.location == document.ubication %}
+                            <li class="document-item">
+                                <a href="{% url 'maps:map_search' coordinate.latitude coordinate.longitude %}">
+                                    {{ document.name }}
+                                </a>
+                            </li>
+                            {% endif %}
+                            {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
     </div>
+    
 </div>
 
         <script src="https://unpkg.com/folium/folium.js"></script>
