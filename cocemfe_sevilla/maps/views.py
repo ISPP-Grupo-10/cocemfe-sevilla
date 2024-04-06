@@ -6,19 +6,27 @@ from .models import Coordinates
 
 def map_index(request):
     mapa = folium.Map(location=[37.3896, -5.9845], zoom_start=10, zoom_control=True, scrollWheelZoom=True)
-    documents = Document.objects.all()
-    for document in documents:
-        coordinate = Coordinates.objects.filter(location=document.ubication).first()
-        if coordinate:
-            latitude = coordinate.latitude
-            longitude = coordinate.longitude
+    cities_with_documents = Document.objects.values_list('ubication', flat=True).distinct()
+    
+    for city in cities_with_documents:
+        documents = Document.objects.filter(ubication=city)
+        coordinates = Coordinates.objects.filter(location=city).first()
+        if not coordinates:
+            latitude, longitude = get_coordinates_openstreetmap(city)
+            Coordinates.objects.create(location=city, latitude=latitude, longitude=longitude)
         else:
-            latitude, longitude = get_coordinates_openstreetmap(document.ubication)
-            Coordinates.objects.create(location=document.ubication,latitude=latitude,longitude=longitude)
-        folium.Marker(location=[latitude, longitude], popup=document.name).add_to(mapa)
-
-
-    folium.Marker(location=[37.3896, -5.9845], popup='Sevilla').add_to(mapa)
+            latitude, longitude = coordinates.latitude, coordinates.longitude
+            
+        marker = folium.Marker(location=[latitude, longitude], popup=city)
+        marker.add_to(mapa)
+        
+        # Crear un control de tipo Popup con el listado de documentos
+        popup_content = "<h3>{}</h3><ul>".format(city)
+        for document in documents:
+            popup_content += "<li><a href='/documents/view_pdf/{0}' target='_top'>{1}</a></li>".format(document.id, document.name)
+        popup_content += "</ul>"
+        
+        folium.Popup(popup_content).add_to(marker)
 
     mapa_html = mapa._repr_html_()
 
@@ -35,5 +43,3 @@ def get_coordinates_openstreetmap(city):
         return latitude, longitude
     else:
         return None, None
-
-
