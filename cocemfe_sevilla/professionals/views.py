@@ -6,7 +6,7 @@ from django.contrib.auth import logout, login, authenticate
 
 from documents.models import Document
 from .models import Professional, Request
-from .forms import ProfessionalCreationForm, ProfessionalForm
+from .forms import ProfessionalCreationForm, ProfessionalForm, SecurePasswordChangeForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import logout, login, authenticate
 from django.utils.decorators import method_decorator
@@ -197,7 +197,14 @@ def request_document_chats(request):
         return render(request, 'list_chats.html', {'possessed_documents': possessed_documents})
    
 
-
-    
-    
-
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = SecurePasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Tu contraseña ha sido cambiada exitosamente.')
+            return redirect('professionals:request_list') # URL TEMPORAL, INTEGRAR CON PANTALLA PERFIL USUARIO
+    else:
+        form = SecurePasswordChangeForm(user=request.user)
+    return render(request, 'update_password.html', {'form': form})
