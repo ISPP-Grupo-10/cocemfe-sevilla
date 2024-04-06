@@ -15,8 +15,10 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from .forms import ProfessionalForm, RequestCreateForm, RequestUpdateForm
 from django.contrib.auth.hashers import make_password 
+from django.http import HttpResponseForbidden
 import random
 import string
+
 
 def custom_login(request):
     if request.method == 'POST':
@@ -67,6 +69,17 @@ def create_professional(request):
         form = ProfessionalCreationForm()
 
     return render(request, 'professional_create.html', {'form': form})
+
+@login_required
+def professional_data(request, professional_id):
+    professional = get_object_or_404(Professional, pk=professional_id)
+    user_is_staff = request.user.is_staff or request.user.is_superuser
+    if user_is_staff or request.user.pk == professional_id:
+        professional_copy = professional.copy()
+        professional_copy.password = ''
+        return render(request, 'professional_data.html', {'professional': professional_copy})
+    else:
+        return HttpResponseForbidden("You are not authorized to view this page.")
 
 @login_required
 def edit_user_view(request, pk):

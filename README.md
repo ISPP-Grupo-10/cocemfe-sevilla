@@ -1,4 +1,7 @@
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/1c512c2c52c8437382e833b12427d8da)](https://app.codacy.com/gh/ISPP-Grupo-10/cocemfe-sevilla/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade) [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/1c512c2c52c8437382e833b12427d8da)](https://app.codacy.com/gh/ISPP-Grupo-10/cocemfe-sevilla/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_Coverage) [![Django CI](https://github.com/ISPP-Grupo-10/cocemfe-sevilla/actions/workflows/django.yml/badge.svg)](https://github.com/ISPP-Grupo-10/cocemfe-sevilla/actions/workflows/django.yml)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/1c512c2c52c8437382e833b12427d8da)](https://app.codacy.com/gh/ISPP-Grupo-10/cocemfe-sevilla/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade) [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/1c512c2c52c8437382e833b12427d8da)](https://app.codacy.com/gh/ISPP-Grupo-10/cocemfe-sevilla/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_Coverage) [![Django CI](https://github.com/ISPP-Grupo-10/cocemfe-sevilla/actions/workflows/django.yml/badge.svg)](https://github.com/ISPP-Grupo-10/cocemfe-sevilla/actions/workflows/django.yml) [![PythonVersion](https://img.shields.io/badge/Python-3.11-blue.svg?style=flat-square&labelColor=495057)](https://www.python.org/downloads/release/python-3115/)
+
+
+
 
 # Cocemfe Web
 
