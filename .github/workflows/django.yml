@@ -5,10 +5,13 @@ on:
     branches: ["main", "develop"]
   pull_request:
     branches: ["main", "develop"]
+  workflow_call:
+    secrets:
+      CODACY_PROJECT_TOKEN:
+        required: true
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -31,10 +34,16 @@ jobs:
           python ./cocemfe_sevilla/manage.py migrate
       - name: Run Tests
         run: |
-          python ./cocemfe_sevilla/manage.py test
+          cd cocemfe_sevilla
+          coverage run --branch --source=. ./manage.py test
+          coverage xml
+      - name: Codacy Coverage Reporter
+        uses: codacy/codacy-coverage-reporter-action@v1
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: cocemfe_sevilla/coverage.xml
 
   build-windows:
-
     runs-on: windows-latest
     strategy:
       matrix:
@@ -57,7 +66,11 @@ jobs:
           python ./cocemfe_sevilla/manage.py migrate
       - name: Run Tests
         run: |
-          python ./cocemfe_sevilla/manage.py test
-
-
-
+          cd cocemfe_sevilla
+          coverage run --branch --source=. ./manage.py test
+          coverage xml
+      - name: Codacy Coverage Reporter
+        uses: codacy/codacy-coverage-reporter-action@v1
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: cocemfe_sevilla/coverage.xml

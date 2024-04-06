@@ -29,6 +29,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "cocemfesevillanotificaciones@gmail.com"
+EMAIL_HOST_PASSWORD = 'stqx wqug nfqd woau'
+EMAIL_USE_TLS = True
 
 # Application definition
 
@@ -46,10 +52,12 @@ INSTALLED_APPS = [
     "votings",
     "organizations",
     "maps",
+    "authentication",
     "bootstrap5",
-    "base"
+    "base",
 ]
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -62,6 +70,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "cocemfe_sevilla.urls"
+
 
 TEMPLATES = [
     {

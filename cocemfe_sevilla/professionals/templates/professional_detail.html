@@ -1,120 +1,225 @@
-{% extends "base.html" %}
-{% load static %}
-
-
+{% extends 'base.html' %}
+{% block title %}Crear Professional{% endblock %}
+{% block encabezado %}{% endblock %}
 {% block contenido %}
-<link rel="stylesheet" href="{%static 'css/professional.css'%}"/>
-<h2 class="title-style">DETALLES DE USUARIOS </h2>
 
-<div class="contenedor-table">
-    <div class="izquierda">
-        <div class="col-md-6">
-                <div class="card-body2">
-                    <form method="post" class="registration-form" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        {% if form.errors %}
-                            <div class="alert alert-danger">
-                                <strong>Error:</strong> Por favor, corrige los siguientes errores.
-                            </div>
-                        {% endif %}
-                        <div class="form-group">
-                            <label class="label-style" for="{{ form.username.id_for_label }}">Nombre de usuario:</label>&nbsp; 
-                            {{ form.username }}
-                            {% if form.username.errors %}
-                                <ul class="errorlist">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-ZAElWN6PqB8kyByGWGdIV6yB/wWw+2sBOnTgCZlb5B5KZl3IFIKo3sggs2pihGzwCwPbLjBOvDT6xg6lL7sR7Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+  <title>Detalles de Usuario</title>
+</head>
+
+<body>
+    <style>
+        body {
+            color: #000;
+            overflow-x: hidden;
+            height: 100%;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+  
+        .card {
+            padding: 30px 40px;
+            margin-top: 60px;
+            margin-bottom: 60px;
+            border: none !important;
+            box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.2);
+        }
+  
+        .blue-text {
+            color: #00BCD4;
+        }
+  
+        .form-control-label {
+            margin-bottom: 0;
+        }
+  
+        input,
+        textarea,
+        button {
+            padding: 8px 15px;
+            border-radius: 5px !important;
+            margin: 5px 0px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            font-size: 18px !important;
+            font-weight: 300;
+        }
+  
+        input:focus,
+        textarea:focus {
+            -moz-box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+            border: 3px solid #00BCD4;
+            outline-width: 0;
+            font-weight: 400;
+        }
+  
+        .btn-block {
+            text-transform: uppercase;
+            font-size: 15px !important;
+            font-weight: 400;
+            height: 43px;
+            cursor: pointer;
+            background-color: rgba(0, 162, 151, 0.842); /* Color del botón "Crear" */
+  
+        }
+  
+        .btn-block:hover {
+            color: #fff !important;
+        }
+  
+        button:focus {
+            -moz-box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+            outline-width: 0;
+        }
+  
+        .form-container {
+            padding: 20px;
+            border: 50px solid rgba(0, 165, 153, 0.3);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 165, 153, 0.3);
+        }
+  
+        /* Hacer el formulario más estrecho */
+        .col-xl-7,
+        .col-lg-8,
+        .col-md-9,
+        .col-11 {
+            max-width: 600px; /* Ajusta el ancho según tus necesidades */
+        }
+    </style>
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-danger" role="alert">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    <div class="row d-flex justify-content-center">
+        <div class="col-xl-7 col-lg-8 col-md-9 col-11 text-center card form-container">
+                        <form method="post" class="form-card" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {% if form.errors %}
+                                <div class="alert alert-danger">
+                                    <strong>Error:</strong> Por favor, corrige los siguientes errores.
+                                </div>
+                            {% endif %}
+                            <div class="row justify-content-between text-left">
+                                <div class="form-group col-12 flex-column d-flex mb-4">
+                                    <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                        <i class="fas fa-user"></i> Nombre de usuario
+                                    </label>
+                                    {{ form.username }}
                                     {% for error in form.username.errors %}
-                                        <li class="error-item">{{ error }}</li>
+                                        <span class="error">{{ error }}</span>
                                     {% endfor %}
-                                </ul>
-                            {% endif %}
-                        </div>
-                        <div class="form-group">
-                            <label class="label-style" for="{{ form.first_name.id_for_label }}">Nombre:</label>&nbsp; 
-                            {{ form.first_name }}
-                            {% if form.address.first_name %}
-                                <ul class="errorlist">
+                                </div>
+                            </div>
+                            <div class="row justify-content-between text-left">
+                                <div class="form-group col-12 flex-column d-flex mb-4">
+                                    <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                        <i class="fas fa-user"></i> Nombre
+                                    </label>
+                                    {{ form.first_name }}
                                     {% for error in form.first_name.errors %}
-                                        <li class="error-item">{{ error }}</li>
+                                        <span class="error">{{ error }}</span>
                                     {% endfor %}
-                                </ul>
-                            {% endif %}
-                        </div>
-                        <div class="form-group">
-                            <label class="label-style" for="{{ form.last_name.id_for_label }}">Apellidos:</label>&nbsp; 
-                            {{ form.last_name }}
-                            {% if form.last_name.errors %}
-                                <ul class="errorlist">
+                                </div>
+                            </div>
+                            <div class="row justify-content-between text-left">
+                                <div class="form-group col-12 flex-column d-flex mb-4">
+                                    <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                        <i class="fas fa-user"></i> Apellidos
+                                    </label>
+                                    {{ form.last_name }}
                                     {% for error in form.last_name.errors %}
-                                        <li class="error-item">{{ error }}</li>
+                                        <span class="error">{{ error }}</span>
                                     {% endfor %}
-                                </ul>
-                            {% endif %}
-                        </div>
-                        <div class="form-group">
-                            <label class="label-style" for="{{ form.email.id_for_label }}">Email:</label>&nbsp; 
-                            {{ form.email }}
-                            {% if form.email.errors %}
-                                <ul class="errorlist">
+                                </div>
+                            </div>
+                            <div class="row justify-content-between text-left">
+                                <div class="form-group col-12 flex-column d-flex mb-4">
+                                    <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                        <i class="fa fa-envelope"></i> Dirección de correo electrónico<span class="text-danger"> *</span>
+                                    </label>
+                                    {{ form.email }}
                                     {% for error in form.email.errors %}
-                                        <li class="error-item">{{ error }}</li>
+                                        <span class="error">{{ error }}</span>
                                     {% endfor %}
-                                </ul>
-                            {% endif %}
-                        </div>
-                        <div class="form-group">
-                            <label class="label-style" for="{{ form.telephone_number.id_for_label }}">Teléfono: </label>&nbsp; 
-                            {{ form.telephone_number }}
-                            {% if form.telephone_number.errors %}
-                                <ul class="errorlist">
+                                </div>
+                            </div>
+                            <div class="row justify-content-between text-left">
+                                <div class="form-group col-12 flex-column d-flex mb-4">
+                                    <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                        <i class="fa fa-phone"></i> Teléfono<span class="text-danger"> *</span>
+                                    </label>
+                                    {{ form.telephone_number }}
                                     {% for error in form.telephone_number.errors %}
-                                        <li class="error-item">{{ error }}</li>
+                                        <span class="error">{{ error }}</span>
                                     {% endfor %}
-                                </ul>
-                            {% endif %}
-                        </div>
-                        <div class="form-group">
-                            <label class="label-style" for="{{ form.license_number.id_for_label }}">Número de Licencia: </label>&nbsp; 
-                            {{ form.license_number}}
-                            {% if form.license_number.errors %}
-                                <ul class="errorlist">
+                                </div>
+                            </div>
+                            <div class="row justify-content-between text-left">
+                                <div class="form-group col-12 flex-column d-flex mb-4">
+                                    <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                        <i class="fa fa-address-card"></i> Número de licencia<span class="text-danger"> *</span>
+                                    </label>
+                                    {{ form.license_number }}
                                     {% for error in form.license_number.errors %}
-                                        <li class="error-item">{{ error }}</li>
+                                        <span class="error">{{ error }}</span>
                                     {% endfor %}
-                                </ul>
-                            {% endif %}
-                        </div>
-                        <div class="form-group">
-                            <label class="label-style" for="{{ form.organizations.id_for_label }}">Organizaciones:</label>&nbsp; 
-                            {{ form.organizations }}
-                            {% if form.organizations.errors %}
-                                <ul class="errorlist">
+                                </div>
+                            </div>
+                            <div class="row justify-content-between text-left">
+                                <div class="form-group col-12 flex-column d-flex mb-4">
+                                    <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                        <i class="fas fa-building"></i> Organización<span class="text-danger"> *</span>
+                                    </label>
+                                    {{ form.organizations }}
                                     {% for error in form.organizations.errors %}
-                                        <li class="error-item">{{ error }}</li>
+                                        <span class="error">{{ error }}</span>
                                     {% endfor %}
-                                </ul>
-                            {% endif %}
-                        </div>
-                        <div class="hola">
-                            <label class="label-style" for="{{ form.profile_picture.id_for_label }}">Imagen de perfil:</label>&nbsp;
-                            <br>
-                            {{ form.profile_picture }}
-                            {% if form.profile_picture.errors %}
-                                <ul class="errorlist">
+                                </div>
+                            </div>
+                            <div class="row justify-content-between text-left">
+                                <div class="form-group col-12 flex-column d-flex mb-4">
+                                    <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                        <i class="fa fa-picture-o"></i> Foto de Perfil<span class="text-danger"> *</span>
+                                    </label>
+                                    {% if professional.profile_picture %}
+                                        <div class="text-center">
+                                        <img src="{{ professional.profile_picture.url }}" width="100px" height="100px" alt="Imagen de perfil actual"  class="imagen-media">
+                                        </div>
+                                    {% else %}
+                                        <div class="text-center">
+                                        <img src="/media/IconoUsuario.jpg" width="100px" height="120px" alt="Imagen por defecto"  class="imagen-media">
+                                        </div>
+                                    {% endif %}
+                                    {{ form.profile_picture }}
                                     {% for error in form.profile_picture.errors %}
-                                        <li class="error-item">{{ error }}</li>
+                                        <span class="error">{{ error }}</span>
                                     {% endfor %}
-                                </ul>
-                            {% endif %}
-                        </div>
+                                </div>
+                            </div>
                             <button type="submit" class="btn btn-primary">Guardar</button>
-                    </form>
+                        </form>
+                        
+                    </div>
                 </div>
             </div>
-        </div>
-    {% if professional.profile_picture %}
-        <img src="{{ professional.profile_picture.url }}" width="200" height="150" alt="Imagen de perfil actual"  class="imagen-media">
-    {% else %}
-        <img src="/media/IconoUsuario.jpg" alt="Imagen por defecto"  class="imagen-media">
-    {% endif %}
-  </div>
-{% endblock %}
+        
+    </div>
+    {% endblock %}
+
+</body>
