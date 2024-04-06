@@ -6,23 +6,49 @@ from .models import Coordinates
 
 def map_index(request):
     mapa = folium.Map(location=[37.3896, -5.9845], zoom_start=10, zoom_control=True, scrollWheelZoom=True)
-    documents = Document.objects.all()
-    for document in documents:
-        coordinate = Coordinates.objects.filter(location=document.ubication).first()
-        if coordinate:
-            latitude = coordinate.latitude
-            longitude = coordinate.longitude
+    cities_with_documents = Document.objects.values_list('ubication', flat=True).distinct()
+    coordinates = Coordinates.objects.all()
+    documents_by_city = {}
+
+    for city in cities_with_documents:
+        documents = Document.objects.filter(ubication=city)
+        coordinate = Coordinates.objects.filter(location=city).first()
+        if not coordinate:
+            latitude, longitude = get_coordinates_openstreetmap(city)
+            Coordinates.objects.create(location=city, latitude=latitude, longitude=longitude)
         else:
-            latitude, longitude = get_coordinates_openstreetmap(document.ubication)
-            Coordinates.objects.create(location=document.ubication,latitude=latitude,longitude=longitude)
-        folium.Marker(location=[latitude, longitude], popup=document.name).add_to(mapa)
+            latitude, longitude = coordinate.latitude, coordinate.longitude
 
-
-    folium.Marker(location=[37.3896, -5.9845], popup='Sevilla').add_to(mapa)
+        folium.Marker(location=[latitude, longitude], popup=city).add_to(mapa)
+        documents_by_city[city] = documents
 
     mapa_html = mapa._repr_html_()
 
-    return render(request, 'maps_index.html', {'mapa_html': mapa_html})
+    return render(request, 'maps_index.html', {'mapa_html': mapa_html, 'documents_by_city': documents_by_city, 'coordinates': coordinates})
+
+def map_search(request, latitude, longitude):
+    latitude = float(latitude)
+    longitude = float(longitude)
+    mapa = folium.Map(location=[latitude, longitude], zoom_start=12, zoom_control=True, scrollWheelZoom=True)
+    cities_with_documents = Document.objects.values_list('ubication', flat=True).distinct()
+    coordinates = Coordinates.objects.all()
+    documents_by_city = {}
+
+    for city in cities_with_documents:
+        documents = Document.objects.filter(ubication=city)
+        coordinate = Coordinates.objects.filter(location=city).first()
+        if not coordinate:
+            latitude, longitude = get_coordinates_openstreetmap(city)
+            Coordinates.objects.create(location=city, latitude=latitude, longitude=longitude)
+        else:
+            latitude, longitude = coordinate.latitude, coordinate.longitude
+
+        folium.Marker(location=[latitude, longitude], popup=city).add_to(mapa)
+        documents_by_city[city] = documents
+
+    mapa_html = mapa._repr_html_()
+
+    return render(request, 'maps_index.html', {'mapa_html': mapa_html, 'documents_by_city': documents_by_city, 'coordinates': coordinates})
 
 def get_coordinates_openstreetmap(city):
     url = f'https://nominatim.openstreetmap.org/search?q={city}&format=json'
@@ -35,5 +61,3 @@ def get_coordinates_openstreetmap(city):
         return latitude, longitude
     else:
         return None, None
-
-
