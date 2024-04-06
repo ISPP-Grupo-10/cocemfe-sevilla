@@ -29,6 +29,7 @@ def map_index(request):
         popup_content += "</ul>"
         
         folium.Popup(popup_content).add_to(marker)
+        documents_by_city[city] = documents
 
     mapa_html = mapa._repr_html_()
 
