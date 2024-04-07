@@ -6,7 +6,7 @@ from django.contrib.auth import logout, login, authenticate
 
 from documents.models import Document
 from .models import Professional, Request
-from .forms import ProfessionalCreationForm, ProfessionalForm, SecurePasswordChangeForm
+from .forms import ProfessionalCreationForm, ProfessionalForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import logout, login, authenticate
 from django.utils.decorators import method_decorator
@@ -15,10 +15,8 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from .forms import ProfessionalForm, RequestCreateForm, RequestUpdateForm
 from django.contrib.auth.hashers import make_password 
-from django.http import HttpResponseForbidden
 import random
 import string
-
 
 def custom_login(request):
     if request.method == 'POST':
@@ -69,16 +67,6 @@ def create_professional(request):
         form = ProfessionalCreationForm()
 
     return render(request, 'professional_create.html', {'form': form})
-
-@login_required
-def professional_data(request, professional_id):
-    professional = get_object_or_404(Professional, pk=professional_id)
-    user_is_staff = request.user.is_staff or request.user.is_superuser
-    if user_is_staff or request.user.pk == professional_id:
-        professional.password = ''
-        return render(request, 'professional_data.html', {'professional': professional})
-    else:
-        return HttpResponseForbidden("You are not authorized to view this page.")
 
 @login_required
 def edit_user_view(request, pk):
@@ -198,14 +186,7 @@ def request_document_chats(request):
         return render(request, 'list_chats.html', {'possessed_documents': possessed_documents})
    
 
-@login_required
-def change_password(request):
-    if request.method == 'POST':
-        form = SecurePasswordChangeForm(user=request.user, data=request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Tu contraseña ha sido cambiada exitosamente.')
-            return redirect('professionals:request_list') # URL TEMPORAL, INTEGRAR CON PANTALLA PERFIL USUARIO
-    else:
-        form = SecurePasswordChangeForm(user=request.user)
-    return render(request, 'update_password.html', {'form': form})
+
+    
+    
+
