@@ -82,14 +82,23 @@ def selenium_converter(file_path, download_directory):
         driver.maximize_window()
 
         # Esperar hasta que el botón esté presente en la página
-        button = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, "//p[text()='Consentir']")))
+        print("antes del boton")
+        #consent_paragraph = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//div[@class='fc-consent-root']//div[@class='fc-dialog-container']//div[@class='fc-dialog fc-choice-dialog']//div[@class='fc-footer-buttons-container']//div[@class='fc-footer-buttons']//button[@class='fc-button fc-cta-consent fc-primary-button']//p[text()='Consentir']")))
+        cookie_panel = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "fc-consent-root")))
+        driver.execute_script("arguments[0].parentNode.removeChild(arguments[0])", cookie_panel)
+        #button = WebDriverWait(driver, 60).until(EC.visibility_of_element_located((By.XPATH, "//p[text()='Consentir']")))
         # Hacer clic en el botón
-        button.click()
+        print("despues del boton")
+        #consent_paragraph.click()
+        print("despues del click")
         # Esperar hasta que la página esté completamente cargada
         button = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH,  "//div[@class='upload-container']//button[contains(text(), 'Seleccionar archivo')]")))
+        print("despues del boton 2")
         # Encontrar y hacer clic en el botón
         button = driver.find_element(By.XPATH, "//div[@class='upload-container']//button[contains(text(), 'Seleccionar archivo')]")
+        print("despues del boton 3")
         button.click()
+        print("hago click")
 
         time.sleep(2)
         pyautogui.write(file_path)
@@ -97,10 +106,13 @@ def selenium_converter(file_path, download_directory):
         time.sleep(5)
         # Ejecutar script de JavaScript para desplazarse hacia abajo en la página
         driver.execute_script("window.scrollBy(0, 800);")
+        print("despues del scroll")
 
         form = WebDriverWait(driver, 120).until(EC.presence_of_element_located((By.ID, "sendform")))
+        print("despues del form")
         # Localizar el elemento <strong> con texto "Empezar" dentro del formulario
         empezar_button = form.find_element(By.XPATH, '//form[@id="sendform"]//strong[contains(text(), "Empezar")]')
+        print("despues del boton 4")
         empezar_button.click()
 
         # Eliminar el archivo original
@@ -111,6 +123,7 @@ def selenium_converter(file_path, download_directory):
         # Esperar hasta que el enlace de descarga esté presente y hacer clic en él
         descargar_link = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, '//div[@id="app"]//span[contains(text(), "Descargar")]')))
         descargar_link.click()
+        print("despues del boton 5")
 
         # Puedes agregar más acciones aquí, como enviar texto a campos de entrada, hacer clic en enlaces, etc.
 
