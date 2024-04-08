@@ -39,7 +39,7 @@ def custom_login(request):
         
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
-        if user is not None:
+        if user is not None and (professional.email_verified == True or professional.is_superuser==True):
             login(request, user)
             return redirect('/')
         else:
