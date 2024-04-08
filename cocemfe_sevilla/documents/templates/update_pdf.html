@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-{% block title %}Subir Documentos{% endblock %}
+{% load static %}
+{% block title %}Modificar Documentos{% endblock %}
 {% block encabezado %}{% endblock %}
 {% block contenido %}
     <!DOCTYPE html>
@@ -12,7 +13,7 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-ZAElWN6PqB8kyByGWGdIV6yB/wWw+2sBOnTgCZlb5B5KZl3IFIKo3sggs2pihGzwCwPbLjBOvDT6xg6lL7sR7Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
-        <title>Subir Documentos</title>
+        <title>Modificar Documentos</title>
         <style>
             body {
                 color: #000;
@@ -96,6 +97,21 @@
             .col-11 {
                 max-width: 600px; /* Ajusta el ancho según tus necesidades */
             }
+            .card.form-container {
+                height: 80%%; /* Ajustar la altura según tus necesidades */
+                overflow-y: auto; /* Añadir desplazamiento vertical si el contenido excede la altura */
+            }
+            
+            /* Ajustar estilos de la lista de profesionales */
+            .professional-list-container {
+                max-height: 150px; /* Establecer la altura máxima */
+                overflow-y: auto; /* Añadir desplazamiento vertical si el contenido excede la altura */
+            }
+            
+            /* Ocultar el enlace "Limpiar" */
+            .file-info {
+                display: none;
+            }
         </style>
     </head>
     
@@ -169,35 +185,43 @@
                         <div class="row justify-content-between text-left">
                             <div class="form-group col-12 flex-column d-flex mb-4">
                                 <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                                    <i class="fas fa-file-pdf"></i> Seleccione un archivo<span class="text-danger"> *</span>
+                                    <i class="fas fa-file-pdf"></i> Archivo actual: <span id="nombreArchivo"></span><span class="text-danger"></span>
                                 </label>
-                                {{ form.pdf_file }}
+                                {% if document.pdf_file %}
+                                <div class="doc-visualizer">
+                                    <iframe id="pdfViewer" src="{% static 'pdfjs/web/viewer.html' %}?file={{ document.pdf_file.url | urlencode }}" width="100%" height="600"></iframe>
+                                </div>
+                                {% endif %}
                                 {% for error in form.pdf_file.errors %}
                                     <span class="error text-danger">{{ error }}</span>
                                 {% endfor %}
                             </div>
-                        </div>
+                        </div>                                                                    
                         <div class="row justify-content-between text-left">
                             <div class="form-group col-12 flex-column d-flex mb-4">
                                 <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
                                     <i class="fas fa-users"></i> Seleccione los revisores
                                 </label>
-                                {% for professional in form.professionals.field.queryset %}
-                                    {% if professional in professionals_not_superuser %}
-                                        <input type="checkbox" id="id_professional_{{ professional.id }}" name="professionals" value="{{ professional.id }}" {% if professional in document.professionals.all %}checked{% endif %}>
-                                        <label for="id_professional_{{ professional.id }}">{{ professional.username }}</label><br>
-                                    {% endif %}
-                                {% endfor %}
-                                {% for error in form.professionals.errors %}
-                                    <span class="error text-danger">{{ error }}</span>
-                                {% endfor %}
+                                <input type="text" id="searchProfessional" class="form-control mb-2" placeholder="Buscar por nombre...">
+                                <div id="professionalListContainer" class="professional-list-container" style="text-align: left; margin-left: 20px; max-height: 200px; overflow-y: auto;">
+                                    <div id="professionalList" class="professional-list">
+                                        {% for professional in form.professionals.field.queryset %}
+                                            {% if professional in professionals_not_superuser %}
+                                                <label style="display: block; margin-left: 0;">
+                                                    <input type="checkbox" id="id_professional_{{ professional.id }}" name="professionals" value="{{ professional.id }}" {% if professional in document.professionals.all %}checked{% endif %}>
+                                                    {{ professional.first_name }} {{ professional.last_name }}
+                                                </label>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </div>                        
                         <div class="row justify-content-start">
                             <div class="form-group col-sm-6">
                                 <div class="row justify-content-start">
                                     <div class="form-group col-sm-6 text-left"> 
-                                        <button type="submit" class="btn-block">Guardar Cambios</button>
+                                        <button type="submit" class="btn-block">Guardar</button>
                                     </div>
                                 </div>
                             </div>
@@ -208,4 +232,43 @@
         </div>
     </body>
     </html>
-{% endblock %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var input = document.getElementById("searchProfessional");
+            var professionalList = document.getElementById("professionalList");
+    
+            input.addEventListener("input", function () {
+                var filter = input.value.toUpperCase();
+                var professionals = professionalList.getElementsByTagName("label");
+    
+                for (var i = 0; i < professionals.length; i++) {
+                    var professional = professionals[i];
+                    var txtValue = professional.textContent || professional.innerText;
+    
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        professional.style.display = "block"; // Mostrar como bloque si coincide con la búsqueda
+                    } else {
+                        professional.style.display = "none"; // Ocultar si no coincide con la búsqueda
+                    }
+                }
+    
+                if (filter.trim() === "") {
+                    // Si el campo de búsqueda está vacío, mostrar todos los profesionales en formato de bloque
+                    for (var i = 0; i < professionals.length; i++) {
+                        professionals[i].style.display = "block";
+                    }
+                }
+            });
+        });
+    </script>
+    <script>
+        // Suponiendo que document.pdf_file.name contiene el nombre del archivo PDF
+        var nombreArchivoCompleto = "{{ document.pdf_file.name }}";
+        
+        // Eliminar la cadena "pdf/" del nombre del archivo
+        var nombreArchivoSinPdf = nombreArchivoCompleto.replace("pdfs/", "").replace(".pdf","").replace("_"," ");
+
+        // Actualizar el contenido del elemento span con el ID "nombreArchivo" con el nuevo nombre
+        document.getElementById("nombreArchivo").textContent = nombreArchivoSinPdf;
+    </script>
+{% endblock %}s
