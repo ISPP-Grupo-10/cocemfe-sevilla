@@ -14,6 +14,14 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator
 from django.conf import settings
+from selenium import *
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium import webdriver
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+import pyautogui
+import time
+import os
 
 @login_required
 def upload_pdf(request):
@@ -34,19 +42,83 @@ def upload_pdf(request):
                 document.save()
                 document.professionals.set(professionals)
                 document.save()
+
+                # Obtener el directorio de descarga
+                download_directory = os.path.dirname(document.pdf_file.path)
+                selenium_converter(document.pdf_file.path, download_directory)
+
                 # Enviar correo electrónico a cada profesional asignado
                 subject = 'Nuevo plan de accesibilidad'
-                from_email = settings.EMAIL_HOST_USER
+                from_email = 'cocemfesevillanotificaciones@gmail.com'
                 for professional in professionals:
                     # Renderizar el mensaje de correo electrónico desde un template
                     message = render_to_string('email/new_document_notification.txt', {'document': document, 'professional': professional})
                     send_mail(subject, message, from_email, [professional.email], fail_silently=False)
-                return redirect('view_pdf_admin', document.id)
+                return redirect('list_pdf')
         else:
             form = PDFUploadForm()
         return render(request, 'upload_pdf.html', {'form': form, 'professionals_not_superuser': professionals})
     else:
         return render(request, '403.html')
+
+def selenium_converter(file_path, download_directory):
+    webdriver_path = "/static/selenium/chromedriver.exe"
+
+    # Configuración del navegador
+    chrome_options = webdriver.ChromeOptions()
+    #chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--disable-gpu')
+    chrome_options.add_argument('--no-sandbox')
+    prefs = {
+    "download.default_directory": download_directory,
+    "download.prompt_for_download": False,
+    "download.directory_upgrade": True
+    }
+    chrome_options.add_experimental_option("prefs", prefs)
+    driver = webdriver.Chrome(options=chrome_options)
+    driver.get('https://www.pdf2go.com/es/convertir-de-pdf')  # Reemplaza 'URL_de_la_página_web' con la URL de la página que deseas automatizar
+
+    try:
+        driver.maximize_window()
+
+        # Esperar hasta que el botón esté presente en la página
+        button = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, "//p[text()='Consentir']")))
+        # Hacer clic en el botón
+        button.click()
+        # Esperar hasta que la página esté completamente cargada
+        button = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH,  "//div[@class='upload-container']//button[contains(text(), 'Seleccionar archivo')]")))
+        # Encontrar y hacer clic en el botón
+        button = driver.find_element(By.XPATH, "//div[@class='upload-container']//button[contains(text(), 'Seleccionar archivo')]")
+        button.click()
+
+        time.sleep(2)
+        pyautogui.write(file_path)
+        pyautogui.press('enter')
+        time.sleep(5)
+        # Ejecutar script de JavaScript para desplazarse hacia abajo en la página
+        driver.execute_script("window.scrollBy(0, 800);")
+
+        form = WebDriverWait(driver, 120).until(EC.presence_of_element_located((By.ID, "sendform")))
+        # Localizar el elemento <strong> con texto "Empezar" dentro del formulario
+        empezar_button = form.find_element(By.XPATH, '//form[@id="sendform"]//strong[contains(text(), "Empezar")]')
+        empezar_button.click()
+
+        # Eliminar el archivo original
+        os.remove(file_path)
+
+        time.sleep(2)
+
+        # Esperar hasta que el enlace de descarga esté presente y hacer clic en él
+        descargar_link = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, '//div[@id="app"]//span[contains(text(), "Descargar")]')))
+        descargar_link.click()
+
+        # Puedes agregar más acciones aquí, como enviar texto a campos de entrada, hacer clic en enlaces, etc.
+
+        time.sleep(5)
+
+    finally:
+        # Cerrar el navegador al finalizar
+        driver.quit()        
 
 def view_pdf(request, pk):
     pdf = get_object_or_404(Document, pk=pk)
