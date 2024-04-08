@@ -14,6 +14,7 @@
         "license_number": 79185246301478925641,
         "organizations": 10,
         "email": "mariagomez@gmail.com",
+        "email_verified":true,
         "profile_picture": ""
       }
     },
@@ -32,6 +33,7 @@
         "license_number": 36987451203548796521,
         "organizations": 6,
         "email": "javiermartinez@gmail.com",
+        "email_verified":true,
         "profile_picture": ""
       }
     },
@@ -50,6 +52,7 @@
         "license_number": 96325874102369874120,
         "organizations": 4,
         "email": "antoniohernandez@gmail.com",
+        "email_verified":true,
         "profile_picture": ""
       }
     },
@@ -68,6 +71,7 @@
         "license_number": 85203698741023698741,
         "organizations": 2,
         "email": "isabelfernandez@gmail.com",
+        "email_verified":true,
         "profile_picture": ""
       }
     },
@@ -86,6 +90,7 @@
         "license_number": 12369874102369874102,
         "organizations": 7,
         "email": "mariajoselopez@gmail.com",
+        "email_verified":true,
         "profile_picture": ""
       }
     },
@@ -104,6 +109,7 @@
         "license_number": 98741023698741023698,
         "organizations": 7,
         "email": "manuelgarcia@gmail.com",
+        "email_verified":true,
         "profile_picture": ""
       }
     },
@@ -122,6 +128,7 @@
         "license_number": 45612398741023698741,
         "organizations": 8,
         "email": "anamartin@gmail.com",
+        "email_verified":true,
         "profile_picture": ""
       }
     },
@@ -140,6 +147,7 @@
         "license_number": 78941023698741023698,
         "organizations": 9,
         "email": "franciscosanchez@gmail.com",
+        "email_verified":true,
         "profile_picture": ""
       }
     },
@@ -158,6 +166,7 @@
         "license_number": 65478941023698741023,
         "organizations": 10,
         "email": "joseluisrodriguez@gmail.com",
+        "email_verified":true,
         "profile_picture": ""
       }
     },
@@ -176,6 +185,7 @@
         "license_number": 14785236987410236541,
         "organizations": 5,
         "email": "miguelangelhernandez@gmail.com",
+        "email_verified":true,
         "profile_picture": ""
       }
     },
@@ -194,6 +204,7 @@
         "license_number": 32165498741023698741,
         "organizations": 9,
         "email": "rafaelgonzalez@gmail.com",
+        "email_verified":true,
         "profile_picture": ""
       }
     },
@@ -212,6 +223,7 @@
         "license_number": 10236547896521458963,
         "organizations": 4,
         "email": "pablosanchez@gmail.com",
+        "email_verified":true,
         "profile_picture": ""
       }
     },
@@ -230,6 +242,7 @@
         "license_number": 78965412369874102536,
         "organizations": 9,
         "email": "fernandogomez@gmail.com",
+        "email_verified":true,
         "profile_picture": ""
       }
     },
@@ -248,6 +261,7 @@
         "license_number": 32145698741023698741,
         "organizations": 5,
         "email": "isabelmariagarcia@gmail.com",
+        "email_verified":true,
         "profile_picture": ""
       }
     },
@@ -266,6 +280,7 @@
         "license_number": 10236547896521023698,
         "organizations": 1,
         "email": "josemanuelmartinez@gmail.com",
+        "email_verified":true,
         "profile_picture": ""
       }
     },
@@ -284,6 +299,7 @@
         "license_number": 98741023698741023698,
         "organizations": 1,
         "email": "carmengonzalez@gmail.com",
+        "email_verified":true,
         "profile_picture": ""
       }
     },
@@ -302,6 +318,7 @@
         "license_number": 32165498741023698741,
         "organizations": 7,
         "email": "juanmartinez@gmail.com",
+        "email_verified":true,
         "profile_picture": ""
       }
     },
@@ -320,6 +337,7 @@
         "license_number": 10236547896521478963,
         "organizations": 5,
         "email": "manuelasanchez@gmail.com",
+        "email_verified":true,
         "profile_picture": ""
       }
     },
@@ -338,6 +356,7 @@
         "license_number": 98741023698741025636,
         "organizations": 2,
         "email": "manueljosemartinez@gmail.com",
+        "email_verified":true,
         "profile_picture": ""
       }
     },
@@ -356,6 +375,7 @@
           "license_number": 98741023698741023698,
           "organizations": 3,
           "email": "joseluismartinez@gmail.com",
+          "email_verified":true,
           "profile_picture": ""
         }
       }      
