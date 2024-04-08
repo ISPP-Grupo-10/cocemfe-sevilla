@@ -1,9 +1,16 @@
+from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.contrib import messages
 from django.contrib.auth import logout, login, authenticate
 
+from .utils import get_professional, validate_email
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_bytes
+from django.template.loader import get_template
+from django.core.mail import EmailMultiAlternatives
 from documents.models import Document
 from .models import Professional, Request
 from .forms import ProfessionalCreationForm, ProfessionalForm, SecurePasswordChangeForm
@@ -50,20 +57,33 @@ def is_admin(user):
 
 @user_passes_test(is_admin)
 def create_professional(request):
+    messages=[]
     if request.method == 'POST':
         form = ProfessionalCreationForm(request.POST, request.FILES)
         if form.is_valid():
-            professional = form.save(commit=False)  
+            professional = form.save(commit=False)
+            professional.save()
+  
 
             password = ''.join(random.choices(string.ascii_letters + string.digits, k=12))
-            professional.password = make_password(password)  
-            professional.save() 
+            professional.password = make_password(password)
+            uid = urlsafe_base64_encode(force_bytes(professional.pk))
+            verify_url = reverse('professionals:verify_email', args=[uid])
 
             subject = '¡Bienvenida a COCEMFE Sevilla - Acceso al Sistema de Gestión de Documentos!'
-            from_email = 'cocemfesevillanotificaciones@gmail.com'
-            message = render_to_string('email/new_professional_notification.txt', {'professional': professional, 'password': password}) 
-            send_mail(subject, message, from_email, [professional.email], fail_silently=False)
-
+            
+            # Enviar el correo electrónico de verificación
+            template = get_template('email/verification_email.html')
+            content = template.render(
+                {'verify_url': request.build_absolute_uri('/') + verify_url[1:],'professional': professional, 'password': password})
+            message = EmailMultiAlternatives(
+                subject,
+                content,
+                settings.EMAIL_HOST_USER,
+                [professional.email]
+            )
+            message.attach_alternative(content, 'text/html')
+            message.send()
             return redirect(reverse('professionals:professional_list'))
     else:
         form = ProfessionalCreationForm()
@@ -210,3 +230,14 @@ def change_password(request):
     else:
         form = SecurePasswordChangeForm(user=request.user)
     return render(request, 'update_password.html', {'form': form})
+
+class VerifyEmailView(View):
+
+    def get(self, request, uidb64):
+        professional = get_professional(uidb64)
+        if professional is not None:
+            professional.email_verified = True
+            professional.save()
+            return redirect('/?message=Correo_electronico_verificado&status=Success')
+        else:
+            return redirect('/?message=Correo_electronico_no_verificado&status=Error')
