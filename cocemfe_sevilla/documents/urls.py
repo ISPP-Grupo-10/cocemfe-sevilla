@@ -14,4 +14,5 @@ urlpatterns = [
     path('delete_pdf/<int:pk>/', delete_pdf, name='delete_pdf'),
     path('check_pdf/<int:pk>/', check_pdf, name='check_pdf'),
     path('create-suggestion/<int:document_id>/', crear_sugerencia, name='create_suggestion'),
+    path('delete_pdf_form/<int:pk>/', delete_pdf_form, name='delete_pdf_form'),
 ]
