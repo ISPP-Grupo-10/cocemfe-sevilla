@@ -67,7 +67,7 @@
                 font-weight: 400;
                 height: 43px;
                 cursor: pointer;
-                background-color: rgba(0, 162, 151, 0.842); /* Color del botón "Crear" */
+                background-color: rgba(0, 162, 151, 0.842);
                 color: white;
                 border: none;
             }
@@ -90,25 +90,22 @@
                 box-shadow: 0 0 10px rgba(0, 165, 153, 0.3);
             }
         
-            /* Hacer el formulario más estrecho */
             .col-xl-7,
             .col-lg-8,
             .col-md-9,
             .col-11 {
-                max-width: 600px; /* Ajusta el ancho según tus necesidades */
+                max-width: 600px;
             }
             .card.form-container {
-                height: 80%%; /* Ajustar la altura según tus necesidades */
-                overflow-y: auto; /* Añadir desplazamiento vertical si el contenido excede la altura */
+                height: 80%%; 
+                overflow-y: auto; 
             }
             
-            /* Ajustar estilos de la lista de profesionales */
             .professional-list-container {
-                max-height: 150px; /* Establecer la altura máxima */
-                overflow-y: auto; /* Añadir desplazamiento vertical si el contenido excede la altura */
+                max-height: 150px;
+                overflow-y: auto;
             }
             
-            /* Ocultar el enlace "Limpiar" */
             .file-info {
                 display: none;
             }
@@ -184,13 +181,20 @@
                         </div>
                         <div class="row justify-content-between text-left">
                             <div class="form-group col-12 flex-column d-flex mb-4">
-                                <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                                    <i class="fas fa-file-pdf"></i> Archivo actual: <span id="nombreArchivo"></span><span class="text-danger"></span>
-                                </label>
                                 {% if document.pdf_file %}
+                                <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                    <i class="fas fa-file-pdf"></i> Archivo actual:<span id="nombreArchivo"></span><span class="text-danger"></span>
+                                </label>
                                 <div class="doc-visualizer">
                                     <iframe id="pdfViewer" src="{% static 'pdfjs/web/viewer.html' %}?file={{ document.pdf_file.url | urlencode }}" width="100%" height="600"></iframe>
                                 </div>
+
+                                <button type="button" class="btn btn-danger" id="deletePdfBtn">Eliminar PDF</button>
+                                {%else%}
+                                <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                    <i class="fas fa-file-pdf"></i> Selecciona un archivo:<span class="text-danger"> *</span>
+                                </label>
+                                {{form.pdf_file}}
                                 {% endif %}
                                 {% for error in form.pdf_file.errors %}
                                     <span class="error text-danger">{{ error }}</span>
@@ -246,14 +250,13 @@
                     var txtValue = professional.textContent || professional.innerText;
     
                     if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        professional.style.display = "block"; // Mostrar como bloque si coincide con la búsqueda
+                        professional.style.display = "block"; 
                     } else {
-                        professional.style.display = "none"; // Ocultar si no coincide con la búsqueda
+                        professional.style.display = "none"; 
                     }
                 }
     
                 if (filter.trim() === "") {
-                    // Si el campo de búsqueda está vacío, mostrar todos los profesionales en formato de bloque
                     for (var i = 0; i < professionals.length; i++) {
                         professionals[i].style.display = "block";
                     }
@@ -262,13 +265,33 @@
         });
     </script>
     <script>
-        // Suponiendo que document.pdf_file.name contiene el nombre del archivo PDF
         var nombreArchivoCompleto = "{{ document.pdf_file.name }}";
         
-        // Eliminar la cadena "pdf/" del nombre del archivo
         var nombreArchivoSinPdf = nombreArchivoCompleto.replace("pdfs/", "").replace(".pdf","").replace("_"," ");
 
-        // Actualizar el contenido del elemento span con el ID "nombreArchivo" con el nuevo nombre
         document.getElementById("nombreArchivo").textContent = nombreArchivoSinPdf;
     </script>
-{% endblock %}s
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const deletePdfBtn = document.getElementById("deletePdfBtn");
+    
+            deletePdfBtn.addEventListener("click", function () {
+                if (confirm("¿Estás seguro de que deseas eliminar este PDF?")) {
+                    const pk = "{{ document.pk }}"; 
+                    const xhr = new XMLHttpRequest();
+                    xhr.open("POST", "{% url 'delete_pdf_form' 0 %}".replace("0", pk));
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    xhr.onload = function () {
+                        if (xhr.status === 200) {
+                            location.reload();
+                        } else {
+                            console.error("Error al eliminar el PDF");
+                        }
+                    };
+                    xhr.send();
+                }
+            });
+        });
+    </script>
+    
+{% endblock %}
