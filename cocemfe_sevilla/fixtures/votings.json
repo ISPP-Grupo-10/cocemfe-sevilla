@@ -1,0 +1,68 @@
+[
+    {
+        "model": "votings.voting",
+        "pk": 1,
+        "fields": {
+            "vote": true,
+            "date": "2024-04-03",
+            "justification": "Estoy de acuerdo con la propuesta",
+            "professional": 2,
+            "suggestion": 3
+        }
+    },
+    {
+        "model": "votings.voting",
+        "pk": 2,
+        "fields": {
+            "vote": false,
+            "date": "2024-04-04",
+            "justification": "No estoy de acuerdo con la propuesta",
+            "professional": 2,
+            "suggestion": 4
+        }
+    },
+    {
+        "model": "votings.voting",
+        "pk": 3,
+        "fields": {
+            "vote": true,
+            "date": "2024-03-22",
+            "justification": "Estoy de acuerdo con la propuesta",
+            "professional": 3,
+            "suggestion": 5
+        }
+    },
+    {
+        "model": "votings.voting",
+        "pk": 4,
+        "fields": {
+            "vote": false,
+            "date": "2024-03-23",
+            "justification": "No estoy de acuerdo con la propuesta",
+            "professional": 4,
+            "suggestion": 6
+        }
+    },
+    {
+        "model": "votings.voting",
+        "pk": 5,
+        "fields": {
+            "vote": true,
+            "date": "2024-03-29",
+            "justification": "Estoy de acuerdo con la propuesta",
+            "professional": 5,
+            "suggestion": 7
+        }
+    },
+    {
+        "model": "votings.voting",
+        "pk": 6,
+        "fields": {
+            "vote": false,
+            "date": "2024-03-30",
+            "justification": "No estoy de acuerdo con la propuesta",
+            "professional": 6,
+            "suggestion": 8
+        }
+    }
+]

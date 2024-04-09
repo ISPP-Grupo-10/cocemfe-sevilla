@@ -1,363 +1,160 @@
 [
-    {
-      "model": "professionals.professional",
-      "pk": 2,
-      "fields": {
-        "username": "mariagomez",
-        "first_name": "María",
-        "last_name": "Gómez",
-        "is_staff": true,
-        "is_active": true,
-        "date_joined": "2023-06-08T00:00:00Z",
-        "password": "mariagomez",
-        "telephone_number": "612345678",
-        "license_number": 79185246301478925641,
-        "organizations": 10,
-        "email": "mariagomez@gmail.com",
-        "profile_picture": ""
-      }
-    },
-    {
-      "model": "professionals.professional",
-      "pk": 3,
-      "fields": {
-        "username": "javiermartinez",
-        "first_name": "Javier",
-        "last_name": "Martínez",
-        "is_staff": false,
-        "is_active": true,
-        "date_joined": "2023-04-22T00:00:00Z",
-        "password": "javiermartinez",
-        "telephone_number": "645231897",
-        "license_number": 36987451203548796521,
-        "organizations": 6,
-        "email": "javiermartinez@gmail.com",
-        "profile_picture": ""
-      }
-    },
-    {
-      "model": "professionals.professional",
-      "pk": 4,
-      "fields": {
-        "username": "antoniohernandez",
-        "first_name": "Antonio",
-        "last_name": "Hernández",
-        "is_staff": false,
-        "is_active": true,
-        "date_joined": "2023-06-05T00:00:00Z",
-        "password": "antoniohernandez",
-        "telephone_number": "678912345",
-        "license_number": 96325874102369874120,
-        "organizations": 4,
-        "email": "antoniohernandez@gmail.com",
-        "profile_picture": ""
-      }
-    },
-    {
-      "model": "professionals.professional",
-      "pk": 5,
-      "fields": {
-        "username": "isabelfernandez",
-        "first_name": "Isabel",
-        "last_name": "Fernández",
-        "is_staff": false,
-        "is_active": true,
-        "date_joined": "2024-02-19T00:00:00Z",
-        "password": "isabelfernandez",
-        "telephone_number": "689345678",
-        "license_number": 85203698741023698741,
-        "organizations": 2,
-        "email": "isabelfernandez@gmail.com",
-        "profile_picture": ""
-      }
-    },
-    {
-      "model": "professionals.professional",
-      "pk": 6,
-      "fields": {
-        "username": "mariajoselopez",
-        "first_name": "María José",
-        "last_name": "López",
-        "is_staff": false,
-        "is_active": true,
-        "date_joined": "2023-05-23T00:00:00Z",
-        "password": "mariajoselopez",
-        "telephone_number": "612345987",
-        "license_number": 12369874102369874102,
-        "organizations": 7,
-        "email": "mariajoselopez@gmail.com",
-        "profile_picture": ""
-      }
-    },
-    {
-      "model": "professionals.professional",
-      "pk": 7,
-      "fields": {
-        "username": "manuelgarcia",
-        "first_name": "Manuel",
-        "last_name": "García",
-        "is_staff": false,
-        "is_active": true,
-        "date_joined": "2023-10-01T00:00:00Z",
-        "password": "manuelgarcia",
-        "telephone_number": "679845612",
-        "license_number": 98741023698741023698,
-        "organizations": 7,
-        "email": "manuelgarcia@gmail.com",
-        "profile_picture": ""
-      }
-    },
-    {
-      "model": "professionals.professional",
-      "pk": 8,
-      "fields": {
-        "username": "anamartin",
-        "first_name": "Ana",
-        "last_name": "Martín",
-        "is_staff": false,
-        "is_active": true,
-        "date_joined": "2023-03-12T00:00:00Z",
-        "password": "anamartin",
-        "telephone_number": "634589721",
-        "license_number": 45612398741023698741,
-        "organizations": 8,
-        "email": "anamartin@gmail.com",
-        "profile_picture": ""
-      }
-    },
-    {
-      "model": "professionals.professional",
-      "pk": 9,
-      "fields": {
-        "username": "franciscosanchez",
-        "first_name": "Francisco",
-        "last_name": "Sánchez",
-        "is_staff": false,
-        "is_active": true,
-        "date_joined": "2024-03-03T00:00:00Z",
-        "password": "franciscosanchez",
-        "telephone_number": "657894512",
-        "license_number": 78941023698741023698,
-        "organizations": 9,
-        "email": "franciscosanchez@gmail.com",
-        "profile_picture": ""
-      }
-    },
-    {
-      "model": "professionals.professional",
-      "pk": 10,
-      "fields": {
-        "username": "joseluisrodriguez",
-        "first_name": "José Luis",
-        "last_name": "Rodríguez",
-        "is_staff": false,
-        "is_active": true,
-        "date_joined": "2023-06-01T00:00:00Z",
-        "password": "joseluisrodriguez",
-        "telephone_number": "678954123",
-        "license_number": 65478941023698741023,
-        "organizations": 10,
-        "email": "joseluisrodriguez@gmail.com",
-        "profile_picture": ""
-      }
-    },
-    {
-      "model": "professionals.professional",
-      "pk": 11,
-      "fields": {
-        "username": "miguelangelhernandez",
-        "first_name": "Miguel Ángel",
-        "last_name": "Hernández",
-        "is_staff": false,
-        "is_active": true,
-        "date_joined": "2024-01-17T00:00:00Z",
-        "password": "miguelangelhernandez",
-        "telephone_number": "636589742",
-        "license_number": 14785236987410236541,
-        "organizations": 5,
-        "email": "miguelangelhernandez@gmail.com",
-        "profile_picture": ""
-      }
-    },
-    {
-      "model": "professionals.professional",
-      "pk": 12,
-      "fields": {
-        "username": "rafaelgonzalez",
-        "first_name": "Rafael",
-        "last_name": "González",
-        "is_staff": false,
-        "is_active": true,
-        "date_joined": "2023-03-22T00:00:00Z",
-        "password": "rafaelgonzalez",
-        "telephone_number": "615874963",
-        "license_number": 32165498741023698741,
-        "organizations": 9,
-        "email": "rafaelgonzalez@gmail.com",
-        "profile_picture": ""
-      }
-    },
-    {
-      "model": "professionals.professional",
-      "pk": 13,
-      "fields": {
-        "username": "pablosanchez",
-        "first_name": "Pablo",
-        "last_name": "Sánchez",
-        "is_staff": false,
-        "is_active": true,
-        "date_joined": "2024-01-09T00:00:00Z",
-        "password": "pablosanchez",
-        "telephone_number": "632587419",
-        "license_number": 10236547896521458963,
-        "organizations": 4,
-        "email": "pablosanchez@gmail.com",
-        "profile_picture": ""
-      }
-    },
-    {
-      "model": "professionals.professional",
-      "pk": 14,
-      "fields": {
-        "username": "fernandogomez",
-        "first_name": "Fernando",
-        "last_name": "Gómez",
-        "is_staff": false,
-        "is_active": true,
-        "date_joined": "2023-03-10T00:00:00Z",
-        "password": "fernandogomez",
-        "telephone_number": "689457123",
-        "license_number": 78965412369874102536,
-        "organizations": 9,
-        "email": "fernandogomez@gmail.com",
-        "profile_picture": ""
-      }
-    },
-    {
-      "model": "professionals.professional",
-      "pk": 15,
-      "fields": {
-        "username": "isabelmariagarcia",
-        "first_name": "Isabel María",
-        "last_name": "García",
-        "is_staff": false,
-        "is_active": true,
-        "date_joined": "2024-01-04T00:00:00Z",
-        "password": "isabelmariagarcia",
-        "telephone_number": "645783219",
-        "license_number": 32145698741023698741,
-        "organizations": 5,
-        "email": "isabelmariagarcia@gmail.com",
-        "profile_picture": ""
-      }
-    },
-    {
-      "model": "professionals.professional",
-      "pk": 16,
-      "fields": {
-        "username": "josemanuelmartinez",
-        "first_name": "José Manuel",
-        "last_name": "Martínez",
-        "is_staff": false,
-        "is_active": true,
-        "date_joined": "2023-08-22T00:00:00Z",
-        "password": "josemanuelmartinez",
-        "telephone_number": "678954123",
-        "license_number": 10236547896521023698,
-        "organizations": 1,
-        "email": "josemanuelmartinez@gmail.com",
-        "profile_picture": ""
-      }
-    },
-    {
-      "model": "professionals.professional",
-      "pk": 17,
-      "fields": {
-        "username": "carmengonzalez",
-        "first_name": "Carmen",
-        "last_name": "González",
-        "is_staff": false,
-        "is_active": true,
-        "date_joined": "2023-05-28T00:00:00Z",
-        "password": "carmengonzalez",
-        "telephone_number": "645789123",
-        "license_number": 98741023698741023698,
-        "organizations": 1,
-        "email": "carmengonzalez@gmail.com",
-        "profile_picture": ""
-      }
-    },
-    {
-      "model": "professionals.professional",
-      "pk": 18,
-      "fields": {
-        "username": "juanmartinez",
-        "first_name": "Juan",
-        "last_name": "Martínez",
-        "is_staff": false,
-        "is_active": true,
-        "date_joined": "2023-09-09T00:00:00Z",
-        "password": "juanmartinez",
-        "telephone_number": "689457123",
-        "license_number": 32165498741023698741,
-        "organizations": 7,
-        "email": "juanmartinez@gmail.com",
-        "profile_picture": ""
-      }
-    },
-    {
-      "model": "professionals.professional",
-      "pk": 19,
-      "fields": {
-        "username": "manuelasanchez",
-        "first_name": "Manuela",
-        "last_name": "Sánchez",
-        "is_staff": false,
-        "is_active": true,
-        "date_joined": "2023-10-13T00:00:00Z",
-        "password": "manuelasanchez",
-        "telephone_number": "678912345",
-        "license_number": 10236547896521478963,
-        "organizations": 5,
-        "email": "manuelasanchez@gmail.com",
-        "profile_picture": ""
-      }
-    },
-    {
-      "model": "professionals.professional",
-      "pk": 20,
-      "fields": {
-        "username": "manueljosemartinez",
-        "first_name": "Manuel José",
-        "last_name": "Martínez",
-        "is_staff": false,
-        "is_active": true,
-        "date_joined": "2023-11-04T00:00:00Z",
-        "password": "manueljosemartinez",
-        "telephone_number": "678945123",
-        "license_number": 98741023698741025636,
-        "organizations": 2,
-        "email": "manueljosemartinez@gmail.com",
-        "profile_picture": ""
-      }
-    },
-    {
-        "model": "professionals.professional",
-        "pk": 21,
-        "fields": {
-          "username": "joseluismartinez",
-          "first_name": "José Luis",
-          "last_name": "Martínez",
-          "is_staff": false,
-          "is_active": true,
-          "date_joined": "2023-12-15T00:00:00Z",
-          "password": "joseluismartinez",
-          "telephone_number": "678956321",
-          "license_number": 98741023698741023698,
-          "organizations": 3,
-          "email": "joseluismartinez@gmail.com",
-          "profile_picture": ""
-        }
-      }      
-  ]
-  
+  {
+    "model": "professionals.professional",
+    "pk": 100,
+    "fields": {
+      "username": "admin",
+      "is_staff": true,
+      "is_active": true,
+      "is_superuser": true,
+      "date_joined": "2023-01-01T00:00:00Z",
+      "password": "admin",
+      "email": "admin@gmail.com",
+      "terms_accepted": true
+    }
+  },
+  {
+    "model": "professionals.professional",
+    "pk": 1,
+    "fields": {
+      "username": "mariagomez",
+      "first_name": "María",
+      "last_name": "Gómez",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-01-15T00:00:00Z",
+      "password": "mariagomez",
+      "telephone_number": "612345678",
+      "license_number": 79185246301478925641,
+      "organizations": 1,
+      "email": "mariagomez@gmail.com",
+      "profile_picture": ""
+    }
+  },
+  {
+    "model": "professionals.professional",
+    "pk": 2,
+    "fields": {
+      "username": "javiermartinez",
+      "first_name": "Javier",
+      "last_name": "Martínez",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-01-07T00:00:00Z",
+      "password": "javiermartinez",
+      "telephone_number": "645231897",
+      "license_number": 36987451203548796521,
+      "organizations": 2,
+      "email": "javiermartinez@gmail.com",
+      "profile_picture": ""
+    }
+  },
+  {
+    "model": "professionals.professional",
+    "pk": 3,
+    "fields": {
+      "username": "franciscosanchez",
+      "first_name": "Francisco",
+      "last_name": "Sánchez",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-01-20T00:00:00Z",
+      "password": "franciscosanchez",
+      "telephone_number": "657894512",
+      "license_number": 78941023698741023698,
+      "organizations": 3,
+      "email": "franciscosanchez@gmail.com",
+      "profile_picture": ""
+    }
+  },
+  {
+    "model": "professionals.professional",
+    "pk": 4,
+    "fields": {
+      "username": "antoniohernandez",
+      "first_name": "Antonio",
+      "last_name": "Hernández",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-01-12T00:00:00Z",
+      "password": "antoniohernandez",
+      "telephone_number": "678912345",
+      "license_number": 96325874102369874120,
+      "organizations": 4,
+      "email": "antoniohernandez@gmail.com",
+      "profile_picture": ""
+    }
+  },
+  {
+    "model": "professionals.professional",
+    "pk": 5,
+    "fields": {
+      "username": "isabelfernandez",
+      "first_name": "Isabel",
+      "last_name": "Fernández",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-01-29T00:00:00Z",
+      "password": "isabelfernandez",
+      "telephone_number": "689345678",
+      "license_number": 85203698741023698741,
+      "organizations": 1,
+      "email": "isabelfernandez@gmail.com",
+      "profile_picture": ""
+    }
+  },
+  {
+    "model": "professionals.professional",
+    "pk": 6,
+    "fields": {
+      "username": "mariajoselopez",
+      "first_name": "María José",
+      "last_name": "López",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-01-25T00:00:00Z",
+      "password": "mariajoselopez",
+      "telephone_number": "612345987",
+      "license_number": 12369874102369874102,
+      "organizations": 2,
+      "email": "mariajoselopez@gmail.com",
+      "profile_picture": ""
+    }
+  },
+  {
+    "model": "professionals.professional",
+    "pk": 7,
+    "fields": {
+      "username": "manuelgarcia",
+      "first_name": "Manuel",
+      "last_name": "García",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z",
+      "password": "manuelgarcia",
+      "telephone_number": "679845612",
+      "license_number": 98741023698741023698,
+      "organizations": 3,
+      "email": "manuelgarcia@gmail.com",
+      "profile_picture": ""
+    }
+  },
+  {
+    "model": "professionals.professional",
+    "pk": 8,
+    "fields": {
+      "username": "anamartin",
+      "first_name": "Ana",
+      "last_name": "Martín",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-01-03T00:00:00Z",
+      "password": "anamartin",
+      "telephone_number": "634589721",
+      "license_number": 45612398741023698741,
+      "organizations": 4,
+      "email": "anamartin@gmail.com",
+      "profile_picture": ""
+    }
+  }
+]
