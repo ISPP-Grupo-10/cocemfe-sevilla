@@ -35,18 +35,15 @@
                   <input type="text" name="organization" id="organization" value="{{ organization }}" class="form-control" placeholder="Organización">
               </div>
             </div>
-            
-              
-            
           <div class="form-group2 mt-2 text-right" style="flex-direction: row;">
               <button type="submit" class="btn btn-primary">Buscar</button>
-              <a href="{% url 'professionals:professional_list' %}" class="btn btn-primary">Limpiar</a>
+              <a href="{% url 'professionals:professional_list' %}"><span class="btn btn-primary">Limpiar</span></a>
           </div>
           </form>
         </div>
         {% if request.user.is_superuser %}
         <div>
-            <a href="{% url 'professionals:create_professional' %}" class="btn btn-orange">Nuevo profesional</a>
+            <a href="{% url 'professionals:create_professional' %}" class="btn btn-orange">+ Nuevo profesional</a>
         </div>
         {% endif %}
       </div>

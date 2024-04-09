@@ -75,9 +75,8 @@ def professional_data(request, professional_id):
     professional = get_object_or_404(Professional, pk=professional_id)
     user_is_staff = request.user.is_staff or request.user.is_superuser
     if user_is_staff or request.user.pk == professional_id:
-        professional_copy = professional.copy()
-        professional_copy.password = ''
-        return render(request, 'professional_data.html', {'professional': professional_copy})
+        professional.password = ''
+        return render(request, 'professional_data.html', {'professional': professional})
     else:
         return HttpResponseForbidden("You are not authorized to view this page.")
 
