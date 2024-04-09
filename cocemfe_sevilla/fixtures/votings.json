@@ -6,7 +6,7 @@
             "vote": true,
             "date": "2024-04-03",
             "justification": "Estoy de acuerdo con la propuesta",
-            "professional": 6,
+            "professional": 2,
             "suggestion": 3
         }
     },
@@ -17,8 +17,8 @@
             "vote": false,
             "date": "2024-04-04",
             "justification": "No estoy de acuerdo con la propuesta",
-            "professional": 6,
-            "suggestion": 3
+            "professional": 2,
+            "suggestion": 4
         }
     },
     {
@@ -28,7 +28,7 @@
             "vote": true,
             "date": "2024-03-22",
             "justification": "Estoy de acuerdo con la propuesta",
-            "professional": 6,
+            "professional": 3,
             "suggestion": 5
         }
     },
@@ -39,8 +39,8 @@
             "vote": false,
             "date": "2024-03-23",
             "justification": "No estoy de acuerdo con la propuesta",
-            "professional": 6,
-            "suggestion": 5
+            "professional": 4,
+            "suggestion": 6
         }
     },
     {
@@ -50,7 +50,7 @@
             "vote": true,
             "date": "2024-03-29",
             "justification": "Estoy de acuerdo con la propuesta",
-            "professional": 6,
+            "professional": 5,
             "suggestion": 7
         }
     },
@@ -62,7 +62,7 @@
             "date": "2024-03-30",
             "justification": "No estoy de acuerdo con la propuesta",
             "professional": 6,
-            "suggestion": 7
+            "suggestion": 8
         }
     }
 ]

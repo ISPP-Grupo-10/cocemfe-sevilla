@@ -1,12 +1,26 @@
 [
   {
     "model": "professionals.professional",
+    "pk": 100,
+    "fields": {
+      "username": "admin",
+      "is_staff": true,
+      "is_active": true,
+      "is_superuser": true,
+      "date_joined": "2023-01-01T00:00:00Z",
+      "password": "admin",
+      "email": "admin@gmail.com",
+      "terms_accepted": true
+    }
+  },
+  {
+    "model": "professionals.professional",
     "pk": 1,
     "fields": {
       "username": "mariagomez",
       "first_name": "María",
       "last_name": "Gómez",
-      "is_staff": true,
+      "is_staff": false,
       "is_active": true,
       "date_joined": "2023-01-15T00:00:00Z",
       "password": "mariagomez",
