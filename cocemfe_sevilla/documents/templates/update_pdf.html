@@ -185,10 +185,6 @@
                                 <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
                                     <i class="fas fa-file-pdf"></i> Archivo actual:<span id="nombreArchivo"></span><span class="text-danger"></span>
                                 </label>
-                                <div class="doc-visualizer">
-                                    <iframe id="pdfViewer" src="{% static 'pdfjs/web/viewer.html' %}?file={{ document.pdf_file.url | urlencode }}" width="100%" height="600"></iframe>
-                                </div>
-
                                 <button type="button" class="btn btn-danger" id="deletePdfBtn">Eliminar PDF</button>
                                 {%else%}
                                 <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">

@@ -5,7 +5,7 @@ from professionals.models import Professional
 class PDFUploadForm(forms.ModelForm):
 
     pdf_file = forms.FileField(
-        widget=forms.ClearableFileInput(attrs={'multiple': True, 'accept': '.pdf'})
+        widget=forms.FileInput(attrs={'multiple': True, 'accept': '.pdf'})
     )
 
     professionals = forms.ModelMultipleChoiceField(
