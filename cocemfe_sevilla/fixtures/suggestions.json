@@ -1,0 +1,114 @@
+[
+    {
+        "model": "suggestions.suggestion",
+        "pk": 1,
+        "fields": {
+            "main": "Instalación de rampas",
+            "justification": "Las rampas son fundamentales para permitir el acceso a personas con movilidad reducida, facilitando su desplazamiento dentro de las instalaciones.",
+            "relevance": "Poco Importante",
+            "section": "",
+            "page": 1,
+            "date": "2024-04-07",
+            "professional": 2,
+            "document": 2
+        }
+    },
+    {
+        "model": "suggestions.suggestion",
+        "pk": 2,
+        "fields": {
+            "main": "Señalización en Braille",
+            "justification": "La señalización en Braille es esencial para garantizar la accesibilidad a personas con discapacidad visual, permitiéndoles navegar de manera independiente por las instalaciones.",
+            "relevance": "Importante",
+            "section": "",
+            "page": 2,
+            "date": "2024-04-08",
+            "professional": 4,
+            "document": 2
+        }
+    },
+    {
+        "model": "suggestions.suggestion",
+        "pk": 3,
+        "fields": {
+            "main": "Ampliación de puertas",
+            "justification": "Ampliar el ancho de las puertas facilitará el acceso a personas con sillas de ruedas o dispositivos de asistencia, mejorando la experiencia de usuario y cumpliendo con normativas de accesibilidad.",
+            "relevance": "Muy Importante",
+            "section": "",
+            "page": 3,
+            "date": "2024-03-16",
+            "professional": 1,
+            "document": 3
+        }
+    },
+    {
+        "model": "suggestions.suggestion",
+        "pk": 4,
+        "fields": {
+            "main": "Instalación de ascensores",
+            "justification": "La instalación de ascensores es crucial para permitir el acceso a personas con movilidad reducida a diferentes niveles de un edificio, garantizando la accesibilidad universal.",
+            "relevance": "Poco Importante",
+            "section": "",
+            "page": 4,
+            "date": "2024-03-17",
+            "professional": 3,
+            "document": 3
+        }
+    },
+    {
+        "model": "suggestions.suggestion",
+        "pk": 5,
+        "fields": {
+            "main": "Aumento de espacios de estacionamiento accesibles",
+            "justification": "Incrementar el número de espacios de estacionamiento accesibles promueve la inclusión y facilita la movilidad de personas con discapacidad, mejorando la accesibilidad del entorno.",
+            "relevance": "Importante",
+            "section": "",
+            "page": 5,
+            "date": "2024-03-21",
+            "professional": 4,
+            "document": 4
+        }
+    },
+    {
+        "model": "suggestions.suggestion",
+        "pk": 6,
+        "fields": {
+            "main": "Adaptación de baños",
+            "justification": "La adaptación de baños con equipamiento adecuado es esencial para garantizar la dignidad y autonomía de personas con discapacidad, cumpliendo con estándares de accesibilidad.",
+            "relevance": "Muy Importante",
+            "section": "",
+            "page": 6,
+            "date": "2024-03-22",
+            "professional": 5,
+            "document": 4
+        }
+    },
+    {
+        "model": "suggestions.suggestion",
+        "pk": 7,
+        "fields": {
+            "main": "Mejora de accesos peatonales",
+            "justification": "La mejora de accesos peatonales mediante la eliminación de barreras arquitectónicas facilita la movilidad de personas con discapacidad, promoviendo la inclusión y la igualdad de oportunidades.",
+            "relevance": "Poco Importante",
+            "section": "",
+            "page": 7,
+            "date": "2024-03-19",
+            "professional": 7,
+            "document": 5
+        }
+    },
+    {
+        "model": "suggestions.suggestion",
+        "pk": 8,
+        "fields": {
+            "main": "Instalación de pasamanos",
+            "justification": "La instalación de pasamanos en escaleras y pasillos facilita el desplazamiento seguro de personas con movilidad reducida, reduciendo riesgos de caídas y promoviendo la autonomía.",
+            "relevance": "Importante",
+            "section": "",
+            "page": 8,
+            "date": "2024-03-20",
+            "professional": 8,
+            "document": 5
+        }
+    }
+]
