@@ -14,8 +14,6 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator
 from django.conf import settings
-import os
-from django.http import JsonResponse
 
 @login_required
 def upload_pdf(request):
@@ -165,28 +163,11 @@ def update_pdf(request, pk):
                 
                 return redirect('view_pdf_admin', updated_document.id)
         else:
+            # Aquí pasamos la instancia del documento para que el formulario se inicialice con los datos del documento.
             form = PDFUploadForm(instance=document)
         return render(request, 'update_pdf.html', {'form': form, 'document': document, 'professionals_not_superuser': professionals_not_superuser})
     else:
         return render(request, '403.html')
-
-
-
-@login_required
-def delete_pdf_form(request, pk):
-    document = get_object_or_404(Document, pk=pk)
-    if request.user.is_superuser:
-        file_path = document.pdf_file.path
-
-        if os.path.exists(file_path):
-            os.remove(file_path)
-
-        document.pdf_file = None
-        document.save()
-
-        return JsonResponse({'message': 'Archivo adjunto eliminado correctamente'})
-    else:
-        return JsonResponse({'error': 'No tienes permiso para eliminar este archivo adjunto'}, status=403)
 
 @login_required
 def delete_pdf(request, pk):

@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
-{% load static %}
-{% block title %}Modificar Documentos{% endblock %}
+{% block title %}Subir Documentos{% endblock %}
 {% block encabezado %}{% endblock %}
 {% block contenido %}
     <!DOCTYPE html>
@@ -13,7 +12,7 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-ZAElWN6PqB8kyByGWGdIV6yB/wWw+2sBOnTgCZlb5B5KZl3IFIKo3sggs2pihGzwCwPbLjBOvDT6xg6lL7sR7Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
-        <title>Modificar Documentos</title>
+        <title>Subir Documentos</title>
         <style>
             body {
                 color: #000;
@@ -67,7 +66,7 @@
                 font-weight: 400;
                 height: 43px;
                 cursor: pointer;
-                background-color: rgba(0, 162, 151, 0.842);
+                background-color: rgba(0, 162, 151, 0.842); /* Color del botón "Crear" */
                 color: white;
                 border: none;
             }
@@ -90,20 +89,12 @@
                 box-shadow: 0 0 10px rgba(0, 165, 153, 0.3);
             }
         
+            /* Hacer el formulario más estrecho */
             .col-xl-7,
             .col-lg-8,
             .col-md-9,
             .col-11 {
-                max-width: 600px;
-            }
-            .card.form-container {
-                height: 80%%; 
-                overflow-y: auto; 
-            }
-            
-            .professional-list-container {
-                max-height: 150px;
-                overflow-y: auto;
+                max-width: 600px; /* Ajusta el ancho según tus necesidades */
             }
         </style>
     </head>
@@ -177,47 +168,36 @@
                         </div>
                         <div class="row justify-content-between text-left">
                             <div class="form-group col-12 flex-column d-flex mb-4">
-                                {% if document.pdf_file %}
                                 <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                                    <i class="fas fa-file-pdf"></i> Archivo actual:<span id="nombreArchivo"></span><span class="text-danger"></span>
+                                    <i class="fas fa-file-pdf"></i> Seleccione un archivo<span class="text-danger"> *</span>
                                 </label>
-                                <button type="button" class="btn btn-danger" id="deletePdfBtn">Eliminar PDF</button>
-                                {%else%}
-                                <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                                    <i class="fas fa-file-pdf"></i> Selecciona un archivo:<span class="text-danger"> *</span>
-                                </label>
-                                {{form.pdf_file}}
-                                {% endif %}
+                                {{ form.pdf_file }}
                                 {% for error in form.pdf_file.errors %}
                                     <span class="error text-danger">{{ error }}</span>
                                 {% endfor %}
                             </div>
-                        </div>                                                                    
+                        </div>
                         <div class="row justify-content-between text-left">
                             <div class="form-group col-12 flex-column d-flex mb-4">
                                 <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
                                     <i class="fas fa-users"></i> Seleccione los revisores
                                 </label>
-                                <input type="text" id="searchProfessional" class="form-control mb-2" placeholder="Buscar por nombre...">
-                                <div id="professionalListContainer" class="professional-list-container" style="text-align: left; margin-left: 20px; max-height: 200px; overflow-y: auto;">
-                                    <div id="professionalList" class="professional-list">
-                                        {% for professional in form.professionals.field.queryset %}
-                                            {% if professional in professionals_not_superuser %}
-                                                <label style="display: block; margin-left: 0;">
-                                                    <input type="checkbox" id="id_professional_{{ professional.id }}" name="professionals" value="{{ professional.id }}" {% if professional in document.professionals.all %}checked{% endif %}>
-                                                    {{ professional.first_name }} {{ professional.last_name }}
-                                                </label>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </div>
-                                </div>
+                                {% for professional in form.professionals.field.queryset %}
+                                    {% if professional in professionals_not_superuser %}
+                                        <input type="checkbox" id="id_professional_{{ professional.id }}" name="professionals" value="{{ professional.id }}" {% if professional in document.professionals.all %}checked{% endif %}>
+                                        <label for="id_professional_{{ professional.id }}">{{ professional.username }}</label><br>
+                                    {% endif %}
+                                {% endfor %}
+                                {% for error in form.professionals.errors %}
+                                    <span class="error text-danger">{{ error }}</span>
+                                {% endfor %}
                             </div>
-                        </div>                        
+                        </div>
                         <div class="row justify-content-start">
                             <div class="form-group col-sm-6">
                                 <div class="row justify-content-start">
                                     <div class="form-group col-sm-6 text-left"> 
-                                        <button type="submit" class="btn-block">Guardar</button>
+                                        <button type="submit" class="btn-block">Guardar Cambios</button>
                                     </div>
                                 </div>
                             </div>
@@ -228,62 +208,4 @@
         </div>
     </body>
     </html>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var input = document.getElementById("searchProfessional");
-            var professionalList = document.getElementById("professionalList");
-    
-            input.addEventListener("input", function () {
-                var filter = input.value.toUpperCase();
-                var professionals = professionalList.getElementsByTagName("label");
-    
-                for (var i = 0; i < professionals.length; i++) {
-                    var professional = professionals[i];
-                    var txtValue = professional.textContent || professional.innerText;
-    
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        professional.style.display = "block"; 
-                    } else {
-                        professional.style.display = "none"; 
-                    }
-                }
-    
-                if (filter.trim() === "") {
-                    for (var i = 0; i < professionals.length; i++) {
-                        professionals[i].style.display = "block";
-                    }
-                }
-            });
-        });
-    </script>
-    <script>
-        var nombreArchivoCompleto = "{{ document.pdf_file.name }}";
-        
-        var nombreArchivoSinPdf = nombreArchivoCompleto.replace("pdfs/", "").replace(".pdf","").replace("_"," ");
-
-        document.getElementById("nombreArchivo").textContent = nombreArchivoSinPdf;
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const deletePdfBtn = document.getElementById("deletePdfBtn");
-    
-            deletePdfBtn.addEventListener("click", function () {
-                if (confirm("¿Estás seguro de que deseas eliminar este PDF?")) {
-                    const pk = "{{ document.pk }}"; 
-                    const xhr = new XMLHttpRequest();
-                    xhr.open("POST", "{% url 'delete_pdf_form' 0 %}".replace("0", pk));
-                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
-                    xhr.onload = function () {
-                        if (xhr.status === 200) {
-                            location.reload();
-                        } else {
-                            console.error("Error al eliminar el PDF");
-                        }
-                    };
-                    xhr.send();
-                }
-            });
-        });
-    </script>
-    
 {% endblock %}
