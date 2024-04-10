@@ -66,15 +66,19 @@ def selenium_converter(file_path, download_directory):
 
     # Configuración del navegador
     chrome_options = webdriver.ChromeOptions()
-    #chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--headless')
     chrome_options.add_argument('--disable-gpu')
     chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--ignore-certificate-errors')
+    chrome_options.add_argument('--disable-web-security')
+    chrome_options.add_argument('--ignore-urlfetcher-cert-requests')
     prefs = {
     "download.default_directory": download_directory,
     "download.prompt_for_download": False,
     "download.directory_upgrade": True
     }
     chrome_options.add_experimental_option("prefs", prefs)
+
     driver = webdriver.Chrome(options=chrome_options)
     driver.get('https://www.pdf2go.com/es/convertir-de-pdf')  # Reemplaza 'URL_de_la_página_web' con la URL de la página que deseas automatizar
 
@@ -92,10 +96,10 @@ def selenium_converter(file_path, download_directory):
         #consent_paragraph.click()
         print("despues del click")
         # Esperar hasta que la página esté completamente cargada
-        button = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH,  "//div[@class='upload-container']//button[contains(text(), 'Seleccionar archivo')]")))
+        button = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH,  "//div[@class='upload-container']//button[contains(., 'Seleccionar archivo')]")))
         print("despues del boton 2")
         # Encontrar y hacer clic en el botón
-        button = driver.find_element(By.XPATH, "//div[@class='upload-container']//button[contains(text(), 'Seleccionar archivo')]")
+        button = driver.find_element(By.XPATH, "//div[@class='upload-container']//button[contains(., 'Seleccionar archivo')]")
         print("despues del boton 3")
         button.click()
         print("hago click")
@@ -111,19 +115,31 @@ def selenium_converter(file_path, download_directory):
         form = WebDriverWait(driver, 120).until(EC.presence_of_element_located((By.ID, "sendform")))
         print("despues del form")
         # Localizar el elemento <strong> con texto "Empezar" dentro del formulario
-        empezar_button = form.find_element(By.XPATH, '//form[@id="sendform"]//strong[contains(text(), "Empezar")]')
+        empezar_button = form.find_element(By.XPATH, '//form[@id="sendform"]//strong[contains(., "Empezar")]')
         print("despues del boton 4")
         empezar_button.click()
 
         # Eliminar el archivo original
+        #C:\Users\danie\OneDrive\Desktop\ISPP\cocemfe-sevilla-1\cocemfe_sevilla\media\pdfs\PRUEBA-2.pdf
         os.remove(file_path)
 
         time.sleep(2)
 
+
+        
+        cookie_panel = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "fc-consent-root")))
+        driver.execute_script("arguments[0].parentNode.removeChild(arguments[0])", cookie_panel)
+        print("Despues de quitar consent")
+        #Pantalla de Consentir
+
+
         # Esperar hasta que el enlace de descarga esté presente y hacer clic en él
-        descargar_link = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, '//div[@id="app"]//span[contains(text(), "Descargar")]')))
+        #descargar_link = driver.find_element((By.XPATH, '//div[@id="app"]//span[contains(., "Descargar")]'))
+        descargar_link = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, '//div[@id="app"]//span[contains(., "Descargar")]')))
+        print("Boton de descargar visto")
         descargar_link.click()
         print("despues del boton 5")
+
 
         # Puedes agregar más acciones aquí, como enviar texto a campos de entrada, hacer clic en enlaces, etc.
 
