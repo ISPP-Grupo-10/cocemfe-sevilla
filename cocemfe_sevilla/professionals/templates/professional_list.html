@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 {% load static %}
 {% block contenido %}
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-danger" role="alert">
+    {{ message }}
+</div>
+{% endfor %}
+{% endif %}
 <link rel="stylesheet" href="{% static 'css/list_pdf.css' %}"/>
 <div class="flex flex-col w-full min-h-screen bg-white">
   <div class="border-b dark:border-gray-700">

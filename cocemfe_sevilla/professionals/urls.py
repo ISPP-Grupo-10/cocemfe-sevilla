@@ -20,4 +20,6 @@ urlpatterns = [
     path('requests/<int:pk>/update', update_request, name='update_request'),
     path('chats/', request_document_chats, name="chats"),
     path('change_password/', change_password, name='update_password'),
+    path('verify_email/<str:uidb64>/', VerifyEmailView.as_view(), name='verify_email'),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

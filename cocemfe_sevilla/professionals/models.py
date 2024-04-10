@@ -19,6 +19,7 @@ class Professional(AbstractUser):
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     access_documents = models.ManyToManyField('documents.Document', blank=True)
     terms_accepted = models.BooleanField(default=False)
+    email_verified = models.BooleanField(default=False)
 
     def __str__(self):
         return self.username
