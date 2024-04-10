@@ -177,21 +177,24 @@
                                 {% endfor %}
                             </div>
                         </div>
-                        <div class="row justify-content-between text-left">
-                            <div class="form-group col-12 flex-column d-flex mb-4">
-                                <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                                    <i class="fas fa-users"></i> Seleccione los revisores
-                                </label>
-                                {% for professional in form.professionals.field.queryset %}
-                                    {% if professional in professionals_not_superuser %}
-                                        <input type="checkbox" id="id_professional_{{ professional.id }}" name="professionals" value="{{ professional.id }}">
-                                        <label for="id_professional_{{ professional.id }}">{{ professional.username }}</label><br>
-                                    {% endif %}
-                                {% endfor %}
-                                {% for error in form.professionals.errors %}
-                                    <span class="error text-danger">{{ error }}</span>
-                                {% endfor %}
+                        <div class="form-group col-12 flex-column d-flex mb-4">
+                            <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                Seleccione los revisores<span class="text-danger"> </span>
+                            </label>
+                            <input type="text" id="searchProfessional" class="form-control mb-2" placeholder="Buscar por nombre...">
+                            <div id="professionalListContainer" class="professional-list-container" style="text-align: left; margin-left: 20px; max-height: 200px; overflow-y: auto;">
+                                <div id="professionalList" class="professional-list">
+                                    {% for professional in form.professionals.field.queryset %}
+                                        {% if professional in professionals_not_superuser %}
+                                            <label style="display: block; margin-left: 0;">
+                                                <input type="checkbox" id="id_professional_{{ professional.id }}" name="professionals" value="{{ professional.id }}">
+                                                {{ professional.first_name }} {{ professional.last_name }}
+                                            </label>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
                             </div>
+                            
                         </div>
                         <div class="row justify-content-start">
                             <div class="form-group col-sm-6">
@@ -208,4 +211,34 @@
         </div>
     </body>
     </html>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var input = document.getElementById("searchProfessional");
+            var professionalList = document.getElementById("professionalList");
+    
+            input.addEventListener("input", function () {
+                var filter = input.value.toUpperCase();
+                var professionals = professionalList.getElementsByTagName("label");
+    
+                for (var i = 0; i < professionals.length; i++) {
+                    var professional = professionals[i];
+                    var txtValue = professional.textContent || professional.innerText;
+    
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        professional.style.display = "block"; // Mostrar como bloque si coincide con la búsqueda
+                    } else {
+                        professional.style.display = "none"; // Ocultar si no coincide con la búsqueda
+                    }
+                }
+    
+                if (filter.trim() === "") {
+                    // Si el campo de búsqueda está vacío, mostrar todos los profesionales en formato de bloque
+                    for (var i = 0; i < professionals.length; i++) {
+                        professionals[i].style.display = "block";
+                    }
+                }
+            });
+        });
+    </script>
 {% endblock %}
