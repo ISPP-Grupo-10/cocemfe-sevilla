@@ -118,7 +118,10 @@ def edit_user_view(request, pk):
             elif request.user.id == professional.id:
                 form.save()
                 previous_url = request.META.get('HTTP_REFERER')
-                return redirect(previous_url + '?message=Datos de perfil actualizados&status=Success')
+                if previous_url:
+                    return redirect(previous_url + '?message=Datos de perfil actualizados&status=Success')
+                else:
+                    return redirect('/?message=Datos de perfil actualizados&status=Success')
             else:
                 return render(request, '403.html')
         else:
