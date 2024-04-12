@@ -90,7 +90,7 @@
 
             <div class="d-flex justify-content-end align-items-center">
                 <div class="me-5">
-                    <button class="btn btn-orange" type="button">Perfil</button>
+                    <a href="{% url 'professionals:professional_detail' pk=user.id  %}" class="btn btn-orange">Perfil</a>
                 </div>
         {% endif %}
                 <div>

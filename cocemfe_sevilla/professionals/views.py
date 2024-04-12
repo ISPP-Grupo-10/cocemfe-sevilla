@@ -112,12 +112,13 @@ def edit_user_view(request, pk):
     if request.method == 'POST':
         form = ProfessionalForm(request.POST, request.FILES, user_is_staff=user_is_staff, instance=professional)
         if form.is_valid():
-            if user_is_staff:
+            if user_is_staff and not request.user.id == professional.id:
                 form.save()
                 return redirect('/professionals/?message=Profesional editado&status=Success')
             elif request.user.id == professional.id:
                 form.save()
-                return redirect('/professionals/?message=Datos de perfil actualizados&status=Success')
+                previous_url = request.META.get('HTTP_REFERER')
+                return redirect(previous_url + '?message=Datos de perfil actualizados&status=Success')
             else:
                 return render(request, '403.html')
         else:
