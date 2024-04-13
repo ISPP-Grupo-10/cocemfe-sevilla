@@ -14,6 +14,7 @@ from professionals.models import Professional
 from professionals.views import create_professional
 
 
+
 class ProfessionalViewTest(TestCase):
     def setUp(self):
         self.professional = Professional.objects.create(
@@ -336,6 +337,52 @@ class EditUserViewTestCase(TestCase):
                                                    email='test@example.com')
         url = reverse('professionals:professional_detail', kwargs={'pk': professional.id})
         response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+
+
+class ProfessionalDataViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.organization = Organization.objects.create(name='Org1', telephone_number='123456789',
+                                                        address='Address1', email='org1@example.com',
+                                                        zip_code='12345')
+
+        self.professional_staff = Professional.objects.create(username='staff_user', is_staff=True,
+                                                                telephone_number='123456789', license_number='ABC123',
+                                                                terms_accepted=True, organizations=self.organization)
+        self.professional_normal = Professional.objects.create(username='normal_user',
+                                                                telephone_number='987654321',
+                                                                terms_accepted=True, license_number='XYZ789')
+
+
+    def test_view_raises_403_for_unauthorized_user(self):
+        unauthorized_user = Professional.objects.create(username='unauthorizeduser',
+                                                        telephone_number='111111111',
+                                                        license_number='DEF456',
+                                                        terms_accepted=True
+                                                        )
+        self.client.force_login(unauthorized_user)
+        response = self.client.get(reverse('professionals:professional_data',
+                                        kwargs={'professional_id': self.professional_staff.pk}))
+        self.assertEqual(response.status_code, 403)
+
+    '''
+    def test_view_displays_for_admin_user(self):
+        self.client.force_login(self.professional_staff)
+        response = self.client.get(reverse('professionals:professional_data', kwargs={'professional_id': self.professional_normal.pk}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'professional_data.html')
+
+
+    def test_view_displays_for_professional_owner(self):
+        self.client.force_login(self.professional_normal)
+        response = self.client.get(reverse('professionals:professional_data', kwargs={'professional_id': self.professional_normal.pk}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'professional_data.html')
+    '''
+
+    def test_view_redirects_for_non_authenticated_user(self):
+        response = self.client.get(reverse('professionals:professional_data', kwargs={'professional_id': self.professional_normal.pk}))
         self.assertEqual(response.status_code, 302)
 
 

@@ -4,9 +4,9 @@ from professionals.models import Professional
 
 class Suggestion(models.Model):
     RELEVANCE_CHOICES = (
-        ('urgente', 'Urgente'),
-        ('importante', 'Importante'),
-        ('poco', 'Poco importante'),
+        ('Muy importante', 'Muy importante'),
+        ('Importante', 'Importante'),
+        ('Poco importante', 'Poco importante'),
     )
     main = models.CharField(max_length=255)
     justification = models.TextField()

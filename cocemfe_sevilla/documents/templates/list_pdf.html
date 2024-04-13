@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-
+{% block title %}Listado de Documentos{% endblock %}
 {% block contenido %}
 
 <link rel="stylesheet" href="{% static 'css/list_pdf.css' %}"/>
@@ -45,15 +45,15 @@
           <table class="w-full caption-bottom text-sm">
             <thead class="[&amp;_tr]:border-b">
               <tr class="border-b border-gray-200 transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 style="color: black;">
+                <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 style="color: black;"">
                     Nombre
                   </th>
                                   
                 <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
-                  Fecha de Subida
+                  Inicio de Aportaciones
                 </th>
                 <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
-                  Fecha de Cierre
+                  Inicio de Votaciones
                 </th>
                 <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
                   Estado
@@ -78,8 +78,16 @@
         <td class="p-4 align-middle">
             <a href="{% url 'view_pdf_admin' doc.id %}" class="font-semibold text-[#00bfa5]" style="max-width: 400px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block;">{{ doc.name }}</a>
         </td>
-        <td class="p-4 align-middle">{{ doc.start_date }}</td>
-        <td class="p-4 align-middle">{{ doc.end_date }}</td>
+        {% if doc.status == 'Votaciones' or doc.status == 'En revisión' or doc.status == 'Revisado' %}
+        <td class="p-4 align-middle">Periodo Cerrado</td>
+        {%else%}
+        <td class="p-4 align-middle">{{ doc.suggestion_start_date }}</td>
+        {%endif%}
+        {% if doc.status == 'En revisión' or doc.status == 'Revisado' %}
+        <td class="p-4 align-middle">Periodo Cerrado</td>
+        {%else%}
+        <td class="p-4 align-middle">{{ doc.voting_start_date }}</td>
+        {%endif%}
         <td class="p-4 align-middle">
             {% for status_value, status_display in doc.STATUS %}
                 {% if doc.status == status_value %}

@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.urls import path
 from .views import *
+from .views import professional_data
 from django.conf.urls.static import static
 from .views import change_password
 
@@ -9,6 +10,7 @@ app_name = 'professionals'
 urlpatterns = [
     path('', professional_list, name='professional_list'),
     path('create_professional/', create_professional, name='create_professional'),
+    path('professional_data/<int:professional_id>/', professional_data, name='professional_data'),
     path('<int:id>/delete/', delete_professional, name='delete_professional'),
     path('<int:pk>/', edit_user_view, name='professional_detail'),
     path('login/', custom_login, name='login'),
@@ -17,5 +19,7 @@ urlpatterns = [
     path('requests/create/', create_request, name='create_request'),
     path('requests/<int:pk>/update', update_request, name='update_request'),
     path('chats/', request_document_chats, name="chats"),
-    path('change_password/', change_password, name='update_password'), # URL TEMPORAL, INTEGRAR CON PANTALLA PERFIL USUARIO
+    path('change_password/', change_password, name='update_password'),
+    path('verify_email/<str:uidb64>/', VerifyEmailView.as_view(), name='verify_email'),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
