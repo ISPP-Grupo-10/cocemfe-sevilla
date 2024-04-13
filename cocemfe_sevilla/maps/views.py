@@ -25,8 +25,12 @@ def map_index(request):
         # Crear un control de tipo Popup con el listado de documentos
         popup_content = "<h3>{}</h3><ul>".format(city)
         for document in documents:
-            popup_content += "<li><a href='/documents/view_pdf/{0}' target='_top'>{1}</a></li>".format(document.id, document.name)
+            if request.user.is_staff:
+                popup_content += "<li><a href='/documents/view_pdf/{0}' target='_top'>{1}</a></li>".format(document.id, document.name)
+            else:
+                popup_content += document.name
         popup_content += "</ul>"
+
         
         folium.Popup(popup_content).add_to(marker)
         documents_by_city[city] = documents
