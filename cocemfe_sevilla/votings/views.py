@@ -36,7 +36,7 @@ def voting_vote(request, suggestion_id):
     
     
 def voting_statistics(request, pk):
-    document = Document.objects.get(pk=pk)
+    document = get_object_or_404(Document, pk=pk)
     suggestions = Suggestion.objects.filter(document=document)
     
     suggestion_data = []
