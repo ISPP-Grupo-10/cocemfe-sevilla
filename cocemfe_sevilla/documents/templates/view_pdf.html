@@ -34,6 +34,9 @@
     <a href="{% url 'update_pdf' pk=pdf.pk %}">
         <button type="button" class="btn btn-primary">Editar Documento</button>
     </a>
+    <a href="{% url 'votings:voting_statistics' pk=pdf.pk %}">
+        <button type="button" class="btn btn-primary">Estadísticas</button>
+    </a>
     {% endif %}
     <div class="doc-info">
         <p><strong>Documento:</strong> {{ pdf.name }}</p>
