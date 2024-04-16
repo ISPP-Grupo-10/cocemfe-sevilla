@@ -8,7 +8,6 @@ from django import forms
 from .models import Professional
 from django.contrib.auth.hashers import make_password 
 from django.forms import ValidationError
-from django.contrib.auth import password_validation
 
 class ProfessionalForm(forms.ModelForm):
     class Meta:
@@ -35,9 +34,11 @@ class ProfessionalForm(forms.ModelForm):
         self.fields.pop('password')
 
     def clean_email(self):
+        email = self.cleaned_data.get('email')
         if not (self.instance.is_superuser or self.instance.is_staff):
-            return self.cleaned_data.get('email', self.instance.email)
-        return self.cleaned_data['email']
+            if email and Professional.objects.exclude(pk=self.instance.pk).filter(email=email).exists():
+                raise forms.ValidationError("Este correo electrónico ya está en uso.")
+        return email
 
     def clean_password(self):
         if not (self.instance.is_superuser or self.instance.is_staff):
@@ -103,6 +104,16 @@ class ProfessionalCreationForm(forms.ModelForm):
     profile_picture = forms.ImageField(required=False)
     password = forms.CharField(widget=forms.HiddenInput(), required=False)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['email'].widget.attrs['readonly'] = False  # Allow editing email field
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if Professional.objects.filter(email=email).exists():
+            raise forms.ValidationError("Este correo electrónico ya está en uso.")
+        return email
+
     def save(self, commit=True):
         professional = super().save(commit=False)
         password = self.cleaned_data.get('password')
@@ -117,7 +128,8 @@ class ProfessionalCreationForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         return cleaned_data
- 
+
+
 class RequestCreateForm(forms.ModelForm):
     class Meta:
         model = Request
