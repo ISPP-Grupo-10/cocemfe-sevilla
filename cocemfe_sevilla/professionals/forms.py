@@ -34,9 +34,11 @@ class ProfessionalForm(forms.ModelForm):
         self.fields.pop('password')
 
     def clean_email(self):
+        email = self.cleaned_data.get('email')
         if not (self.instance.is_superuser or self.instance.is_staff):
-            return self.cleaned_data.get('email', self.instance.email)
-        return self.cleaned_data['email']
+            if email and Professional.objects.exclude(pk=self.instance.pk).filter(email=email).exists():
+                raise forms.ValidationError("Este correo electrónico ya está en uso.")
+        return email
 
     def clean_password(self):
         if not (self.instance.is_superuser or self.instance.is_staff):
