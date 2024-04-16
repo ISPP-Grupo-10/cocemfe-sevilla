@@ -8,7 +8,6 @@ from django import forms
 from .models import Professional
 from django.contrib.auth.hashers import make_password 
 from django.forms import ValidationError
-from django.contrib.auth import password_validation
 
 class ProfessionalForm(forms.ModelForm):
     class Meta:
