@@ -28,6 +28,7 @@ urlpatterns = [
     path('documents/', include('documents.urls')),
     path('professionals/', include('professionals.urls')),
     path('organizations/', include('organizations.urls')),
+    path('maps/', include('maps.urls')),
     path('suggestions/', include('suggestions.urls')),
     path('votings/', include('votings.urls')),
     path('accounts/login/', profViews.custom_login),

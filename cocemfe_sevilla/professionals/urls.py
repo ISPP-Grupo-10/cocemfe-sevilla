@@ -1,9 +1,8 @@
 from django.conf import settings
 from django.urls import path
-from .views import *
 from .views import professional_data
 from django.conf.urls.static import static
-from .views import change_password
+from .views import professional_list, create_professional, delete_professional, edit_user_view, custom_login, custom_logout, request_list, create_request, update_request, request_document_chats, change_password, VerifyEmailView
 
 app_name = 'professionals'
 
