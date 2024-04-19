@@ -1,11 +1,8 @@
 import random
 import string
 from django import forms
-from django.contrib.auth import get_user_model
 from organizations.models import Organization
 from .models import Professional, Request
-from django import forms
-from .models import Professional
 from django.contrib.auth.hashers import make_password 
 from django.forms import ValidationError
 

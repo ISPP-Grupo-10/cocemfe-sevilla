@@ -366,19 +366,6 @@ class ProfessionalDataViewTest(TestCase):
                                         kwargs={'professional_id': self.professional_staff.pk}))
         self.assertEqual(response.status_code, 403)
 
-    '''def test_view_displays_for_admin_user(self):
-        self.client.force_login(self.professional_staff)
-        response = self.client.get(reverse('professionals:professional_data', kwargs={'professional_id': self.professional_normal.pk}))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'professional_data.html')
-
-
-    def test_view_displays_for_professional_owner(self):
-        self.client.force_login(self.professional_normal)
-        response = self.client.get(reverse('professionals:professional_data', kwargs={'professional_id': self.professional_normal.pk}))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'professional_data.html')'''
-
     def test_view_redirects_for_non_authenticated_user(self):
         response = self.client.get(reverse('professionals:professional_data', kwargs={'professional_id': self.professional_normal.pk}))
         self.assertEqual(response.status_code, 302)
