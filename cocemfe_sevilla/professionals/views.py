@@ -1,26 +1,18 @@
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 from django.views import View
 from django.contrib import messages
 from django.contrib.auth import logout, login, authenticate
-
-from .utils import get_professional, validate_email
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.contrib.auth.tokens import default_token_generator
+from .utils import get_professional
+from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
 from documents.models import Document
 from .models import Professional, Request
-from .forms import ProfessionalCreationForm, ProfessionalForm, SecurePasswordChangeForm
+from .forms import ProfessionalCreationForm, ProfessionalForm, SecurePasswordChangeForm, RequestCreateForm, RequestUpdateForm
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.auth import logout, login, authenticate
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_protect
-from django.core.mail import send_mail
-from django.template.loader import render_to_string
-from .forms import ProfessionalForm, RequestCreateForm, RequestUpdateForm
 from django.contrib.auth.hashers import make_password 
 from django.http import HttpResponseForbidden
 import random
