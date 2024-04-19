@@ -3,13 +3,65 @@
 {% block encabezado %}
 {% endblock %}
 {% block contenido %}
+<style>
+    body, html {
+        height: 95%;
+        margin: 0;
+    }
+    .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around; /* Espacio entre los divs */
+        align-items: stretch;
+        height: 100%;
+    }
+    .top {
+        display: flex;
+        height: 65%;
+        justify-content: space-between; /* Espacio entre los divs */
+    }
+    .left {
+        width: 48%;
+        background-color: #f7f7f7;
+        border-radius: 15px;
+        padding: 20px;
+    }
+    .right {
+        width: 48%;
+        background-color: #f7f7f7;
+        border-radius: 15px;
+        padding: 20px;
+    }
+    .bottom {
+        height: 25%;
+        background-color: #f7f7f7;
+        border-radius: 15px;
+        padding: 20px;
+    }
+    .button-container {
+        display: flex;
+        align-items: center;
+        align-content: center;
+        justify-content: space-around; /* Espacio entre los divs */
+    }
+    .button {
+        display: inline-block;
+        background-color: #003c69;
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+    .button a {
+        color: #ffffff !important; /* Aumentamos la especificidad */
+        text-decoration: none; /* Quitar subrayado del enlace */
+    }
+</style>
 <div class="container">
-    <div class="row">
-        <div class="col-6">
-            <div id='calendar' class='my-4 mt-8 space-y-1 mb-4'></div>
+    <div class="top">
+        <div class="left">
+            <div id='calendar' class='my-2 space-y-1 mb-4'></div>
         </div>
-        <div class="col-6">
-            <h3 class="my-3">Documentos</h3>
+        <div class="right">
+            <h3 class="my-2 text-center">Documentos</h3>
             <form method="GET" action="{% url 'list_pdf' %}">
                 <div class="input-group mb-3 col-3">
                     <button class="btn btn-outline-secondary" type="submit" id="button-addon1">Buscar</button>
@@ -23,9 +75,9 @@
                     {% endif %}
                 </div>
             </form>
-            <div class="relative w-full overflow-auto" style="max-height: 405px;">
-                <table class="w-full caption-bottom text-sm">
-                    <thead class="[&amp;_tr]:border-b">
+            <div class="relative w-full overflow-auto" style="max-height: 400px;">
+                <table class="w-full caption-bottom text-sm ">
+                    <thead class="[&amp;_tr]:border-b sticky">
                         <tr class="border-b border-gray-200 transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                             <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 style="color: black;"">
                                 Nombre
@@ -65,6 +117,22 @@
             </div>
         </div>
     </div>
+    {% if request.user.is_superuser %}
+        <div class="bottom">
+            <h3 class="my-2 mb-5 text-center">Acciones rápidas</h3>
+            <div class="button-container">
+                <div class="button">
+                    <a href="{% url 'upload_pdf' %}">+ Subir documento</a>
+                </div>
+                <div class="button">
+                    <a href="{% url 'professionals:create_professional' %}">+ Nuevo profesional</a>
+                </div>
+                <div class="button">
+                    <a href="{% url 'organizations:create_organization' %}">+ Añadir organización</a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 </div>
 
 <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.11/index.global.min.js'></script>
