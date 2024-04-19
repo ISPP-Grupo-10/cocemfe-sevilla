@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import User
 from documents.models import Document
 from professionals.models import Professional
 
