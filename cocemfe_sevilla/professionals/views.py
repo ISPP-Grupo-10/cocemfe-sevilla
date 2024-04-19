@@ -31,7 +31,7 @@ def custom_login(request):
         
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
-        if user is not None and (professional.email_verified == True or professional.is_superuser==True):
+        if user is not None and (professional.email_verified or professional.is_superuser):
             login(request, user)
             return redirect('/')
         else:
@@ -49,7 +49,6 @@ def is_admin(user):
 
 @user_passes_test(is_admin)
 def create_professional(request):
-    messages=[]
     if request.method == 'POST':
         form = ProfessionalCreationForm(request.POST, request.FILES)
         if form.is_valid():
