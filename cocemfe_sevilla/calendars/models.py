@@ -1,8 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import User
-from django.conf import settings
 from professionals.models import Professional
 from documents.models import Document
+from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 # Create your models here.
 class Events(models.Model):
@@ -19,3 +19,9 @@ class Events(models.Model):
     datetime = models.DateTimeField(null=True,blank=True)
     document = models.ForeignKey(Document, on_delete=models.CASCADE, null=False)
     type = models.CharField(max_length=20, choices=TIPO_CHOICES.choices, default=TIPO_CHOICES.REUNION)
+    
+    def clean(self):
+        super().clean()
+
+        if self.datetime and self.datetime < timezone.now():
+            raise ValidationError("La fecha y hora del evento no pueden ser anteriores a la fecha y hora actuales.")

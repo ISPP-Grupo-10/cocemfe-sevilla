@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
 from .models import Events
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.mail import send_mail
@@ -7,28 +7,46 @@ from .forms import EventForm
 from professionals.views import is_admin
 from documents.models import Document
 from django.db import IntegrityError
-
+from django.utils import timezone
+from datetime import datetime
+from django.utils.timezone import make_aware
 
 @user_passes_test(is_admin)
-def create_event(title, description, datetime, document, creator, type):
+def create_event(request, title, description, event_datetime, document, creator, type):
     try:
+        
+        event_datetime = make_aware(event_datetime)
+
+        if event_datetime < timezone.now():
+            raise ValueError("La fecha del evento no puede ser anterior a la fecha actual")
+        
         event = Events.objects.create(
             creator=creator, 
             title=title,
             description=description,
-            datetime=datetime,
+            datetime=event_datetime,
             document=document,
             type=type
         )
         return event  
-    except  Exception as e:
+    except Exception as e:
         print(f"Error al crear el evento: {e}")
-        return None
-    
+        return HttpResponseBadRequest('Error al crear el evento:', str(e))
+
+
 @user_passes_test(is_admin)
 def create_modal_event(request):
     try:
-        document = get_object_or_404(Document, pk= request.POST.get('document_id'))
+        document = get_object_or_404(Document, pk=request.POST.get('document_id'))
+        event_datetime = request.POST.get('datetime')
+        
+        datetime_object = datetime.fromisoformat(event_datetime)
+        datetime_object = timezone.make_aware(datetime_object, timezone.get_current_timezone())
+
+        # Comparar con la fecha y hora actual
+        if datetime_object < timezone.now():
+            raise ValueError("La fecha del evento no puede ser anterior a la fecha actual")
+        
         event = Events.objects.create(
             creator=request.user, 
             title=request.POST.get('title'),
@@ -38,9 +56,10 @@ def create_modal_event(request):
             type=request.POST.get('type'),
         )
         return HttpResponse('Evento creado con éxito')  
-    except  Exception as e:
+    except Exception as e:
         print(f"Error al crear el evento: {e}")
-        return None
+        return JsonResponse({'error': f'Error al crear el evento: {e}'}, status=400)
+
 
 @user_passes_test(is_admin)
 def new_event(request):
@@ -53,7 +72,6 @@ def new_event(request):
                 event.save() 
                 return redirect('/calendars')
             except IntegrityError as e:
-                # Manejar la excepción de violación de restricción de integridad
                 error_message = "Error al crear el evento: {}".format(e)
                 return render(request, 'create_event.html', {'form': form, 'error_message': error_message})
     else:

@@ -41,11 +41,11 @@
             </div>
             <div class="legend-item">
                 <div style="width: 20px; height: 20px; background-color: yellow; border-radius: 50%; margin-right: 10px;"></div>
-                <span>Revisión</span>
+                <span>Revisiones</span>
             </div>
             <div class="legend-item">
                 <div style="width: 20px; height: 20px; background-color: blue; border-radius: 50%; margin-right: 10px;"></div>
-                <span>Reunión</span>
+                <span>Reuniones</span>
             </div>
         </div>
     </div>
@@ -95,7 +95,7 @@
             calendar.render();
     
             // Función para manejar el click en el botón eliminar
-            {% if user.is_superuser %}
+            { % if user.is_superuser % }
                 $('#eliminarEventoBtn').click(function() {
                     var eventId = $(this).attr('data-event-id');
                     window.location.href = "/calendars/delete/" + eventId;
