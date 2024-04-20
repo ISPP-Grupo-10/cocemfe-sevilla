@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
+from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
 from .models import Events
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.mail import send_mail
@@ -105,6 +106,20 @@ def new_event(request):
     else:
         form = EventForm()
     return render(request, 'create_event.html', {'form': form})
+
+
+@user_passes_test(is_admin)
+def edit_event_from_document(request, document_id, type, old_datetime, new_datetime):
+    try:
+        document= get_object_or_404(Document, pk=document_id)
+        event=Events.objects.filter(document=document, type=type, datetime=old_datetime).first()
+        print("Evento: ", event)
+        event.datetime = new_datetime
+        event.save()
+        return HttpResponse('Evento actualizado con éxito')
+    except Exception as e:
+        print(f"Error al actualizar el evento: {e}")
+        return HttpResponseBadRequest('Error al actualizar el evento')
 
 @user_passes_test(is_admin)
 def delete_event(request, event_id):

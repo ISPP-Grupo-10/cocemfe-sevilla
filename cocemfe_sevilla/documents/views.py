@@ -18,6 +18,8 @@ import os
 from django.http import JsonResponse
 from calendars.views import create_event
 from datetime import datetime, time
+from django.forms.models import model_to_dict
+from calendars.views import edit_event_from_document
 
 @login_required
 def upload_pdf(request):
@@ -135,6 +137,9 @@ def view_pdf_admin(request, pk):
 @login_required
 def update_pdf(request, pk):
     document = get_object_or_404(Document, pk=pk)
+    old_suggestion_start_date = document.suggestion_start_date.astimezone(timezone.get_current_timezone())
+    old_suggestion_end_date = document.suggestion_end_date.astimezone(timezone.get_current_timezone())
+    old_voting_end_date = document.voting_end_date.astimezone(timezone.get_current_timezone())
     professionals_not_superuser = Professional.objects.filter(is_superuser=False)
     if request.user.is_superuser:
         if request.method == 'POST':
@@ -142,12 +147,13 @@ def update_pdf(request, pk):
             if form.is_valid():
                 suggestion_start_date = form.cleaned_data['suggestion_start_date']
                 suggestion_end_date = form.cleaned_data['suggestion_end_date']
+                voting_end_date = form.cleaned_data['voting_end_date']
                 pdf = form.cleaned_data['pdf_file']
 
                 updated_document = form.save(commit=False)
                 updated_document.pdf_file = pdf
 
-                previous_status = document.status
+                previous_status = document.status      
 
                 if suggestion_start_date and suggestion_start_date.date() == timezone.now().date():
                     updated_document.status = 'Aportaciones'
@@ -170,6 +176,15 @@ def update_pdf(request, pk):
                         send_mail(subject, message, from_email, [professional.email], fail_silently=False)
 
                 form.save_m2m()
+
+                if suggestion_start_date and suggestion_start_date != old_suggestion_start_date:
+                    edit_event_from_document(request=request, document_id=pk, type='aportaciones', old_datetime=datetime.combine(old_suggestion_start_date, time(23, 59, 00)), new_datetime=datetime.combine(suggestion_start_date, time(23, 59, 00)))
+                if suggestion_end_date and suggestion_end_date != old_suggestion_end_date:
+                    edit_event_from_document(request=request, document_id=pk, type='aportaciones', old_datetime=datetime.combine(old_suggestion_end_date, time(23, 59, 00)), new_datetime=datetime.combine(suggestion_end_date, time(23, 59, 00)))
+                    edit_event_from_document(request=request, document_id=pk, type='votaciones', old_datetime=datetime.combine(old_suggestion_end_date, time(23, 59, 00)), new_datetime=datetime.combine(suggestion_end_date, time(23, 59, 00)))
+                if voting_end_date and voting_end_date != old_voting_end_date:
+                    edit_event_from_document(request=request, document_id=pk, type='votaciones', old_datetime=datetime.combine(old_voting_end_date, time(23, 59, 00)), new_datetime=datetime.combine(voting_end_date, time(23, 59, 00)))
+                
                 
                 return redirect('view_pdf_admin', updated_document.id)
         else:
