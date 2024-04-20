@@ -306,8 +306,9 @@
         // Recargar la página para actualizar los eventos mostrados
         window.location.reload();
         } else {
-        // Mostrar un mensaje de error si la solicitud no fue exitosa
-        alert("Hubo un error al crear el evento.");
+            console.log(response);
+            // Mostrar un mensaje de error si la solicitud no fue exitosa
+            alert("Hubo un error al crear el evento.");
         }
     })
     .catch(error => {
