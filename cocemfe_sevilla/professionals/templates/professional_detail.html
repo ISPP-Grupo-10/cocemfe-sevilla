@@ -195,7 +195,7 @@
                             <div class="row justify-content-between text-left">
                                 <div class="form-group col-12 flex-column d-flex mb-4">
                                     <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                                        <i class="fa fa-picture-o"></i> Foto de Perfil<span class="text-danger"> *</span>
+                                        <i class="fa fa-picture-o"></i> Foto de Perfil
                                     </label>
                                     {% if professional.profile_picture %}
                                         <div class="text-center">
@@ -213,6 +213,7 @@
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-primary">Guardar</button>
+                            <a href="{% url 'professionals:update_password' %}"><span class="btn btn-primary">Cambiar Contraseña</span></a>
                         </form>
                         
                     </div>
