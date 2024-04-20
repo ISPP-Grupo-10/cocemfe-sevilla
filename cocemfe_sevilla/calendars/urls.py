@@ -6,5 +6,6 @@ app_name = 'calendars'
 
 urlpatterns = [
     path('create', views.new_event, name='create_event'),
-    path('all_events', views.all_events, name='all_events'),
+    path('', views.calendar, name='calendar'),
+    path('all_events', views.devolver_eventos, name='all_events'),
 ]

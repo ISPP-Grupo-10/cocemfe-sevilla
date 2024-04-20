@@ -4,10 +4,9 @@ from django.http import JsonResponse
 from .models import Events
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.mail import send_mail
-from smtplib import SMTPRecipientsRefused
 from .forms import EventForm
 from professionals.views import is_admin
-from professionals.models import Professional
+from documents.models import Document
 
 def create_event(title, description, datetime, document, creator):
     try:
@@ -45,18 +44,22 @@ def delete_event(request, event_id):
     return render(request, 'confirmar_eliminacion_evento.html', {'event': event}) 
 
 @login_required
-def all_events(request):
-    all_events = Events.objects.all()
-    out = []
-    for event in all_events:
-        out.append({
-            'creator': event.creator.first_name,
-            'title': event.title,
-            'datetime': event.datetime.strftime("%m/%d/%Y, %H:%M:%S"),
-            'document_name': event.document.name,
-        })
+def calendar(request):
+    return render(request, 'eventos.html') 
 
-    return render(request, 'eventos.html', {'out': out}) 
+@login_required
+def devolver_eventos(request):
+    if request.user.is_superuser:
+        all_events = Events.objects.all()
+    else:
+        documentos = Document.objects.filter(professionals=request.user).all()
+        all_events = [Events.objects.filter(document=documento).all() for documento in documentos]
+    eventos_data = [{
+        'id': evento.id,
+        'title': evento.title,
+        'start': evento.datetime
+    } for evento in all_events]
+    return JsonResponse(eventos_data, safe=False)
 
 ##############
 # Create your views here.
