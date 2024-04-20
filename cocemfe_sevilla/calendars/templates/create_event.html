@@ -107,6 +107,18 @@
     </div>
     {% endfor %}
     {% endif %}
+    {% if form.errors %}
+    <div class="alert alert-danger" role="alert">
+        <ul>
+            {% for field, errors in form.errors.items %}
+            {% for error in errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
     <div class="container-fluid px-1 py-5 mx-auto text-center">
         <h1 class="form-heading mb-4" style="font-family: 'Arial', sans-serif; font-weight: bold;">
             Nuevo Evento
