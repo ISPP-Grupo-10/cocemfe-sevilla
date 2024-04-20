@@ -9,4 +9,5 @@ urlpatterns = [
     path('create_modal_event', views.create_modal_event, name='create_modal_event'),
     path('', views.calendar, name='calendar'),
     path('all_events', views.devolver_eventos, name='all_events'),
+    path('delete/<int:event_id>', views.delete_event, name='delete_event'),
 ]
