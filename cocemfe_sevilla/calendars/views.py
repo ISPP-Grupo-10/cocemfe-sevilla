@@ -1,6 +1,5 @@
-from django.utils import timezone
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from .models import Events
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.mail import send_mail
@@ -9,6 +8,8 @@ from professionals.views import is_admin
 from documents.models import Document
 from django.db import IntegrityError
 
+
+@user_passes_test(is_admin)
 def create_event(title, description, datetime, document, creator, type):
     try:
         event = Events.objects.create(
@@ -20,6 +21,23 @@ def create_event(title, description, datetime, document, creator, type):
             type=type
         )
         return event  
+    except  Exception as e:
+        print(f"Error al crear el evento: {e}")
+        return None
+    
+@user_passes_test(is_admin)
+def create_modal_event(request):
+    try:
+        document = get_object_or_404(Document, pk= request.POST.get('document_id'))
+        event = Events.objects.create(
+            creator=request.user, 
+            title=request.POST.get('title'),
+            description=request.POST.get('description'),
+            datetime=request.POST.get('datetime'),
+            document=document,
+            type=request.POST.get('type'),
+        )
+        return HttpResponse('Evento creado con éxito')  
     except  Exception as e:
         print(f"Error al crear el evento: {e}")
         return None
@@ -71,52 +89,3 @@ def devolver_eventos(request):
     } for evento in all_events]
     return JsonResponse(eventos_data, safe=False)
 
-##############
-# Create your views here.
-@login_required
-def index(request):
-    all_events = Events.objects.filter(user=request.user).all()
-    return render(request,'eventos.html',{'events':all_events})
-
-@login_required
-def add_event(request):
-    start = request.GET.get("start", None)
-    end = request.GET.get("end", None)
-    title = request.GET.get("title", None)
-    event = Events(name=str(title), start=start, end=end, user=request.user)
-    event.save()
-    data = {}
-    return JsonResponse(data)
-
-@login_required
-def update_event(request):
-    start = request.GET.get("start", None)
-    end = request.GET.get("end", None)
-    title = request.GET.get("title", None)
-    id = request.GET.get("id", None)
-    event = Events.objects.get(id=id)
-    event.start = start
-    event.end = end
-    event.name = title
-    event.save()
-    data = {}
-    return JsonResponse(data)
-
-
-def enviar_correo_evento():
-    # Obtener la fecha actual
-    fecha_actual = timezone.now().date()
-
-    # Obtener todos los eventos que ocurren hoy
-    eventos_hoy = Events.objects.filter(start__date=fecha_actual)
-
-    # Iterar sobre los eventos y enviar correos electrónicos a los usuarios
-    for evento in eventos_hoy:
-        usuario = evento.user
-        send_mail(
-        "Eventos de hoy",
-        "Hola {6}, recuerda que hoy tienes los siguientes eventos: {0} ".format(evento, usuario.name),
-        "cuidame09@gmail.com",
-        usuario.email,
-        fail_silently=True
-        )
