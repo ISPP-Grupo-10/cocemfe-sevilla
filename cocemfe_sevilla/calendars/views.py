@@ -33,7 +33,7 @@ def new_event(request):
             event.creator = request.user 
             try:
                 event.save() 
-                return redirect('/')
+                return redirect('/calendars')
             except IntegrityError as e:
                 # Manejar la excepción de violación de restricción de integridad
                 error_message = "Error al crear el evento: {}".format(e)
@@ -45,12 +45,8 @@ def new_event(request):
 @user_passes_test(is_admin)
 def delete_event(request, event_id):
     event = get_object_or_404(Events, pk=event_id)
-    
-    if request.method == 'POST':
-        event.delete()
-        return redirect('evento_eliminado_exitosamente')  
-    
-    return render(request, 'confirmar_eliminacion_evento.html', {'event': event}) 
+    event.delete()
+    return redirect('/calendars')  
 
 @login_required
 def calendar(request):
@@ -67,7 +63,10 @@ def devolver_eventos(request):
         'id': evento.id,
         'title': evento.title,
         'start': evento.datetime,
+        'description': evento.description,
+        'participantes': [{'first_name': profesional.first_name, 'last_name': profesional.last_name} for profesional in evento.document.professionals.all()],
         'color': 'red' if evento.type == 'aportaciones' else ('green' if evento.type ==  'votaciones' else ('blue' if evento.type ==  'reunion' else ('yellow' if evento.type ==  'revision' else 'orange'))),
+        
     } for evento in all_events]
     return JsonResponse(eventos_data, safe=False)
 
