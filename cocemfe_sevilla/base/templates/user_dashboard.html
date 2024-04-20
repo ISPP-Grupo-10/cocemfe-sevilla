@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% block title %}COCEMFE{% endblock %}
+{% block encabezado %}
+{% endblock %}
+{% block contenido %}
+<style>
+    body, html {
+        height: 95%;
+        margin: 0;
+    }
+    .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around; /* Espacio entre los divs */
+        align-items: stretch;
+        height: 100%;
+    }
+    .top {
+        display: flex;
+        height: 65%;
+        justify-content: space-between; /* Espacio entre los divs */
+    }
+    .left {
+        width: 48%;
+        background-color: #f7f7f7;
+        border-radius: 15px;
+        padding: 20px;
+    }
+    .right {
+        width: 48%;
+        background-color: #f7f7f7;
+        border-radius: 15px;
+        padding: 20px;
+    }
+    .bottom {
+        height: 25%;
+        background-color: #f7f7f7;
+        border-radius: 15px;
+        padding: 20px;
+    }
+    .button-container {
+        display: flex;
+        align-items: center;
+        align-content: center;
+        justify-content: space-around; /* Espacio entre los divs */
+    }
+    .button {
+        display: inline-block;
+        background-color: #003c69;
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+    .button a {
+        color: #ffffff !important; /* Aumentamos la especificidad */
+        text-decoration: none; /* Quitar subrayado del enlace */
+    }
+</style>
+<div class="container">
+    <div class="top">
+        <div class="left">
+            <div id='calendar' class='my-2 space-y-1 mb-4'></div>
+        </div>
+        <div class="right">
+            <h3 class="my-2 text-center">Documentos</h3>
+            <form method="GET" action="{% url 'list_pdf' %}">
+                <div class="input-group mb-3 col-3">
+                    <button class="btn btn-outline-secondary" type="submit" id="button-addon1">Buscar</button>
+                    <input type="text" class="form-control form-control-xs" name="name" placeholder="Nombre..." aria-label="Buscar por nombre" aria-describedby="button-addon1" style="width: 200px;" value="{{ request.GET.name|default_if_none:'' }}">
+                    {% if request.GET.name %}
+                        <button type="button" class="btn btn-outline-secondary" onclick="clearFilter()" title="Borrar filtro">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                                <path d="M4.354 4.354a.5.5 0 0 1 0 .708L8 8l-3.646 3.646a.5.5 0 0 1-.708-.708L7.293 8 3.646 4.354a.5.5 0 0 1 .708-.708L8 7.293l3.646-3.646a.5.5 0 0 1 .708.708L8.707 8l3.647 3.646a.5.5 0 0 1-.708.708L8 8.707l-3.646 3.647a.5.5 0 0 1-.708-.708L7.293 8 3.646 4.354a.5.5 0 0 1 .708-.708z"/>
+                            </svg>
+                        </button>
+                    {% endif %}
+                </div>
+            </form>
+            <div class="relative w-full overflow-auto" style="max-height: 400px;">
+                <table class="w-full caption-bottom text-sm ">
+                    <thead class="[&amp;_tr]:border-b sticky">
+                        <tr class="border-b border-gray-200 transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 style="color: black;"">
+                                Nombre
+                            </th>
+                            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
+                                Estado
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if documentos %}
+                            {% for doc in documentos %}
+                                {% if forloop.counter|divisibleby:2 %}
+                                    <tr class="bg-gray-100 border-b border-gray-200 transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                                {% else %}
+                                    <tr class="border-b border-gray-200 transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                                {% endif %}
+                                    <td class="p-4 align-middle">
+                                        <a href="{% url 'view_pdf_admin' doc.id %}" class="font-semibold text-[#00bfa5]" style="max-width: 400px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block;">{{ doc.name }}</a>
+                                    </td>
+                                    <td class="p-4 align-middle">
+                                        {% for status_value, status_display in doc.STATUS %}
+                                            {% if doc.status == status_value %}
+                                                {{ status_display }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5" class="p-4 text-center">No hay documentos que mostrar.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% if request.user.is_superuser %}
+        <div class="bottom">
+            <h3 class="my-2 mb-5 text-center">Acciones rápidas</h3>
+            <div class="button-container">
+                <div class="button">
+                    <a href="{% url 'upload_pdf' %}">+ Subir documento</a>
+                </div>
+                <div class="button">
+                    <a href="{% url 'professionals:create_professional' %}">+ Nuevo profesional</a>
+                </div>
+                <div class="button">
+                    <a href="{% url 'organizations:create_organization' %}">+ Añadir organización</a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.11/index.global.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.11/index.global.min.js'></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        height: 500,
+        locale: 'es',
+        firstDay: 1,
+        initialView: 'dayGridMonth',
+      });
+      calendar.render();
+    });
+</script>
+
+{% endblock %}
