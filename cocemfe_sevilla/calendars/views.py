@@ -9,14 +9,15 @@ from professionals.views import is_admin
 from documents.models import Document
 from django.db import IntegrityError
 
-def create_event(title, description, datetime, document, creator):
+def create_event(title, description, datetime, document, creator, type):
     try:
         event = Events.objects.create(
             creator=creator, 
             title=title,
             description=description,
             datetime=datetime,
-            document=document
+            document=document,
+            type=type
         )
         return event  
     except  Exception as e:
@@ -65,7 +66,8 @@ def devolver_eventos(request):
     eventos_data = [{
         'id': evento.id,
         'title': evento.title,
-        'start': evento.datetime
+        'start': evento.datetime,
+        'color': 'red' if evento.type == 'aportaciones' else ('green' if evento.type ==  'votaciones' else ('blue' if evento.type ==  'reunion' else ('yellow' if evento.type ==  'revision' else 'orange'))),
     } for evento in all_events]
     return JsonResponse(eventos_data, safe=False)
 

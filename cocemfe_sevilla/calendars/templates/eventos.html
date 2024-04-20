@@ -3,9 +3,40 @@
 {% block encabezado %}{% endblock %}
 {% block contenido %}
 
-    <div class="container" style="width: 600px; height: 400px;">
-        <div id="calendario"></div>
+<div style="display: flex; margin-top: 20px; margin-left: 20px;">
+    <div style="display: flex; flex-flow: column; justify-content: left; margin-left: 70px; margin-top: 70px;">
+        <a href="{% url 'calendars:create_event' %}" style="margin-top: 30px; margin-bottom: 30px;"
+            class="btn btn-orange">Crear Evento</a>
+
+        <div class="legend-container">
+            <div class="legend-item">
+                <div style="width: 20px; height: 20px; background-color: red; border-radius: 50%; margin-right: 10px;">
+                </div>
+                <span>Aportaciones</span>
+            </div>
+            <div class="legend-item">
+                <div
+                    style="width: 20px; height: 20px; background-color: green; border-radius: 50%; margin-right: 10px;">
+                </div>
+                <span>Votaciones</span>
+            </div>
+            <div class="legend-item">
+                <div
+                    style="width: 20px; height: 20px; background-color: yellow; border-radius: 50%; margin-right: 10px;">
+                </div>
+                <span>Revisión</span>
+            </div>
+            <div class="legend-item">
+                <div style="width: 20px; height: 20px; background-color: blue; border-radius: 50%; margin-right: 10px;">
+                </div>
+                <span>Reunión</span>
+            </div>
+        </div>
     </div>
+    <div class="container" style="display:flex; justify-content: center;">
+        <div id="calendario" style="width: 1100px; height: 800px;"></div>
+    </div>
+</div>
 
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -13,6 +44,7 @@
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.0/main.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.0/main.min.css" rel="stylesheet" />
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@3.10.2/dist/locale/es.js'></script>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendario');
@@ -23,13 +55,30 @@
                     center: 'title',
                     right: 'month,agendaWeek,agendaDay'
                 },
-                
+                locale: 'es',
                 selectable: true,
                 selectHelper: true,
-                eventLimit: true
+                eventLimit: true,
+                eventDisplay: 'list-item'
             });
             calendar.render();
         });
     </script>
+
+    <style>
+        .legend-container {
+            display: flex;
+            flex-direction: column;
+            background-color: #f5f5f5;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+    </style>
 
 {% endblock %}

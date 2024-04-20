@@ -164,7 +164,20 @@
                         </div>
                     </div>
 
-                    <button type="submit">Create Professional</button>
+                    <div class="row justify-content-between text-left">
+                        <div class="form-group col-12 flex-column d-flex mb-4">
+                            <label for="id_name" class="form-control-label px-3"
+                                style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                <i class="fa fa-envelope"></i> Tipo<span class="text-danger"> *</span>
+                            </label>
+                            {{ form.type }}
+                            {% for error in form.type.errors %}
+                            <span class="error">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <button type="submit">Crear Evento</button>
                 </form>
             </div>
         </div>

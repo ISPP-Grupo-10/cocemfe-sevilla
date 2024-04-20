@@ -47,9 +47,10 @@ def upload_pdf(request):
                     message = render_to_string('email/new_document_notification.txt', {'document': document, 'professional': professional})
                     send_mail(subject, message, from_email, [professional.email], fail_silently=False)
                     
-                create_event(title=f'Doc: {document.name}', description='Inicio periodo aportaciones', creator= request.user, datetime=datetime.combine(suggestion_start_date.date(), time(23, 59)), document=document)
-                create_event(title=f'Doc: {document.name}', description='Final periodo aportaciones', creator= request.user, datetime=datetime.combine(suggestion_end_date.date(), time(23, 59)), document=document)
-                create_event(title=f'Doc: {document.name}', description='Final periodo votaciones', creator= request.user, datetime=datetime.combine(voting_end_date.date(), time(23, 59)), document=document)
+                create_event(title=f'Inicio: {document.name}', description='Inicio periodo aportaciones', creator= request.user, datetime=datetime.combine(suggestion_start_date, time(23, 59, 00)), document=document, type='aportaciones')
+                create_event(title=f'Final: {document.name}', description='Final periodo aportaciones', creator= request.user, datetime=datetime.combine(suggestion_end_date, time(23, 59, 00)), document=document, type='aportaciones')
+                create_event(title=f'Inicio: {document.name}', description='Inicio periodo votaciones', creator= request.user, datetime=datetime.combine(suggestion_end_date, time(23, 59, 00)), document=document, type='votaciones')
+                create_event(title=f'Final: {document.name}', description='Final periodo votaciones', creator= request.user, datetime=datetime.combine(voting_end_date, time(23, 59, 00)), document=document, type='votaciones')
                 return redirect('view_pdf_admin', document.id)
         else:
             form = PDFUploadForm()
