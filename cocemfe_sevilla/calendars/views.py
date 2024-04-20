@@ -7,10 +7,10 @@ from django.core.mail import send_mail
 from .forms import EventForm
 from professionals.views import is_admin
 from documents.models import Document
+from django.db import IntegrityError
 
 def create_event(title, description, datetime, document, creator):
     try:
-        
         event = Events.objects.create(
             creator=creator, 
             title=title,
@@ -19,19 +19,27 @@ def create_event(title, description, datetime, document, creator):
             document=document
         )
         return event  
-    except:
-        return None  
+    except  Exception as e:
+        print(f"Error al crear el evento: {e}")
+        return None
 
 @user_passes_test(is_admin)
 def new_event(request):
     if request.method == 'POST':
         form = EventForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('/') 
+            event = form.save(commit=False) 
+            event.creator = request.user 
+            try:
+                event.save() 
+                return redirect('/')
+            except IntegrityError as e:
+                # Manejar la excepción de violación de restricción de integridad
+                error_message = "Error al crear el evento: {}".format(e)
+                return render(request, 'create_event.html', {'form': form, 'error_message': error_message})
     else:
         form = EventForm()
-    return render(request, 'create_event.html', {'form': form}) 
+    return render(request, 'create_event.html', {'form': form})
 
 @user_passes_test(is_admin)
 def delete_event(request, event_id):
