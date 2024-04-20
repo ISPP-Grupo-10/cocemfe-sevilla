@@ -156,7 +156,7 @@ def devolver_eventos(request):
         all_events = Events.objects.all()
     else:
         documentos = Document.objects.filter(professionals=request.user).all()
-        all_events = [Events.objects.filter(document=documento).all() for documento in documentos]
+        all_events = Events.objects.filter(document__in=documentos).all()
     eventos_data = [{
         'id': evento.id,
         'title': evento.title,
