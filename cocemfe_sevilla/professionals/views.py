@@ -225,6 +225,13 @@ def change_password(request):
         form = SecurePasswordChangeForm(user=request.user)
     return render(request, 'update_password.html', {'form': form})
 
+@login_required
+def delete_account(request):
+    user = request.user
+    logout(request)
+    user.delete()
+    return redirect('professionals:login')
+
 class VerifyEmailView(View):
 
     def get(self, request, uidb64):
