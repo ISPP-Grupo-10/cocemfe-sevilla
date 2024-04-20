@@ -5,8 +5,10 @@
 
 <div style="display: flex; margin-top: 20px; margin-left: 20px;">
     <div style="display: flex; flex-flow: column; justify-content: left; margin-left: 70px; margin-top: 70px;">
-        <a href="{% url 'calendars:create_event' %}" style="margin-top: 30px; margin-bottom: 30px;"
-            class="btn btn-orange">Crear Evento</a>
+        {% if user.is_superuser %}
+            <a href="{% url 'calendars:create_event' %}" style="margin-top: 30px; margin-bottom: 30px;"
+                class="btn btn-orange">Crear Evento</a>
+        {% endif %}
 
         <div class="legend-container">
             <div class="legend-item">
