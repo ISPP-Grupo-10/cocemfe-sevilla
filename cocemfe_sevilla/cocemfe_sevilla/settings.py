@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "organizations",
     "maps",
     "authentication",
+    "calendars",
     "bootstrap5",
     "base",
 ]
