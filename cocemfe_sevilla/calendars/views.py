@@ -9,7 +9,9 @@ from documents.models import Document
 from django.db import IntegrityError
 from django.utils import timezone
 from datetime import datetime
+from django.conf import settings
 from django.utils.timezone import make_aware
+from django.template.loader import render_to_string
 
 @user_passes_test(is_admin)
 def create_event(request, title, description, event_datetime, document, creator, type):
@@ -28,6 +30,13 @@ def create_event(request, title, description, event_datetime, document, creator,
             document=document,
             type=type
         )
+        
+        subject = f'Nuevo evento: {title}'
+        from_email = settings.EMAIL_HOST_USER
+        for professional in document.professionals.all():
+            message = f'Nuevo evento el día {event_datetime.date()} a las {event_datetime.time()}: {description}'
+            send_mail(subject, message, from_email, [professional.email], fail_silently=False)
+        
         return event  
     except Exception as e:
         print(f"Error al crear el evento: {e}")
@@ -47,14 +56,26 @@ def create_modal_event(request):
         if datetime_object < timezone.now():
             raise ValueError("La fecha del evento no puede ser anterior a la fecha actual")
         
+        creator=request.user, 
+        title=request.POST.get('title'),
+        description=request.POST.get('description'),
+        type=request.POST.get('type'),
+
         event = Events.objects.create(
-            creator=request.user, 
-            title=request.POST.get('title'),
-            description=request.POST.get('description'),
-            datetime=request.POST.get('datetime'),
+            creator=creator, 
+            title=title,
+            description=description,
+            datetime=event_datetime,
             document=document,
-            type=request.POST.get('type'),
+            type=type,
         )
+        subject = f'Nuevo evento: {title}'
+        from_email = settings.EMAIL_HOST_USER
+        for professional in document.professionals.all():
+            message = f'Nuevo evento el día {event_datetime.date()} a las {event_datetime.time()}: {description}'
+            send_mail(subject, message, from_email, [professional.email], fail_silently=False)
+        
+        
         return HttpResponse('Evento creado con éxito')  
     except Exception as e:
         print(f"Error al crear el evento: {e}")
@@ -70,6 +91,13 @@ def new_event(request):
             event.creator = request.user 
             try:
                 event.save() 
+                
+                subject = f'Nuevo evento: {event.title}'
+                from_email = settings.EMAIL_HOST_USER
+                for professional in event.document.professionals.all():
+                    message = f'Nuevo evento el día {event.datetime.date()} a las {event.datetime.time()}: {event.description}'
+                    send_mail(subject, message, from_email, [professional.email], fail_silently=False)
+                
                 return redirect('/calendars')
             except IntegrityError as e:
                 error_message = "Error al crear el evento: {}".format(e)
