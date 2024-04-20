@@ -90,7 +90,27 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 165, 153, 0.3);
         }
-  
+        
+        .btn-delete-profile {
+            background-color: #ff0000; /* Color rojo para el botón */
+            color: #ffffff; /* Texto en blanco */
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .checkbox-delete-data {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn-container {
+            flex-grow: 1;
+        }
         /* Hacer el formulario más estrecho */
         .col-xl-7,
         .col-lg-8,
@@ -213,6 +233,15 @@
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-primary">Guardar</button>
+                            <div class="button-container">
+                                <div class="btn-container">
+                                    <button type="submit" class="btn-delete-profile">Borrar Perfil</button>
+                                </div>
+                                <div class="checkbox-delete-data">
+                                    <input type="checkbox" id="delete-data" name="delete-data">
+                                    <label for="delete-data">Eliminar también los datos de la base de datos</label>
+                                </div>
+                            </div>
                         </form>
                         
                     </div>
