@@ -95,7 +95,7 @@
             calendar.render();
     
             // Función para manejar el click en el botón eliminar
-            { % if user.is_superuser % }
+            {% if user.is_superuser %}
                 $('#eliminarEventoBtn').click(function() {
                     var eventId = $(this).attr('data-event-id');
                     window.location.href = "/calendars/delete/" + eventId;

@@ -31,11 +31,14 @@ def create_event(request, title, description, event_datetime, document, creator,
             document=document,
             type=type
         )
+
+        formatted_date = event_datetime.strftime('%d/%m/%Y')
+        formatted_time = event_datetime.strftime('%H:%M')
         
         subject = f'Nuevo evento: {title}'
         from_email = settings.EMAIL_HOST_USER
         for professional in document.professionals.all():
-            message = f'Nuevo evento el día {event_datetime.date()} a las {event_datetime.time()}: {description}'
+            message = f'Nuevo evento el día {formatted_date} a las {formatted_time}: {description}'
             send_mail(subject, message, from_email, [professional.email], fail_silently=False)
         
         return event  
@@ -57,23 +60,24 @@ def create_modal_event(request):
         if datetime_object < timezone.now():
             raise ValueError("La fecha del evento no puede ser anterior a la fecha actual")
         
-        creator=request.user, 
-        title=request.POST.get('title'),
-        description=request.POST.get('description'),
-        type=request.POST.get('type'),
+        title=request.POST.get('title')
+        description=request.POST.get('description')
+        type=request.POST.get('type')
 
         event = Events.objects.create(
-            creator=creator, 
+            creator=request.user, 
             title=title,
             description=description,
             datetime=event_datetime,
             document=document,
             type=type,
         )
+        formatted_date = datetime_object.strftime('%d/%m/%Y')
+        formatted_time = datetime_object.strftime('%H:%M')
         subject = f'Nuevo evento: {title}'
         from_email = settings.EMAIL_HOST_USER
         for professional in document.professionals.all():
-            message = f'Nuevo evento el día {event_datetime.date()} a las {event_datetime.time()}: {description}'
+            message = f'Nuevo evento el día {formatted_date} a las {formatted_time}: {description}'
             send_mail(subject, message, from_email, [professional.email], fail_silently=False)
         
         
@@ -111,11 +115,26 @@ def new_event(request):
 @user_passes_test(is_admin)
 def edit_event_from_document(request, document_id, type, old_datetime, new_datetime):
     try:
+        event_datetime = make_aware(new_datetime)
+
+        if event_datetime < timezone.now():
+            raise ValueError("La fecha del evento no puede ser anterior a la fecha actual")
+        
         document= get_object_or_404(Document, pk=document_id)
         event=Events.objects.filter(document=document, type=type, datetime=old_datetime).first()
-        print("Evento: ", event)
+
         event.datetime = new_datetime
         event.save()
+
+        formatted_date = event_datetime.strftime('%d/%m/%Y')
+        formatted_time = event_datetime.strftime('%H:%M')
+
+        subject = f'Evento editado: {event.title}'
+        from_email = settings.EMAIL_HOST_USER
+        for professional in event.document.professionals.all():
+            message = f'Se ha cambiado la fecha de este evento. \nLa nueva fecha es: {formatted_date} a las {formatted_time} \n{event.description}'
+            send_mail(subject, message, from_email, [professional.email], fail_silently=False)
+
         return HttpResponse('Evento actualizado con éxito')
     except Exception as e:
         print(f"Error al actualizar el evento: {e}")
