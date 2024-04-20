@@ -16,6 +16,8 @@ from django.core.paginator import Paginator
 from django.conf import settings
 import os
 from django.http import JsonResponse
+from calendars.views import create_event
+from datetime import datetime, time
 
 @login_required
 def upload_pdf(request):
@@ -26,6 +28,7 @@ def upload_pdf(request):
             if form.is_valid():
                 suggestion_end_date = form.cleaned_data['suggestion_end_date']
                 suggestion_start_date = form.cleaned_data['suggestion_start_date']
+                voting_end_date = form.cleaned_data['voting_end_date']
                 document = form.save(commit=False)
                 document.voting_start_date = suggestion_end_date
                 if suggestion_start_date and suggestion_start_date.date() == timezone.now().date():
@@ -43,6 +46,10 @@ def upload_pdf(request):
                     # Renderizar el mensaje de correo electrónico desde un template
                     message = render_to_string('email/new_document_notification.txt', {'document': document, 'professional': professional})
                     send_mail(subject, message, from_email, [professional.email], fail_silently=False)
+                    
+                create_event(title=f'Inicio periodo aportaciones doc: {document.name}', description=None, creator= request.user, datetime=datetime.combine(suggestion_start_date.date(), time(23, 59)), document=document)
+                create_event(title=f'Final periodo aportaciones doc: {document.name}', description=None, creator= request.user, datetime=datetime.combine(suggestion_end_date.date(), time(23, 59)), document=document)
+                create_event(title=f'Final periodo votaciones doc: {document.name}', description=None, creator= request.user, datetime=datetime.combine(voting_end_date.date(), time(23, 59)), document=document)
                 return redirect('view_pdf_admin', document.id)
         else:
             form = PDFUploadForm()
