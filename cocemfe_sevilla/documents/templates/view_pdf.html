@@ -29,6 +29,46 @@
 <br></br>
 <h1 class="text-center">Detalles de documento</h1>
 <div class='doc-container'>
+    {% if request.user.is_staff %}
+    <!-- Verifica si el usuario es un admin -->
+    
+    <div id="myModal" class="modal">
+        <div class="modal-content" style="width: 20%;">
+            <span class="close">&times;</span>
+            <br/>
+            <form id="eventForm">
+            <div class="form-group">
+              <label for="title">Título:</label>
+              <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+            <br/>
+            <div class="form-group">
+              <label for="description">Descripción:</label>
+              <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+            </div>
+            <br/>
+            <div class="form-group">
+              <label for="datetime">Fecha y Hora:</label>
+              <input type="datetime-local" class="form-control" id="datetime" name="datetime" required>
+            </div>
+            <br/>
+            <div class="form-group">
+              <label for="type">Tipo:</label>
+              <select class="form-control" id="type" name="type" required>
+                <option value="reunion">Reunión</option>
+                <option value="votaciones">Votación</option>
+                <option value="revision">Revisión</option>
+                <option value="aportaciones">Aportaciones</option>
+              </select>
+            </div>
+            <br/>
+            <button type="submit" class="btn btn-primary">Crear</button>
+          </form>
+        </div>
+      </div>
+      
+    {% endif %}
+       
     <div class="doc-info" style="font-size: 14px;">
         <p style="font-size: 22px;"><strong>Documento:</strong> {{ pdf.name }}</p>
         <p style="font-size: 22px;"><strong>Plazo:</strong> {{ pdf.suggestion_start_date }} - {{ pdf.suggestion_end_date }}</p>
@@ -227,10 +267,69 @@
     <a href="{% url 'votings:voting_statistics' pk=pdf.pk %}">
         <button type="button" class="btn btn-primary" style="background-color: #4b4a4a; border-color: #4b4a4a;">Estadísticas</button>
     </a>
+    <a>
+        <button id="openModalBtn" type="button" class="btn btn-primary" style="background-color: #4b4a4a; border-color: #4b4a4a;">Crear Evento</button>
+    </a>
     {% endif %}
 </div>
 
 <script>
+    // Obtener el modal y el botón de cierre
+    var modal = document.getElementById("myModal");
+    var span = document.getElementsByClassName("close")[0];
+    var pdf_document_pk = '{{ pdf.pk }}'
+
+    // Abrir el modal al hacer clic en el botón
+    document.getElementById("openModalBtn").onclick = function() {
+    modal.style.display = "block";
+    }
+
+    // Cerrar el modal al hacer clic en el botón de cierre (X)
+    span.onclick = function() {
+    modal.style.display = "none";
+    }
+
+    // Cerrar el modal al hacer clic fuera del contenido del modal
+    window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+    }
+
+    // Enviar los datos del formulario al backend al hacer clic en "Crear"
+    document.getElementById("eventForm").onsubmit = function(event) {
+    event.preventDefault(); // Evitar el envío del formulario por defecto
+    
+    // Obtener los datos del formulario
+    var formData = new FormData(document.getElementById("eventForm"));
+    formData.append("document_id", pdf_document_pk);
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+    // Enviar los datos al backend mediante una solicitud AJAX
+    fetch("{% url 'calendars:create_modal_event' %}", {
+        method: "POST",
+        body:formData,
+    })
+    .then(response => {
+        if (response.ok) {
+        // Cerrar el modal si la solicitud fue exitosa
+        modal.style.display = "none";
+        // Recargar la página para actualizar los eventos mostrados
+        window.location.reload();
+        } else {
+            response.json().then(data => {
+            alert(data.error);
+            }).catch(error => {
+                console.error("Error:", error);
+                alert("Hubo un error al crear el evento.", error);
+            });
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("Hubo un error al crear el evento.");
+    });
+    }
+
 
     function verSeleccion() {
         var page = document.getElementById('page').value;
@@ -483,6 +582,44 @@
         background-color: #ddd;
         border-radius: 5px;
     }
+    /* Estilos para el modal */
+    .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+    }
+
+    /* Contenido del modal */
+    .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    }
+
+    /* Cierre del modal */
+    .close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 30px;
+    font-weight: bold;
+    color: #000;
+    cursor: pointer;
+    }
+
+    .close:hover {
+        color: #aaa;
+    }
+
 </style>
 
 {% endblock %}
