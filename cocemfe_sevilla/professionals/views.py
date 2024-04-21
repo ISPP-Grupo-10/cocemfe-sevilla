@@ -90,6 +90,11 @@ def professional_data(request, professional_id):
         return render(request, 'professional_data.html', {'professional': professional})
     else:
         return HttpResponseForbidden("You are not authorized to view this page.")
+    
+@login_required
+def professional_details(request, pk):
+    professional = get_object_or_404(Professional, id=pk)
+    return render(request, 'professional_details.html', {'professional': professional})
 
 @login_required
 def edit_user_view(request, pk):
