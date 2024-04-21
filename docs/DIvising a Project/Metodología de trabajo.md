@@ -156,6 +156,7 @@ El repositorio constará de la siguiente estructura:
 Para todas las issues se especificarán la etiqueta y el milestone. Las posibles etiquetas que se usarán en este proyecto son:
 - feature, configuration, documentation, style, refactor, testing, bug 
 
+Para nombrar una issue, primero se pondrá la etiqueta correspondiente entre corchetes. Por ejemplo, "[Feature] Añadir inicio de sesión" o "[Testing] Mejorar cobertura de las pruebas de la clase Usuario"<br/>
 En el caso de los milestones estos se añadirán tras la creación de la issue y se corresponden con la fase del proyecto en la que se crearon.
 <br/>En el caso de las issues con etiqueta de feature estás tendrán vinculada una rama feature, para que así automatizar la gestión de estado de estas. Si se crea una issue que no requiere una nueva rama, por ejemplo, para modificar un fichero directamente en develop, la issue se cambiará de estado y cerrará manualmente. El nombre de esta expresará de manera concisa y breve la tarea a realizar.
 
@@ -165,7 +166,7 @@ Durante el desarrollo del proyecto se implementará un sistema de ramas para man
 
 - **Rama `master`**: Contendrá las versiones estables del proyecto listas para producción.
 - **Rama `develop`**: Contendrá las versiones de desarrollo con los últimos cambios realizados.
-- **Rama de `feature`**: Se creará a partir de la rama `develop`, una por cada funcionalidad a implementar. Al completar el trabajo en una rama `feature`, sus contenidos se combinarán con la rama `develop`. La nomenclatura seguirá el patrón "X-Y", donde X corresponde al milestone actual e Y es un título identificativo de la funcionalidad modificada en esa rama.
+- **Rama de `feature`**: Se creará a partir de la rama `develop`, una por cada funcionalidad a implementar. Al completar el trabajo en una rama `feature`, sus contenidos se combinarán con la rama `develop`. La nomenclatura seguirá el patrón "feature/X-Y", donde al id de la issue e Y es un título identificativo de la funcionalidad modificada en esa rama.
 
 Al mergear una rama `feature` con la rama `develop`, se realizará un pull de `develop` a dicha rama previamente. Se resolverán los conflictos localmente, y para garantizar su correcto funcionamiento, se solicitará revisión a otro miembro del equipo mediante una pull request. Este miembro llevará a cabo pruebas informales y verificará que los cambios realizados funcionan correctamente sin causar errores en el resto del sistema.
 
