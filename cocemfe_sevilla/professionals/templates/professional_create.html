@@ -76,6 +76,11 @@
           color: #fff !important;
       }
 
+      .btn-orange2 {
+            background-color: #FFA500; 
+            color: white; 
+        }
+
       button:focus {
           -moz-box-shadow: none !important;
           -webkit-box-shadow: none !important;
@@ -114,106 +119,116 @@
             <form method="post" class="form-card">
                 {% csrf_token %}
                 <div class="row justify-content-between text-left">
-                    <div class="form-group col-12 flex-column d-flex mb-4">
-                        <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                    <div class="form-group col-6 flex-column d-flex mb-4">
+                        <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold; text-align: left;">
                             <i class="fas fa-user"></i> Nombre de usuario<span class="text-danger"> *</span>
                         </label>
                         {{ form.username }}
                         {% for error in form.username.errors %}
                             <span class="error">{{ error }}</span>
                         {% endfor %}
+                    </div> 
+                    <div class="form-group col-6 flex-column d-flex mb-4">
+                        <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold; text-align: left;">
+                            <i class="fas fa-user"></i> Nombre<span class="text-danger"> *</span>
+                        </label>
+                        {{ form.first_name }}
+                        {% for error in form.first_name.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}
+                    </div> 
+                </div>
+                <div class="row justify-content-between text-left">
+                    <div class="form-group col-6 flex-column d-flex mb-4">
+                        <label for="id_telephone_number" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold; text-align: left;">
+                             Apellidos<span class="text-danger"> *</span>
+                        </label>
+                        {{ form.last_name }}
+                        {% for error in form.last_name.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="form-group col-6 flex-column d-flex mb-4">
+                        <label for="id_email" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold; text-align: left;">
+                            <i class="fa fa-envelope"></i> Correo electrónico<span class="text-danger"> *</span>
+                        </label>
+                        {{ form.email }}
+                        {% for error in form.email.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}
                     </div>
                 </div>
                 <div class="row justify-content-between text-left">
-                  <div class="form-group col-12 flex-column d-flex mb-4">
-                      <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                          <i class="fas fa-user"></i> Nombre<span class="text-danger"> *</span>
-                      </label>
-                      {{ form.first_name }}
-                      {% for error in form.first_name.errors %}
-                          <span class="error">{{ error }}</span>
-                      {% endfor %}
-                  </div>
-              </div>
-              <div class="row justify-content-between text-left">
-                <div class="form-group col-12 flex-column d-flex mb-4">
-                    <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                        <i class="fas fa-user"></i> Apellidos<span class="text-danger"> *</span>
-                    </label>
-                    {{ form.last_name }}
-                    {% for error in form.last_name.errors %}
-                        <span class="error">{{ error }}</span>
-                    {% endfor %}
+                    <div class="form-group col-6 flex-column d-flex mb-4">
+                        <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold; text-align: left;">
+                            <i class="fa fa-phone"></i> Teléfono<span class="text-danger"> *</span>
+                        </label>
+                        {{ form.telephone_number }}
+                        {% for error in form.telephone_number.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="form-group col-6 flex-column d-flex mb-4">
+                        <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold; text-align: left;">
+                            <i class="fa fa-address-card"></i> Número de licencia<span class="text-danger"> *</span>
+                        </label>
+                        {{ form.license_number }}
+                        {% for error in form.license_number.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
-            <div class="row justify-content-between text-left">
-              <div class="form-group col-12 flex-column d-flex mb-4">
-                  <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                      <i class="fa fa-envelope"></i> Dirección de correo electrónico<span class="text-danger"> *</span>
-                  </label>
-                  {{ form.email }}
-                  {% for error in form.email.errors %}
-                      <span class="error">{{ error }}</span>
-                  {% endfor %}
-              </div>
-          </div>
-          <div class="row justify-content-between text-left">
-            <div class="form-group col-12 flex-column d-flex mb-4">
-                <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                    <i class="fa fa-phone"></i> Teléfono<span class="text-danger"> *</span>
-                </label>
-                {{ form.telephone_number }}
-                {% for error in form.telephone_number.errors %}
-                    <span class="error">{{ error }}</span>
-                {% endfor %}
-            </div>
-        </div>
-        <div class="row justify-content-between text-left">
-          <div class="form-group col-12 flex-column d-flex mb-4">
-              <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                  <i class="fa fa-address-card"></i> Número de licencia<span class="text-danger"> *</span>
-              </label>
-              {{ form.license_number }}
-              {% for error in form.license_number.errors %}
-                  <span class="error">{{ error }}</span>
-              {% endfor %}
-          </div>
-      </div>
-      <div class="row justify-content-between text-left">
-        <div class="form-group col-12 flex-column d-flex mb-4">
-            <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                <i class="fas fa-building"></i> Organización<span class="text-danger"> *</span>
-            </label>
-            {{ form.organizations }}
-            {% for error in form.organizations.errors %}
-                <span class="error">{{ error }}</span>
-            {% endfor %}
-        </div>
-    </div>
-    <div class="row justify-content-between text-left">
-      <div class="form-group col-12 flex-column d-flex mb-4">
-          <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-              <i class="fa fa-picture-o"></i> Foto de Perfil
-          </label>
-          {{ form.profile_picture }}
-          {% for error in form.profile_picture.errors %}
-              <span class="error">{{ error }}</span>
-          {% endfor %}
-      </div>
-  </div>
-  <div class="row justify-content-start">
-        <div class="form-group col-sm-6">
-            <div class="row justify-content-start">
-                <div class="form-group col-sm-6 text-left"> 
-                    <button type="submit" class="btn-block">Crear</button>
+                <div class="row justify-content-between text-left">
+                    <div class="form-group col-12 flex-column d-flex mb-4">
+                        <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold; text-align: left;">
+                            <i class="fas fa-building"></i> Organización<span class="text-danger"> *</span>
+                        </label>
+                            {{ form.organizations }}
+                            {% for error in form.organizations.errors %}
+                                <span class="error">{{ error }}</span>
+                            {% endfor %}
+                    </div>
                 </div>
-            </div>
+                <div class="row justify-content-between text-left">
+                    <div class="form-group col-12 flex-column d-flex mb-4">
+                        <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold; text-align: left;">
+                            <i class="fa fa-picture-o"></i> Foto de Perfil<span class="text-danger" > </span>
+                        </label>
+                        {{ form.profile_picture }}
+                        {% for error in form.profile_picture.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="row justify-content-start">
+                    <div class="form-group col-sm-6">
+                        <div class="row justify-content-start">
+                            <div class="form-group col-sm-6 text-left"> 
+                                <button type="submit" class="btn-orange2">Crear</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <div class="row justify-content-end">
+                            <div class="form-group col-sm-6 text-right"> 
+                                <button type="button" class="btn btn-danger" id="cancelBtn">Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
-    </div>
-</form>
-    </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const cancelBtn = document.getElementById("cancelBtn");
+        cancelBtn.addEventListener("click", function () {
+            window.history.back(); // Retrocede a la página anterior
+        });
+    });
+</script>
 
 </body>
 </html>

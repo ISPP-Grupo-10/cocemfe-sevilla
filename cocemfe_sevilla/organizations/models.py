@@ -6,15 +6,15 @@ class Organization(models.Model):
 
     phone_number_validator = RegexValidator(
         regex=r'^\d{9}$',
-        message='El número de teléfono debe tener exactamente 9 dígitos.',
+        message='El número de teléfono debe tener exactamente 9 dígitos numéricos.',
         code='invalid_phone_number'
     )
 
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=125)
     telephone_number = models.CharField(max_length=9, validators=[phone_number_validator])
-    address = models.CharField(max_length=255)
+    address = models.CharField(max_length=125)
     email = models.EmailField()
-    zip_code = models.IntegerField(validators=[RegexValidator(regex=r'^\d{5}$', message='El codigo postal debe tener 5 dígitos')])
+    zip_code = models.IntegerField(validators=[RegexValidator(regex=r'^\d{5}$', message='El codigo postal debe tener exactamente 5 dígitos numéricos')])
 
 
 

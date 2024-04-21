@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 class Professional(AbstractUser):
     phone_number_validator = RegexValidator(
         regex=r'^\d{9}$',  
-        message='El número de teléfono debe tener exactamente 9 dígitos.',
+        message='El número de teléfono debe tener exactamente 9 dígitos numéricos.',
         code='invalid_phone_number'
     )
     telephone_number = models.CharField(max_length=9, validators=[phone_number_validator])
