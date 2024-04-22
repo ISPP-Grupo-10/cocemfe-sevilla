@@ -211,19 +211,14 @@
                                 </div>
                             </div>
                             <div class="row justify-content-between">
-                                <div class="form-group col-sm-6">
-                                    <div class="row justify-content-start">
-                                        <div class="form-group col-sm-6 text-left"> 
-                                            <button type="submit" class="btn-orange2">Guardar</button>
-                                        </div>
-                                    </div>
+                                <div class="col-sm-4 text-left">
+                                    <button type="submit" class="btn-orange2">Guardar</button>
                                 </div>
-                                <div class="form-group col-sm-6">
-                                    <div class="row justify-content-end">
-                                        <div class="form-group col-sm-6 text-right"> 
-                                            <button type="button" class="btn btn-danger" id="cancelBtn">Cancelar</button>
-                                        </div>
-                                    </div>
+                                <div class="col-sm-4 text-center">
+                                    <a href="{% url 'professionals:update_password' %}" style="display: inline-block;"><span class="btn btn-primary" style="overflow: hidden;">Cambiar Contraseña</span></a>
+                                </div>
+                                <div class="col-sm-4 text-right">
+                                    <button type="button" class="btn btn-danger" id="cancelBtn">Cancelar</button>
                                 </div>
                             </div>
                         </form>
