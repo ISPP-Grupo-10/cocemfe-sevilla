@@ -338,8 +338,6 @@ class EditUserViewTestCase(TestCase):
         
         self.assertEqual(response.status_code, 302)
         self.professional_normal.refresh_from_db()
-        print('-----------------------', self.professional_normal.email)
-        
         self.assertEqual(self.professional_normal.telephone_number, '987654321')
         self.assertEqual(self.professional_normal.email, 'test_updated@example.com')
 
