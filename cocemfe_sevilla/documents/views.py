@@ -140,9 +140,9 @@ def view_pdf_admin(request, pk):
 @login_required
 def update_pdf(request, pk):
     document = get_object_or_404(Document, pk=pk)
-    old_suggestion_start_date = document.suggestion_start_date.astimezone(timezone.get_current_timezone())
-    old_suggestion_end_date = document.suggestion_end_date.astimezone(timezone.get_current_timezone())
-    old_voting_end_date = document.voting_end_date.astimezone(timezone.get_current_timezone())
+    old_suggestion_start_date = document.suggestion_start_date.astimezone(timezone.get_current_timezone()) if document.suggestion_start_date else None
+    old_suggestion_end_date = document.suggestion_end_date.astimezone(timezone.get_current_timezone()) if document.suggestion_end_date else None
+    old_voting_end_date = document.voting_end_date.astimezone(timezone.get_current_timezone()) if document.voting_end_date else None
     professionals_not_superuser = Professional.objects.filter(is_superuser=False)
     if request.user.is_superuser:
         if request.method == 'POST':
@@ -181,12 +181,22 @@ def update_pdf(request, pk):
                 form.save_m2m()
 
                 if suggestion_start_date and suggestion_start_date != old_suggestion_start_date:
-                    edit_event_from_document(request=request, document_id=pk, type='aportaciones', old_datetime=datetime.combine(old_suggestion_start_date, time(23, 59, 00)), new_datetime=datetime.combine(suggestion_start_date, time(23, 59, 00)))
+                    if old_suggestion_start_date is None:
+                        create_event(request = request, title=f'Inicio: {document.name}', description='Inicio periodo aportaciones', creator= request.user, event_datetime=datetime.combine(suggestion_start_date, time(23, 59, 00)), document=document, type='aportaciones')
+                    else:
+                        edit_event_from_document(request=request, document_id=pk, type='aportaciones', old_datetime=datetime.combine(old_suggestion_start_date, time(23, 59, 00)), new_datetime=datetime.combine(suggestion_start_date, time(23, 59, 00)))
                 if suggestion_end_date and suggestion_end_date != old_suggestion_end_date:
-                    edit_event_from_document(request=request, document_id=pk, type='aportaciones', old_datetime=datetime.combine(old_suggestion_end_date, time(23, 59, 00)), new_datetime=datetime.combine(suggestion_end_date, time(23, 59, 00)))
-                    edit_event_from_document(request=request, document_id=pk, type='votaciones', old_datetime=datetime.combine(old_suggestion_end_date, time(23, 59, 00)), new_datetime=datetime.combine(suggestion_end_date, time(23, 59, 00)))
+                    if old_suggestion_end_date is None:
+                        create_event(request = request, title=f'Final: {document.name}', description='Final periodo aportaciones', creator= request.user, event_datetime=datetime.combine(suggestion_end_date, time(23, 59, 00)), document=document, type='aportaciones')
+                        create_event(request = request, title=f'Inicio: {document.name}', description='Inicio periodo votaciones', creator= request.user, event_datetime=datetime.combine(suggestion_end_date, time(23, 59, 00)), document=document, type='votaciones')
+                    else:
+                        edit_event_from_document(request=request, document_id=pk, type='aportaciones', old_datetime=datetime.combine(old_suggestion_end_date, time(23, 59, 00)), new_datetime=datetime.combine(suggestion_end_date, time(23, 59, 00)))
+                        edit_event_from_document(request=request, document_id=pk, type='votaciones', old_datetime=datetime.combine(old_suggestion_end_date, time(23, 59, 00)), new_datetime=datetime.combine(suggestion_end_date, time(23, 59, 00)))
                 if voting_end_date and voting_end_date != old_voting_end_date:
-                    edit_event_from_document(request=request, document_id=pk, type='votaciones', old_datetime=datetime.combine(old_voting_end_date, time(23, 59, 00)), new_datetime=datetime.combine(voting_end_date, time(23, 59, 00)))
+                    if old_voting_end_date is None:
+                        create_event(request = request, title=f'Final: {document.name}', description='Final periodo votaciones', creator= request.user, event_datetime=datetime.combine(voting_end_date, time(23, 59, 00)), document=document, type='votaciones')
+                    else:
+                        edit_event_from_document(request=request, document_id=pk, type='votaciones', old_datetime=datetime.combine(old_voting_end_date, time(23, 59, 00)), new_datetime=datetime.combine(voting_end_date, time(23, 59, 00)))
                 
                 
                 return redirect('view_pdf_admin', updated_document.id)

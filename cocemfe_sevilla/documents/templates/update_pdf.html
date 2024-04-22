@@ -157,7 +157,7 @@
                                         <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
                                             Comienzo de aportaciones<span class="text-danger"> *</span>
                                         </label>
-                                        {{ form.suggestion_start_date }}
+                                        <input type="date" name="suggestion_start_date" value="{{ document.suggestion_start_date|date:'Y-m-d' }}">
                                         {% for error in form.suggestion_start_date.errors %}
                                             <span class="error">{{ error }}</span>
                                         {% endfor %}
@@ -166,7 +166,7 @@
                                         <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
                                             Cierre de aportaciones<span class="text-danger"> *</span>
                                         </label>
-                                        {{ form.suggestion_end_date }}
+                                        <input type="date" name="suggestion_end_date" value="{{ document.suggestion_end_date|date:'Y-m-d' }}">
                                         {% for error in form.suggestion_end_date.errors %}
                                             <span class="error">{{ error }}</span>
                                         {% endfor %}
@@ -177,7 +177,7 @@
                                         <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
                                             Cierre de votaciones <span class="text-danger"> *</span>
                                         </label>
-                                        {{ form.voting_end_date }}
+                                        <input type="date" name="voting_end_date" value="{{ document.voting_end_date|date:'Y-m-d' }}">
                                         {% for error in form.voting_end_date.errors %}
                                             <span class="error">{{ error }}</span>
                                         {% endfor %}
