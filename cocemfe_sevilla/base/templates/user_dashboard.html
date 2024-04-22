@@ -58,7 +58,7 @@
 <div class="container">
     <div class="top">
         <div class="left">
-            <div id='calendar' class='my-2 space-y-1 mb-4'></div>
+            <div id='calendar' class='my-2 space-y-1 mb-4' style="max-height: 450px;"></div>
         </div>
         <div class="right">
             <h3 class="my-2 text-center">Documentos</h3>
@@ -135,18 +135,32 @@
     {% endif %}
 </div>
 
-<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.11/index.global.min.js'></script>
-<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.11/index.global.min.js'></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.0/main.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.0/main.min.css" rel="stylesheet" />
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@3.10.2/dist/locale/es.js'></script>
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-      var calendarEl = document.getElementById('calendar');
-      var calendar = new FullCalendar.Calendar(calendarEl, {
-        height: 500,
-        locale: 'es',
-        firstDay: 1,
-        initialView: 'dayGridMonth',
-      });
-      calendar.render();
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            events: "/calendars/all_events",
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+            locale: 'es',
+            selectable: true,
+            selectHelper: true,
+            eventLimit: true,
+            eventDisplay: 'list-item'
+        });
+        calendar.render();
     });
 </script>
 

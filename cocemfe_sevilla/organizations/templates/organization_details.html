@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+{% block title %}Detalles de Organización{% endblock %}
+{% block encabezado %}{% endblock %}
+{% block contenido %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de Organización</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
+    <style>
+        body {
+            color: #000;
+            overflow-x: hidden;
+            height: 100%;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+
+        .card {
+            padding: 30px 40px;
+            margin-top: 60px;
+            margin-bottom: 60px;
+            border: none !important;
+            box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .blue-text {
+            color: #00BCD4;
+        }
+
+        .form-control-label {
+            margin-bottom: 0;
+        }
+
+        input,
+        textarea,
+        button {
+            padding: 8px 15px;
+            border-radius: 5px !important;
+            margin: 5px 0px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            font-size: 18px !important;
+            font-weight: 300;
+        }
+
+        input:focus,
+        textarea:focus {
+            -moz-box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+            border: 3px solid #00BCD4;
+            outline-width: 0;
+            font-weight: 400;
+        }
+
+        .btn-block {
+            text-transform: uppercase;
+            font-size: 15px !important;
+            font-weight: 400;
+            height: 43px;
+            cursor: pointer;
+        }
+
+        .btn-orange2 {
+            background-color: #FFA500;
+            color: white;
+        }
+
+        .btn-block:hover {
+            color: #fff !important;
+        }
+
+        button:focus {
+            -moz-box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+            outline-width: 0;
+        }
+
+        .form-container {
+            padding: 20px;
+            border: 50px solid rgba(0, 165, 153, 0.3);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 165, 153, 0.3);
+        }
+
+        /* Hacer el formulario más estrecho */
+        .col-xl-7,
+        .col-lg-8,
+        .col-md-9,
+        .col-11 {
+            max-width: 600px;
+            /* Ajusta el ancho según tus necesidades */
+        }
+
+        .cancel-btn-container {
+            text-align: left;
+            /* Alineado a la izquierda */
+            margin-top: 20px;
+        }
+
+        .organization-info {
+            text-align: left;
+            /* Alineado a la izquierda */
+            margin-bottom: 10px;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 10px;
+        }
+
+        .info-title {
+            flex: 0 0 30%;
+            font-weight: bold;
+        }
+
+        .info-value {
+            flex: 0 0 70%;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container-fluid px-1 py-5 mx-auto text-center">
+        <h1 class="form-heading mb-4" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+            Detalles de Organización
+        </h1>
+        <div class="row d-flex justify-content-center">
+            <div class="col-xl-7 col-lg-8 col-md-9 col-11 text-center card form-container">
+                <div class="organization-info">
+                    <div class="info-row">
+                        <div class="info-title">
+                            <label for="name" class="form-control-label px-3"><i class="fas fa-building"></i> Nombre:</label>
+                        </div>
+                        <div class="info-value">
+                            <p>{{ organization.name }}</p>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-title">
+                            <label for="telephone_number" class="form-control-label px-3"><i class="fa fa-phone"></i> Teléfono:</label>
+                        </div>
+                        <div class="info-value">
+                            <p>{{ organization.telephone_number }}</p>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-title">
+                            <label for="address" class="form-control-label px-3"><i class="fas fa-map-marker-alt"></i> Dirección:</label>
+                        </div>
+                        <div class="info-value">
+                            <p>{{ organization.address }}</p>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-title">
+                            <label for="email" class="form-control-label px-3"><i class="fa fa-envelope"></i> Correo Electrónico:</label>
+                        </div>
+                        <div class="info-value">
+                            <p>{{ organization.email }}</p>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-title">
+                            <label for="zip_code" class="form-control-label px-3"><i class="fas fa-mail-bulk"></i> Código Postal:</label>
+                        </div>
+                        <div class="info-value">
+                            <p>{{ organization.zip_code }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="cancel-btn-container">
+                    <div class="form-group col-sm-6">
+                        <div class="row justify-content-start">
+                            <div class="form-group col-sm-6 text-left">
+                                <button type="button" class="btn btn-danger" id="cancelBtn">Volver</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const cancelBtn = document.getElementById("cancelBtn");
+        cancelBtn.addEventListener("click", function () {
+            window.history.back(); // Retrocede a la página anterior
+        });
+    });
+</script>
+
+</html>
+{% endblock %}

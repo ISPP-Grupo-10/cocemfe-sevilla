@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% block title %}Detalles de Professional{% endblock %}
+{% block encabezado %}{% endblock %}
+{% block contenido %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-ZAElWN6PqB8kyByGWGdIV6yB/wWw+2sBOnTgCZlb5B5KZl3IFIKo3sggs2pihGzwCwPbLjBOvDT6xg6lL7sR7Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <title>Detalles de Usuario</title>
+</head>
+<body>
+    <style>
+        body {
+            color: #000;
+            overflow-x: hidden;
+            height: 100%;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+        .card {
+            padding: 30px 40px;
+            margin-top: 60px;
+            margin-bottom: 60px;
+            border: none !important;
+            box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.2);
+        }
+        .blue-text {
+            color: #00BCD4;
+        }
+        .label {
+            font-family: 'Arial', sans-serif;
+            font-weight: bold;
+            text-align: left;
+        }
+        .detail {
+            margin-bottom: 10px;
+        }
+        .detail p {
+            margin-bottom: 5px;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .details-container {
+            width: calc(100% - 120px); /* Ajuste para la imagen de perfil */
+        }
+        .photo-container {
+            width: 100px; /* Ancho fijo para la imagen de perfil */
+        }
+        .photo-container img {
+            width: 100%;
+            height: auto;
+        }
+
+        .form-container {
+            padding: 20px;
+            border: 50px solid rgba(0, 165, 153, 0.3);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 165, 153, 0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .cancel-btn-container {
+            text-align: right;
+            margin-top: 20px;
+        }
+    </style>
+    <div class="row d-flex justify-content-center">
+        <div class="col-xl-7 col-lg-8 col-md-9 col-11 text-left card form-container">
+            <h1>Detalles de {{ professional.first_name }}</h1>
+            <div class="container">
+                <div class="details-container">
+                    <div class="detail">
+                        <p class="label"><i class="fas fa-user"></i> Nombre de usuario<span class="text-danger"> </span></p>
+                        <p>{{ professional.username }}</p>
+                    </div> 
+                    <div class="detail">
+                        <p class="label"><i class="fas fa-user"></i> Nombre<span class="text-danger"> </span></p>
+                        <p>{{ professional.first_name }}</p>
+                    </div> 
+                    <div class="detail">
+                        <p class="label"><i class="fa fa-phone"></i> Teléfono<span class="text-danger"> </span></p>
+                        <p>{{ professional.telephone_number }}</p>
+                    </div>
+                    <div class="detail">
+                        <p class="label"><i class="fa fa-address-card"></i> Número de licencia<span class="text-danger"> </span></p>
+                        <p>{{ professional.license_number }}</p>
+                    </div>
+                    <div class="detail">
+                        <p class="label"><i class="fas fa-building"></i> Organización<span class="text-danger"> </span></p>
+                        <p>{{ professional.organizations }}</p>
+                    </div>
+                    <div class="detail">
+                        <p class="label"><i class="fa fa-envelope"></i> Correo electrónico<span class="text-danger"> </span></p>
+                        <p>{{ professional.email }}</p>
+                    </div>
+                </div>
+                <div class="photo-container">
+                    {% if professional.profile_picture %}
+                        <div class="text-center">
+                            <img src="{{ professional.profile_picture.url }}" alt="Imagen de perfil actual"  class="imagen-media">
+                        </div>
+                    {% else %}
+                        <div class="text-center">
+                            <img src="/media/IconoUsuario.jpg" alt="Imagen por defecto"  class="imagen-media">
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="cancel-btn-container">
+                <button type="button" class="btn btn-danger" id="cancelBtn">Volver</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const cancelBtn = document.getElementById("cancelBtn");
+        cancelBtn.addEventListener("click", function () {
+            window.history.back(); // Retrocede a la página anterior
+        });
+    });
+</script>
+
+</html>
+{% endblock %}

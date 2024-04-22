@@ -15,7 +15,10 @@ def map_index(request):
         coordinate = Coordinates.objects.filter(location=city).first()
         if not coordinate:
             latitude, longitude = get_coordinates_openstreetmap(city)
-            Coordinates.objects.create(location=city, latitude=latitude, longitude=longitude)
+            if latitude and longitude:
+                Coordinates.objects.create(location=city, latitude=latitude, longitude=longitude)
+            else:
+                continue
         else:
             latitude, longitude = coordinate.latitude, coordinate.longitude
             
@@ -52,7 +55,10 @@ def map_search(request, latitude, longitude):
         coordinate = Coordinates.objects.filter(location=city).first()
         if not coordinate:
             latitude, longitude = get_coordinates_openstreetmap(city)
-            Coordinates.objects.create(location=city, latitude=latitude, longitude=longitude)
+            if latitude and longitude:
+                Coordinates.objects.create(location=city, latitude=latitude, longitude=longitude)
+            else:
+                continue
         else:
             latitude, longitude = coordinate.latitude, coordinate.longitude
 
