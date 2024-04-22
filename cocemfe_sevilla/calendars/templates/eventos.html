@@ -87,7 +87,8 @@
                         participantes += '<li>' + participante.first_name + ' ' + participante.last_name + '</li>';
                     });
                     participantes += '</ul>';
-                    $('#participantesEvento').html(participantes);  
+                    $('#participantesEvento').html(participantes);
+                    $('#descripcionEvento').css('max-height', $('#eventoDetalle').height() - $('#tituloEvento').outerHeight(true) - $('#participantesEvento').outerHeight(true) - 20);
                     $('#eliminarEventoBtn').attr('data-event-id', evento.id); // Añadir el id del evento al botón eliminar
                     $('#eventoModal').modal('show');
                 }
@@ -117,6 +118,16 @@
             display: flex;
             align-items: center;
             margin-bottom: 10px;
+        }
+
+        #descripcionEvento {
+            word-wrap: break-word;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        #tituloEvento {
+            word-wrap: break-word;
         }
     </style>
 
