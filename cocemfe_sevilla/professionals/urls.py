@@ -2,7 +2,10 @@ from django.conf import settings
 from django.urls import path
 from .views import professional_data
 from django.conf.urls.static import static
-from .views import professional_list, create_professional, delete_professional, edit_user_view, professional_details, custom_login, custom_logout, request_list, create_request, update_request, request_document_chats, change_password, VerifyEmailView
+
+
+from .views import professional_list, create_professional, delete_professional, edit_user_view, professional_details, custom_login, custom_logout, request_list, create_request, update_request, request_document_chats, delete_account, change_password, VerifyEmailView
+
 
 app_name = 'professionals'
 
@@ -21,5 +24,6 @@ urlpatterns = [
     path('chats/', request_document_chats, name="chats"),
     path('change_password/', change_password, name='update_password'),
     path('verify_email/<str:uidb64>/', VerifyEmailView.as_view(), name='verify_email'),
+    path('delete_account/', delete_account, name='delete_account'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
