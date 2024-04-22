@@ -2,7 +2,7 @@
 ****
 | NOMBRE DEL PROYECTO | CLIENTE  | EQUIPO DE TRABAJO | FECHA DE ELABORACIÓN | FASE DEL PROYECTO |
 |---------------------|----------|-------------------|----------------------|-------------------|
-| Cocemfe-Web         | COCEMFE  | Grupo 10          | 6/03/2024           | Sprint2           |
+| Cocemfe-Web         | COCEMFE  | Grupo 10          | 02/04/2024           | Sprint3           |
 
 
 | MIEMBROS DEL EQUIPO DE TRABAJO | MIEMBROS DEL EQUIPO DE TRABAJO |
@@ -23,7 +23,7 @@
 
 **Nombre del alumno:** [Nombre alumno]
 
-**Lugar y fecha:** Sevilla a 07/03/2024
+**Lugar y fecha:** Sevilla a 05/04/2024
 
 **Grupo de Trabajo:** Grupo 10
 
@@ -70,17 +70,23 @@ Con el fin de penalizar a aquellos miembros del equipo que no hayan desempeñado
 
 Así mismo, al firmar este documento me comprometo a realizar las tareas que me correspondan de esta lista en el periodo comprendido entre el 05/03/2024 y el 09/04/2024 referente al Sprint 2:
 
-- Cambiar la plantilla de documentos: Datos y Estado
-- Implementar login y editar Profesionales
-- Implementar el chat privado entre Profesionales y Administrador
-- Implementar notificaciones sobre cambios en Documentos
-- Diseñar e implementar una pantalla de bienvenida
-- Implementar una vista de comentarios en cada Documento
-- Implementar aprobaciones provisionales de Profesionales
-- Actualizar el documento “uso de IA”
-- Implementar subida y aprobación final de un Documento
-- Realizar la gestión del feedback de usuarios pilotos
-- Aplicar métricas de rendimiento
+- Implementar mapa con marcadores
+- Implementar panel de estadísticas
+- Implementar calendario
+- Implementar creación de eventos
+- Implementar donaciones
+- Implementar pantalla de inicio para administradores
+- Implementar pantalla de inicio para profesionales
+- Implementar manual de usuarios
+- Implementar pantalla de “Mi Perfil”
+- Implementar cambio de contraseña
+- Actualizar frontend
+- Finalizar implementación de subrayado de texto
+- Implementar validación de correos
+- Crear presentación
+- Testear las funcionalidades implementadas
+- Solucionar fallos detectados por Codacy
+- Desplegar la aplicación
 
 Al firmar este documento, entiendo y acepto las responsabilidades que se me han asignado y me comprometo a cumplirlas según lo establecido en este compromiso.
 
