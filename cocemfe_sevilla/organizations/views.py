@@ -25,7 +25,7 @@ def organization_options(request):
 @user_passes_test(is_admin)
 def get_organization(request, pk):
     organization = get_object_or_404(Organization, pk=pk)
-    return render(request, 'organization_detail.html', {'organization': organization})
+    return render(request, 'organization_details.html', {'organization': organization})
 
 @user_passes_test(is_admin)
 def update_organization(request, pk):

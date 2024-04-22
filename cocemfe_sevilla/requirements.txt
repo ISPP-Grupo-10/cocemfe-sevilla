@@ -1,3 +1,5 @@
 django-bootstrap-v5
 Pillow==9.4.0
+folium==0.12.1
 coverage==6.5.0
+requests==2.31.0

@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% block title %}Crear Evento{% endblock %}
+{% block encabezado %}{% endblock %}
+{% block contenido %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
+    <title>Crear Evento</title>
+
+</head>
+
+<body>
+    <style>
+        body {
+            color: #000;
+            overflow-x: hidden;
+            height: 100%;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+
+        .card {
+            padding: 30px 40px;
+            margin-top: 60px;
+            margin-bottom: 60px;
+            border: none !important;
+            box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .blue-text {
+            color: #00BCD4;
+        }
+
+        .form-control-label {
+            margin-bottom: 0;
+        }
+
+        input,
+        textarea,
+        button {
+            padding: 8px 15px;
+            border-radius: 5px !important;
+            margin: 5px 0px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            font-size: 18px !important;
+            font-weight: 300;
+        }
+
+        input:focus,
+        textarea:focus {
+            -moz-box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+            border: 3px solid #00BCD4;
+            outline-width: 0;
+            font-weight: 400;
+        }
+
+        .btn-block {
+            text-transform: uppercase;
+            font-size: 15px !important;
+            font-weight: 400;
+            height: 43px;
+            cursor: pointer;
+            background-color: rgba(0, 162, 151, 0.842);
+            /* Color del botón "Crear" */
+
+        }
+
+        .btn-block:hover {
+            color: #fff !important;
+        }
+
+        button:focus {
+            -moz-box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+            outline-width: 0;
+        }
+
+        .form-container {
+            padding: 20px;
+            border: 50px solid rgba(0, 165, 153, 0.3);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 165, 153, 0.3);
+        }
+
+        /* Hacer el formulario más estrecho */
+        .col-xl-7,
+        .col-lg-8,
+        .col-md-9,
+        .col-11 {
+            max-width: 600px;
+            /* Ajusta el ancho según tus necesidades */
+        }
+    </style>
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-danger" role="alert">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% if form.errors %}
+    <div class="alert alert-danger" role="alert">
+        <ul>
+            {% for field, errors in form.errors.items %}
+            {% for error in errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <div class="container-fluid px-1 py-5 mx-auto text-center">
+        <h1 class="form-heading mb-4" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+            Nuevo Evento
+        </h1>
+        <div class="row d-flex justify-content-center">
+            <div class="col-xl-7 col-lg-8 col-md-9 col-11 text-center card form-container">
+                <form method="post" class="form-card">
+                    {% csrf_token %}
+                    <div class="row justify-content-between text-left">
+                        <div class="form-group col-12 flex-column d-flex mb-4">
+                            <label for="id_name" class="form-control-label px-3"
+                                style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                <i class="fas fa-user"></i> Título<span class="text-danger"> *</span>
+                            </label>
+                            {{ form.title }}
+                            {% for error in form.title.errors %}
+                            <span class="error">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="row justify-content-between text-left">
+                        <div class="form-group col-12 flex-column d-flex mb-4">
+                            <label for="id_name" class="form-control-label px-3"
+                                style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                <i class="fas fa-user"></i> Descripción<span class="text-danger"> *</span>
+                            </label>
+                            {{ form.description }}
+                            {% for error in form.description.errors %}
+                            <span class="error">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="row justify-content-between text-left">
+                        <div class="form-group col-12 flex-column d-flex mb-4">
+                            <label for="id_name" class="form-control-label px-3"
+                                style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                <i class="far fa-calendar-alt"></i> Fecha y hora<span class="text-danger"> *</span>
+                            </label>
+                            {{ form.datetime }}
+                            {% for error in form.datetime.errors %}
+                            <span class="error text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="row justify-content-between text-left">
+                        <div class="form-group col-12 flex-column d-flex mb-4">
+                            <label for="id_name" class="form-control-label px-3"
+                                style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                <i class="fa fa-envelope"></i> Documento<span class="text-danger"> *</span>
+                            </label>
+                            {{ form.document }}
+                            {% for error in form.document.errors %}
+                            <span class="error">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-between text-left">
+                        <div class="form-group col-12 flex-column d-flex mb-4">
+                            <label for="id_name" class="form-control-label px-3"
+                                style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                <i class="fa fa-envelope"></i> Tipo<span class="text-danger"> *</span>
+                            </label>
+                            {{ form.type }}
+                            {% for error in form.type.errors %}
+                            <span class="error">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <button type="submit">Crear Evento</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+{% endblock %}

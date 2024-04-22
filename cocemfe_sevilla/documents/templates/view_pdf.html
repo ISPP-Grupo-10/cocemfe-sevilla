@@ -26,21 +26,55 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/view_pdf.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/chat.css' %}">
-
-<h2 class="text-center">Detalles de documento</h2>
+<br></br>
+<h1 class="text-center">Detalles de documento</h1>
 <div class='doc-container'>
     {% if request.user.is_staff %}
     <!-- Verifica si el usuario es un admin -->
-    <a href="{% url 'update_pdf' pk=pdf.pk %}">
-        <button type="button" class="btn btn-primary">Editar Documento</button>
-    </a>
+    
+    <div id="myModal" class="modal">
+        <div class="modal-content" style="width: 20%;">
+            <span class="close">&times;</span>
+            <br/>
+            <form id="eventForm">
+            <div class="form-group">
+              <label for="title">Título:</label>
+              <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+            <br/>
+            <div class="form-group">
+              <label for="description">Descripción:</label>
+              <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+            </div>
+            <br/>
+            <div class="form-group">
+              <label for="datetime">Fecha y Hora:</label>
+              <input type="datetime-local" class="form-control" id="datetime" name="datetime" required>
+            </div>
+            <br/>
+            <div class="form-group">
+              <label for="type">Tipo:</label>
+              <select class="form-control" id="type" name="type" required>
+                <option value="reunion">Reunión</option>
+                <option value="votaciones">Votación</option>
+                <option value="revision">Revisión</option>
+                <option value="aportaciones">Aportaciones</option>
+              </select>
+            </div>
+            <br/>
+            <button type="submit" class="btn btn-primary">Crear</button>
+          </form>
+        </div>
+      </div>
+      
     {% endif %}
-    <div class="doc-info">
-        <p><strong>Documento:</strong> {{ pdf.name }}</p>
-        <p><strong>Plazo:</strong> {{ pdf.suggestion_start_date }} - {{ pdf.suggestion_end_date }}</p>
-        <p><strong>Ubicación:</strong> {{ pdf.ubication }}</p>
-        <p class="estado-{{ pdf.status|lower }}">{{ pdf.status }}</p>
-    </div>    
+       
+    <div class="doc-info" style="font-size: 14px;">
+        <p style="font-size: 22px;"><strong>Documento:</strong> {{ pdf.name }}</p>
+        <p style="font-size: 22px;"><strong>Plazo:</strong> {{ pdf.suggestion_start_date }} - {{ pdf.suggestion_end_date }}</p>
+        <p style="font-size: 22px;"><strong>Ubicación:</strong> {{ pdf.ubication }}</p>
+        <p class="estado-{{ pdf.status|lower }}" style="font-size: 22px; border: 2px solid rgb(255, 101, 63); padding: 5px;">{{ pdf.status }}</p>
+    </div> 
     <div class="row">
         {% if pdf.pdf_file %}
         
@@ -48,6 +82,9 @@
             
             <iframe id="pdfViewer" src="{% static 'pdfjs/web/viewer.html' %}?file={{ pdf.pdf_file.url | urlencode }}" width="100%" height="600"></iframe>
             <button onclick="toggleFullScreen()" type="submit">Ver en pantalla completa</button>
+            {% if pdf.status == 'Aportaciones' %}
+                <button id="captureButton" type="submit" style="margin-left: 12px;">Capturar Selección</button>
+            {% endif %}
             <button id="verSeleccionButton" style="display: none;" onclick="verSeleccion()" type="submit">Ver Selección</button>
             <button id="limpiarSeleccionButton" style="display: none;" onclick="limpiarSeleccion()" type="submit">Limpiar Selección</button>
 
@@ -66,13 +103,15 @@
                 {% else %}
                     <p>El documento aún no está disponible para aportaciones. Quedan:</p>
                     <div class="contador-container">
-                        <div id="dias" class="contador-item"></div>
-                        <div class="contador-item">:</div>
-                        <div id="horas" class="contador-item"></div>
-                        <div class="contador-item">:</div>
-                        <div id="minutos" class="contador-item"></div>
-                        <div class="contador-item">:</div>
-                        <div id="segundos" class="contador-item"></div>
+                        <div class="contador-container" style="background-color: rgb(255, 101, 63);">
+                            <div id="dias" class="contador-item" style="background-color: rgb(255, 101, 63); font-weight: 800;"></div>
+                            <div class="contador-item" style="background-color: rgb(255, 101, 63); font-weight: 800;">:</div>
+                            <div id="horas" class="contador-item" style="background-color: rgb(255, 101, 63); font-weight: 800;"></div>
+                            <div class="contador-item" style="background-color: rgb(255, 101, 63); font-weight: 800;">:</div>
+                            <div id="minutos" class="contador-item" style="background-color: rgb(255, 101, 63); font-weight: 800";></div>
+                            <div class="contador-item" style="background-color: rgb(255, 101, 63); font-weight: 800;">:</div>
+                            <div id="segundos" class="contador-item" style="background-color: rgb(255, 101, 63); font-weight: 800";></div>
+                        </div>
                     </div>
                 {% endif %}
             </div>
@@ -107,11 +146,27 @@
             <!-- Aquí puedes colocar el contenido de los comentarios -->
             <h3>Comentarios</h3>
             <div class="comments-container">
-                {% for suggestion in page_obj %}
-                    {% if pdf.status == 'Votaciones' %}
-                        {% with suggestion_id=suggestion.id %}
-                            <div class="comment-box">
-                                <a href="{% url 'view_suggestion' suggestion.id %}">
+                {% for suggestion in page_obj.object_list %}
+                    {% if forloop.counter <= 3 %}  <!-- Limitar a 4 comentarios por página -->
+                        {% if pdf.status == 'Votaciones' %}
+                            {% with suggestion_id=suggestion.id %}
+                                <a href="{% url 'view_suggestion' suggestion.id %}" style="text-decoration: none;">
+                                    <div class="comment-box">
+                                        <div class="comment-header">
+                                            <span>{{ suggestion.professional }}</span>
+                                            <span>{{ suggestion.date }}</span>
+                                        </div>
+                                        <div class="comment-content">
+                                            <p style="font-size: 19px;">{{ suggestion.main }}</p>
+                                            <p style="color: #4b4a4a;">{{ suggestion.justification }}</p>
+                                            <!-- Agrega más contenido si es necesario -->
+                                        </div>
+                                    </div>
+                                </a>
+                            {% endwith %}
+                        {% else %}
+                            <a href="{% url 'view_suggestion' suggestion.id %}" style="text-decoration: none;">
+                                <div class="comment-box">
                                     <div class="comment-header">
                                         <span>{{ suggestion.professional }}</span>
                                         <span>{{ suggestion.date }}</span>
@@ -121,37 +176,16 @@
                                         <p style="color: #4b4a4a;">{{ suggestion.justification }}</p>
                                         <!-- Agrega más contenido si es necesario -->
                                     </div>
-                                </a>
-                                <ul>
-                                    {% for suggestion_id, vote_info in votes_info.items %}
-                                        {% if suggestion_id == suggestion.id %}
-                                            <li>{{ vote_info.favor_count }}<span aria-label="Like" role="img"> 👍</span></li>
-                                            <li>{{ vote_info.against_count }}<span aria-label="Dislike" role="img"> ❌</span></li>
-                                        {% endif %}
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        {% endwith %}
-                    {% else %}
-                    <div class="comment-box" onclick="goToSuggestionPage(parseInt('{{ suggestion.page }}'), '{{ pdf.pdf_file.url }}', '{{ suggestion.section }}')">
-                        <div class="comment-header">
-                            <span>{{ suggestion.professional }}</span>
-                            <span>{{ suggestion.date }}</span>
-                        </div>
-                        <div class="comment-content">
-                            <p style="font-size: 19px;">{{ suggestion.main }}</p>
-                            <p style="color: #4b4a4a;">{{ suggestion.justification }}</p>
-                            <!-- Agrega más contenido si es necesario -->
-                        </div>
-                    </div>
+                                </div>
+                            </a>
+                        {% endif %}
                     {% endif %}
                 {% empty %}
                     <b>No hay comentarios</b>
                 {% endfor %}
             </div>
-
-            
-
+        
+            <!-- Controles de paginación -->
             <div class="pagination">
                 <span class="step-links">
                     {% if page_obj.has_previous %}
@@ -171,13 +205,13 @@
                 </span>
             </div>
         </div>
+        
         {% endif %}
         
         
         
         {% if pdf.status == 'Aportaciones' %}
-        <button class="comment-form-container" id="captureButton" type="submit">Capturar Selección</button>
-        <div class="comment-form-container">
+        <div class="comment-form-container" style="margin-left: 12px;">
             <!-- Formulario para enviar comentarios -->
             <form method="post" action="{% url 'create_suggestion' document_id=pdf.pk %}">
                 {% csrf_token %}
@@ -208,13 +242,14 @@
                     <input type="number" id="page" name="page" required>
                 </div>
 
-                <button type="submit">Enviar comentario</button>
+                <button type="submit" style="background-color: orange;">Enviar comentario</button>
             </form>
         </div>
         {% endif %}
         
     </div>
     {% if request.user.is_staff or request.user in pdf.professionals.all %}
+    <br></br>
     <a href="{% url 'view_pdf_chat' pk=pdf.pk %}">
         <button type="button" class="btn btn-secondary" href="{% url 'view_pdf_chat' pk=pdf.pk %}" >
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-chat-dots" viewBox="0 0 16 16">
@@ -225,9 +260,76 @@
     </a>
     {% endif %}
 
+    {% if request.user.is_staff %}
+    <a href="{% url 'update_pdf' pk=pdf.pk %}">
+        <button type="button" class="btn btn-primary" style="background-color: #4b4a4a; border-color: #4b4a4a;" >Editar Documento</button>
+    </a>
+    <a href="{% url 'votings:voting_statistics' pk=pdf.pk %}">
+        <button type="button" class="btn btn-primary" style="background-color: #4b4a4a; border-color: #4b4a4a;">Estadísticas</button>
+    </a>
+    <a>
+        <button id="openModalBtn" type="button" class="btn btn-primary" style="background-color: #4b4a4a; border-color: #4b4a4a;">Crear Evento</button>
+    </a>
+    {% endif %}
 </div>
 
 <script>
+    // Obtener el modal y el botón de cierre
+    var modal = document.getElementById("myModal");
+    var span = document.getElementsByClassName("close")[0];
+    var pdf_document_pk = '{{ pdf.pk }}'
+
+    // Abrir el modal al hacer clic en el botón
+    document.getElementById("openModalBtn").onclick = function() {
+    modal.style.display = "block";
+    }
+
+    // Cerrar el modal al hacer clic en el botón de cierre (X)
+    span.onclick = function() {
+    modal.style.display = "none";
+    }
+
+    // Cerrar el modal al hacer clic fuera del contenido del modal
+    window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+    }
+
+    // Enviar los datos del formulario al backend al hacer clic en "Crear"
+    document.getElementById("eventForm").onsubmit = function(event) {
+    event.preventDefault(); // Evitar el envío del formulario por defecto
+    
+    // Obtener los datos del formulario
+    var formData = new FormData(document.getElementById("eventForm"));
+    formData.append("document_id", pdf_document_pk);
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+    // Enviar los datos al backend mediante una solicitud AJAX
+    fetch("{% url 'calendars:create_modal_event' %}", {
+        method: "POST",
+        body:formData,
+    })
+    .then(response => {
+        if (response.ok) {
+        // Cerrar el modal si la solicitud fue exitosa
+        modal.style.display = "none";
+        // Recargar la página para actualizar los eventos mostrados
+        window.location.reload();
+        } else {
+            response.json().then(data => {
+            alert(data.error);
+            }).catch(error => {
+                console.error("Error:", error);
+                alert("Hubo un error al crear el evento.", error);
+            });
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("Hubo un error al crear el evento.");
+    });
+    }
+
 
     function verSeleccion() {
         var page = document.getElementById('page').value;
@@ -480,6 +582,44 @@
         background-color: #ddd;
         border-radius: 5px;
     }
+    /* Estilos para el modal */
+    .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+    }
+
+    /* Contenido del modal */
+    .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    }
+
+    /* Cierre del modal */
+    .close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 30px;
+    font-weight: bold;
+    color: #000;
+    cursor: pointer;
+    }
+
+    .close:hover {
+        color: #aaa;
+    }
+
 </style>
 
 {% endblock %}

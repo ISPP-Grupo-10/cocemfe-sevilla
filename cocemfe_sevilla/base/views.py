@@ -2,10 +2,22 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from .forms import AceptarTerminosForm
+from documents.models import Document
 
 @login_required
 def pagina_base(request):
-    return render(request, 'index.html') 
+    
+    if request.user.is_superuser:
+        documentos = Document.objects.all()
+    else:
+        documentos = Document.objects.filter(professionals=request.user)
+
+    name = request.GET.get('name')
+
+    if name:
+        documentos = documentos.filter(name__icontains=name)
+
+    return render(request, 'user_dashboard.html' , {'documentos': documentos})
 
 def politica_terminos(request):
     if request.method == 'POST':

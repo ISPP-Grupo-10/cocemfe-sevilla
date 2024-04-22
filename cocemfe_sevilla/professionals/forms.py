@@ -1,12 +1,10 @@
 import random
 import string
 from django import forms
-from django.contrib.auth import get_user_model
 from organizations.models import Organization
 from .models import Professional, Request
-from django import forms
-from .models import Professional
 from django.contrib.auth.hashers import make_password 
+from django.forms import ValidationError
 
 class ProfessionalForm(forms.ModelForm):
     class Meta:
@@ -23,19 +21,24 @@ class ProfessionalForm(forms.ModelForm):
         super(ProfessionalForm, self).__init__(*args, **kwargs)
         
         if not user_is_staff: 
-            self.fields.pop('username')
-            self.fields.pop('first_name')
-            self.fields.pop('last_name')
-            self.fields.pop('license_number')
-            self.fields.pop('organizations')
-            self.fields.pop('profile_picture')
+            self.fields['username'].widget.attrs['readonly'] = True
+            self.fields['first_name'].widget.attrs['readonly'] = True
+            self.fields['last_name'].widget.attrs['readonly'] = True
+            self.fields['license_number'].widget.attrs['readonly'] = True
+            # El campo organizations se mantendrá editable pero solo de lectura
+            self.fields['organizations']
+            self.fields['profile_picture'].widget.attrs['disabled'] = True
+            self.fields['profile_picture'].widget.attrs['style'] = 'pointer-events: none;'
+
             
         self.fields.pop('password')
 
     def clean_email(self):
+        email = self.cleaned_data.get('email')
         if not (self.instance.is_superuser or self.instance.is_staff):
-            return self.cleaned_data.get('email', self.instance.email)
-        return self.cleaned_data['email']
+            if email and Professional.objects.exclude(pk=self.instance.pk).filter(email=email).exists():
+                raise forms.ValidationError("Este correo electrónico ya está en uso.")
+        return email
 
     def clean_password(self):
         if not (self.instance.is_superuser or self.instance.is_staff):
@@ -101,6 +104,16 @@ class ProfessionalCreationForm(forms.ModelForm):
     profile_picture = forms.ImageField(required=False)
     password = forms.CharField(widget=forms.HiddenInput(), required=False)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['email'].widget.attrs['readonly'] = False  # Allow editing email field
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if Professional.objects.filter(email=email).exists():
+            raise forms.ValidationError("Este correo electrónico ya está en uso.")
+        return email
+
     def save(self, commit=True):
         professional = super().save(commit=False)
         password = self.cleaned_data.get('password')
@@ -115,7 +128,8 @@ class ProfessionalCreationForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         return cleaned_data
- 
+
+
 class RequestCreateForm(forms.ModelForm):
     class Meta:
         model = Request
@@ -133,3 +147,90 @@ class RequestUpdateForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         return cleaned_data
+
+
+class SecurePasswordChangeForm(forms.Form):
+
+    @staticmethod
+    def validate_password_strength(password):
+        if len(password) < 12:
+            raise ValidationError(
+                ("La contraseña debe tener al menos 12 caracteres."),
+                code='password_too_short'
+            )
+        if not any(char.isupper() for char in password):
+            raise ValidationError(
+                ("La contraseña debe contener al menos una letra mayúscula."),
+                code='password_no_uppercase'
+            )
+        if not any(char.islower() for char in password):
+            raise ValidationError(
+                ("La contraseña debe contener al menos una letra minúscula."),
+                code='password_no_lowercase'
+            )
+        if not any(char.isdigit() for char in password):
+            raise ValidationError(
+                ("La contraseña debe contener al menos un dígito."),
+                code='password_no_digit'
+            )
+
+        if not any(char in "!@#$%^&*()-_=+[]{};:'\"<>,.?/" for char in password):
+            raise ValidationError(
+                ("La contraseña debe contener al menos un carácter especial."),
+                code='password_no_special_char'
+            )
+
+
+    def __init__(self, data=None, user=None, *args, **kwargs):
+        self.user = user
+        super().__init__(data, *args, **kwargs)
+        self.fields['old_password'] = forms.CharField(
+            label='Contraseña antigua',
+            widget=forms.PasswordInput(attrs={'class': 'form-control', 'value': ''}))
+
+    old_password = forms.CharField(
+        label='Contraseña antigua',
+        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+    )
+    new_password1 = forms.CharField(
+        label='Nueva contraseña',
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        validators=[validate_password_strength]
+    )
+    new_password2 = forms.CharField(
+        label='Confirmar nueva contraseña',
+        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+    )
+
+    def clean_old_password(self):
+        old_password = self.cleaned_data.get('old_password')
+        if self.user is None:
+            raise forms.ValidationError('El usuario no está autenticado.')
+        elif not self.user.check_password(old_password):
+            raise forms.ValidationError('La contraseña antigua es incorrecta.')
+        return old_password
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if 'new_password1' not in cleaned_data:
+            cleaned_data['new_password1'] = ''
+        new_password1 = cleaned_data.get('new_password1')
+        new_password2 = cleaned_data.get('new_password2')
+        if new_password1 != new_password2 or new_password1 == '':
+            raise forms.ValidationError('Las contraseñas nuevas no coinciden.')
+        return cleaned_data
+
+    def save(self, commit=True):
+        password = self.cleaned_data["new_password1"]
+        
+        try:
+            self.validate_password_strength(password)
+        except forms.ValidationError as e:
+            self.add_error('new_password1', e)
+            raise
+
+        self.user.set_password(password)
+        if commit:
+            self.user.save()
+
+        return self.user
