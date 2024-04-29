@@ -33,6 +33,7 @@ urlpatterns = [
     path('votings/', include('votings.urls')),
     path('accounts/login/', profViews.custom_login),
     path('calendars/', include('calendars.urls')),
+    path('chats/', include('chat_messages.urls')),
 
 ]
 if settings.DEBUG:
