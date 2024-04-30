@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import list_pdf, upload_pdf, view_pdf_admin, update_pdf, delete_pdf, check_pdf, delete_pdf_form, load_comments, publish_comment
+from .views import list_pdf, upload_pdf, view_pdf_admin, update_pdf, delete_pdf, check_pdf, delete_pdf_form
 from suggestions.views import *
 
 
@@ -8,8 +8,6 @@ urlpatterns = [
     path("", list_pdf, name="list_pdf"),
     path('upload_pdf', upload_pdf, name='upload_pdf'),
     path('view_pdf/<int:pk>/', view_pdf_admin, name='view_pdf_admin'),
-    path('view_pdf/<int:pk>/chat', load_comments, name='view_pdf_chat'),
-    path('view_pdf/<int:pk>/chat/post', publish_comment, name='publish_comment'),
     path('update_pdf/<int:pk>/', update_pdf, name='update_pdf'),
     path('delete_pdf/<int:pk>/', delete_pdf, name='delete_pdf'),
     path('check_pdf/<int:pk>/', check_pdf, name='check_pdf'),
