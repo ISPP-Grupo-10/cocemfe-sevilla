@@ -119,11 +119,13 @@ class ProfessionalCreationForm(forms.ModelForm):
         password = self.cleaned_data.get('password')
         if not password:
             password = ''.join(random.choices(string.ascii_letters + string.digits, k=12))
-            self.cleaned_data['password'] = password
-        professional.set_password(make_password(password))
-        if commit:
-            professional.save()
-        return professional
+
+        hashed_password = make_password(password)
+        professional.password = hashed_password
+
+        professional.save()
+
+        return professional, password
 
     def clean(self):
         cleaned_data = super().clean()
@@ -222,15 +224,15 @@ class SecurePasswordChangeForm(forms.Form):
 
     def save(self, commit=True):
         password = self.cleaned_data["new_password1"]
-        
         try:
             self.validate_password_strength(password)
         except forms.ValidationError as e:
             self.add_error('new_password1', e)
             raise
-
         self.user.set_password(password)
         if commit:
             self.user.save()
 
+
         return self.user
+

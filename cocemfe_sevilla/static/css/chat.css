@@ -41,13 +41,11 @@
 }
 
 .textarea-style{
-    width: 200px; /* Ajusta el ancho según tus necesidades */
-    height: 100px; /* Ajusta la altura según tus necesidades */
+    width: 20%; /* Ajusta el ancho según tus necesidades */
     border-radius: 8px; /* Ajusta el radio del borde según tus necesidades */
     border: 1px solid #ccc; /* Añade un borde para visualizar el área del textarea */
     padding: 8px; /* Añade un relleno para separar el texto del borde */
     resize: none;
-    width: 50%; 
 }
 
 .textarea-container{
