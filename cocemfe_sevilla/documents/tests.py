@@ -1,13 +1,11 @@
 from django.test import TestCase
 from django.urls import reverse
-from documents.models import Document
+from documents.models import Document, valid_location
 from professionals.models import Professional
 from django.utils import timezone
 from datetime import timedelta
 from organizations.models import Organization
-from django.test import RequestFactory
 from django.core.files.uploadedfile import SimpleUploadedFile
-from pathlib import Path
 from django.utils.translation import gettext as _  
 class DocumentTestCase(TestCase):
     def setUp(self):
@@ -41,7 +39,7 @@ class DocumentTestCase(TestCase):
             suggestion_end_date=timezone.now() + timedelta(days=30),
             voting_start_date=timezone.now() + timedelta(days=30),
             voting_end_date=timezone.now() + timedelta(days=60),
-            ubication='Ubicación de prueba',
+            ubication='Sevilla',
             status='Cerrado'
         )
         self.document.professionals.add(self.professional)
@@ -104,7 +102,7 @@ class DocumentTestCase(TestCase):
 
         data = {
             'name': 'Documento de prueba',
-            'ubication': 'Ubicación de prueba', 
+            'ubication': 'Sevilla', 
             'status': 'Borrador',
             'suggestion_start_date': self.document.suggestion_start_date,
             'suggestion_end_date': self.document.suggestion_end_date,
@@ -123,7 +121,7 @@ class DocumentTestCase(TestCase):
         data = {
             'suggestion_start_date': timezone.now().date(),
             'name': 'Documento de prueba',
-            'ubication': 'Ubicación de prueba',  
+            'ubication': 'Sevilla',  
             'status': 'Abierto',  
             'suggestion_end_date': '01/01/2021',
             'pdf_file': self.pdf_file,
@@ -174,7 +172,7 @@ class DocumentTestCase(TestCase):
             'voting_end_date':new_voting_end_date,
             'professionals': [self.professional.id, new_professional_id],
             'pdf_file': self.pdf_file,
-            'ubication': 'Ubicación de prueba',  
+            'ubication': 'Sevilla',  
         })
         self.assertEqual(response.status_code, 302) 
 
@@ -243,7 +241,7 @@ class DocumentTestCase(TestCase):
             'voting_end_date':new_voting_end_date,
             'professionals': [self.professional.id],
             'pdf_file': self.pdf_file,
-            'ubication': 'Ubicación de prueba', 
+            'ubication': 'Sevilla', 
         })
 
         self.assertEqual(response.status_code, 302) 
@@ -253,3 +251,12 @@ class DocumentTestCase(TestCase):
 
         self.assertEqual(modified_document.name, new_name)
         self.assertEqual(modified_suggestion_end_date, new_suggestion_end_date)
+
+class GetCoordinatesOpenStreetMapTestCase(TestCase):
+    def test_get_coordinates_openstreetmap(self):
+        city = 'Seville'
+        self.assertTrue(valid_location(city))
+
+    def test_get_coordinates_openstreetmap_not_exist(self):
+        city = 'ADFASDJIV'
+        self.assertFalse(valid_location(city))
