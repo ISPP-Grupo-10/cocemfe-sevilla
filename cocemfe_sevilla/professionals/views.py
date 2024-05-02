@@ -1,19 +1,18 @@
+from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 from django.views import View
 from django.contrib import messages
 from django.contrib.auth import logout, login, authenticate
-
+from .utils import get_professional
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.template.loader import get_template
+from django.core.mail import EmailMultiAlternatives
 from documents.models import Document
 from .models import Professional, Request
-from .forms import ProfessionalCreationForm, ProfessionalForm, SecurePasswordChangeForm
+from .forms import ProfessionalCreationForm, ProfessionalForm, SecurePasswordChangeForm, RequestCreateForm, RequestUpdateForm
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.auth import logout, login, authenticate
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_protect
-from django.core.mail import send_mail
-from django.template.loader import render_to_string
-from .forms import ProfessionalForm, RequestCreateForm, RequestUpdateForm
 from django.contrib.auth.hashers import make_password 
 from django.http import HttpResponseForbidden
 import random
@@ -27,12 +26,12 @@ def custom_login(request):
             professional = Professional.objects.get(email=email)
             username = professional.username
         except Professional.DoesNotExist:
-            error_message = "Nombre de usuario o contraseña incorrectos."
+            error_message = "El correo electrónico no está registrado en el sistema."
             return render(request, 'registration/login.html', {'error_message': error_message})
         
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
-        if user is not None:
+        if user is not None and (professional.email_verified or professional.is_superuser):
             login(request, user)
             return redirect('/')
         else:
@@ -53,17 +52,26 @@ def create_professional(request):
     if request.method == 'POST':
         form = ProfessionalCreationForm(request.POST, request.FILES)
         if form.is_valid():
-            professional = form.save(commit=False)  
-
-            password = ''.join(random.choices(string.ascii_letters + string.digits, k=12))
-            professional.password = make_password(password)  
-            professional.save() 
+            professional, password = form.save(commit=False)
+            professional.save()
+  
+            uid = urlsafe_base64_encode(force_bytes(professional.pk))
+            verify_url = reverse('professionals:verify_email', args=[uid])
 
             subject = '¡Bienvenida a COCEMFE Sevilla - Acceso al Sistema de Gestión de Documentos!'
-            from_email = 'cocemfesevillanotificaciones@gmail.com'
-            message = render_to_string('email/new_professional_notification.txt', {'professional': professional, 'password': password}) 
-            send_mail(subject, message, from_email, [professional.email], fail_silently=False)
-
+            
+            # Enviar el correo electrónico de verificación
+            template = get_template('email/verification_email.html')
+            content = template.render(
+                {'verify_url': request.build_absolute_uri('/') + verify_url[1:],'professional': professional, 'password': password})
+            message = EmailMultiAlternatives(
+                subject,
+                content,
+                settings.EMAIL_HOST_USER,
+                [professional.email]
+            )
+            message.attach_alternative(content, 'text/html')
+            message.send()
             return redirect(reverse('professionals:professional_list'))
     else:
         form = ProfessionalCreationForm()
@@ -75,11 +83,15 @@ def professional_data(request, professional_id):
     professional = get_object_or_404(Professional, pk=professional_id)
     user_is_staff = request.user.is_staff or request.user.is_superuser
     if user_is_staff or request.user.pk == professional_id:
-        professional_copy = professional.copy()
-        professional_copy.password = ''
-        return render(request, 'professional_data.html', {'professional': professional_copy})
+        professional.password = ''
+        return render(request, 'professional_data.html', {'professional': professional})
     else:
         return HttpResponseForbidden("You are not authorized to view this page.")
+    
+@login_required
+def professional_details(request, pk):
+    professional = get_object_or_404(Professional, id=pk)
+    return render(request, 'professional_details.html', {'professional': professional})
 
 @login_required
 def edit_user_view(request, pk):
@@ -93,12 +105,16 @@ def edit_user_view(request, pk):
     if request.method == 'POST':
         form = ProfessionalForm(request.POST, request.FILES, user_is_staff=user_is_staff, instance=professional)
         if form.is_valid():
-            if user_is_staff:
+            if user_is_staff and not request.user.id == professional.id:
                 form.save()
                 return redirect('/professionals/?message=Profesional editado&status=Success')
             elif request.user.id == professional.id:
                 form.save()
-                return redirect('/professionals/?message=Datos de perfil actualizados&status=Success')
+                previous_url = request.META.get('HTTP_REFERER')
+                if previous_url:
+                    return redirect(previous_url + '?message=Datos de perfil actualizados&status=Success')
+                else:
+                    return redirect('/?message=Datos de perfil actualizados&status=Success')
             else:
                 return render(request, '403.html')
         else:
@@ -210,3 +226,21 @@ def change_password(request):
     else:
         form = SecurePasswordChangeForm(user=request.user)
     return render(request, 'update_password.html', {'form': form})
+
+@login_required
+def delete_account(request):
+    user = request.user
+    logout(request)
+    user.delete()
+    return redirect('professionals:login')
+
+class VerifyEmailView(View):
+
+    def get(self, request, uidb64):
+        professional = get_professional(uidb64)
+        if professional is not None:
+            professional.email_verified = True
+            professional.save()
+            return redirect('/?message=Correo_electronico_verificado&status=Success')
+        else:
+            return redirect('/?message=Correo_electronico_no_verificado&status=Error')

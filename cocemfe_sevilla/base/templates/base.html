@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width; initial-scale=1.0" />
     <link rel="icon" href="https://www.cocemfe.es/wp-content/uploads/2021/06/favicons.png" sizes="32x32"/>
     <link rel="icon" href="https://www.cocemfe.es/wp-content/uploads/2021/06/favicons.png" sizes="192x192"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.js"></script>
+
     {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
@@ -15,6 +19,7 @@
 
 <body>
     <style>
+        
         a {
             color: #1e2125 !important;
             text-decoration: none;
@@ -54,7 +59,39 @@
         background-color: orange;
         color: white;
     }
-</style>
+
+    /* Establecer el estilo del contenedor principal */
+    .main-container {
+        min-height: 60svh; /* Establecer la altura mínima igual al alto de la ventana */
+        position: relative; /* Establecer la posición relativa */
+    }
+
+    /* Establecer el estilo del footer */
+    footer {
+        background-color: #003c69;
+        color: white; 
+        line-height: 30px;
+        padding: 30px 0;
+        width: 100%;
+        box-shadow: 0 5px 5px -5px rgba(0, 0, 0, 0.75);
+        position: absolute; /* Establecer la posición absoluta */
+        left: 0;
+        bottom: 0;
+        z-index: 1000; /* Asegurar que el footer esté sobre el contenido */
+    }
+
+    /* Estilo para las columnas del footer */
+    .footer-column {
+        margin-bottom: 20px; /* Agregar espacio entre columnas */
+    }
+
+    /* Estilo para el título del footer */
+    .footer-title {
+        color: white;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    </style>
 
 <!-- Grey with black text -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -84,13 +121,20 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{% url "professionals:chats" %}">Chats</a>
                         </li>
+                        
                     {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url "calendars:calendar" %}">Calendario</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url "maps:map_index" %}">Mapa</a>
+                    </li>
                 </ul>
             </div>
 
             <div class="d-flex justify-content-end align-items-center">
                 <div class="me-5">
-                    <button class="btn btn-orange" type="button">Perfil</button>
+                    <a href="{% url 'professionals:professional_detail' pk=user.id  %}" class="btn btn-orange">Perfil</a>
                 </div>
         {% endif %}
                 <div>
@@ -105,6 +149,36 @@
     {% endblock %}
     {% block contenido %}
     {% endblock %}
+
+    <div class="main-container">
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 footer-column">
+                        <h6 class="footer-title">ENCUÉNTRANOS EN</h6>
+                        <p>Calle Aviación nº 31, Edificio Vilaser Santa Justa, módulo 25, Polígono Calonge.</p>
+                        <p>41007 Sevilla</p>
+                        <p>Teléfono: 954 93 27 93</p>
+                    </div>
+                    <div class="col-md-4 footer-column">
+                        <h6 class="footer-title">INFORMACIÓN LEGAL</h6>
+                        <p><a href="/media/other_documents/CustomerAgreement-ES-COCEMFE.pdf" style="color: white !important; text-decoration: none;">Acuerdo de Cliente (Español)</a></p>
+                        <p><a href="/media/other_documents/PolíticasdePrivacidad-COCEMFE.pdf" style="color: white !important; text-decoration: none;">Políticas de Privacidad (Español)</a></p>
+                            <p><a href="/media/other_documents/CustomerAgreement-EN-COCEMFE.pdf" style="color: white !important; text-decoration: none;">Customer Agreement (English)</a></p>
+                            <p><a href="/media/other_documents/PrivacyPolitics-COCEMFE.pdf" style="color: white !important; text-decoration: none;">Privacy Politics (English)</a></p>
+                    </div>
+                    <div class="col-md-4 footer-column">
+                        <p style="font-size: 12px;">"COCEMFE Sevilla ha recibido una ayuda de la Unión Europea con cargo al Programa Operativo FEDER de Andalucía 2014-2020, financiada como parte de la respuesta de la Unión a la pandemia de COVID-19 (REACT-UE), para compensar el sobrecoste energético de gas natural y/o electricidad a pymes y autónomos especialmente afectados por el incremento de los precios del gas natural y la electricidad provocados por el impacto de la guerra de agresión de Rusia contra Ucrania."</p>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <p>&copy;  2023 COCEMFE Sevilla. Todos los derechos reservados. All rights reserved </p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

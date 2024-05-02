@@ -14,28 +14,6 @@
       "model": "organizations.organization",
       "pk": 2,
       "fields": {
-        "name": "Asociación de Ingenieros de Caminos de Sevilla",
-        "telephone_number": "955654321",
-        "address": "Plaza Nueva",
-        "email": "aicsevilla@gmail.com",
-        "zip_code": 41001
-      }
-    },
-    {
-      "model": "organizations.organization",
-      "pk": 3,
-      "fields": {
-        "name": "Centro de Recursos Educativos para Personas con Discapacidad",
-        "telephone_number": "955987654",
-        "address": "Avenida Manuel Siurot",
-        "email": "cree.discapacidad@gmail.com",
-        "zip_code": 41013
-      }
-    },
-    {
-      "model": "organizations.organization",
-      "pk": 4,
-      "fields": {
         "name": "Asociación de Arquitectos Urbanistas de Sevilla",
         "telephone_number": "955555555",
         "address": "Carretera de Utrera",
@@ -45,18 +23,7 @@
     },
     {
       "model": "organizations.organization",
-      "pk": 5,
-      "fields": {
-        "name": "Fundación Síndrome de Down Sevilla",
-        "telephone_number": "954987654",
-        "address": "Avenida de Heliópolis",
-        "email": "downsevilla@gmail.com",
-        "zip_code": 41012
-      }
-    },
-    {
-      "model": "organizations.organization",
-      "pk": 6,
+      "pk": 3,
       "fields": {
         "name": "Asociación de Ingenieros Técnicos de Obras Públicas de Sevilla",
         "telephone_number": "954123456",
@@ -67,40 +34,7 @@
     },
     {
       "model": "organizations.organization",
-      "pk": 7,
-      "fields": {
-        "name": "Fundación ONCE para la Cooperación e Inclusión Social de Personas con Discapacidad",
-        "telephone_number": "955112233",
-        "address": "Monasterio de la Cartuja",
-        "email": "fundaciononce@gmail.com",
-        "zip_code": 41092
-      }
-    },
-    {
-      "model": "organizations.organization",
-      "pk": 8,
-      "fields": {
-        "name": "Centro de Investigaciones Sociales y Discapacidad",
-        "telephone_number": "955332211",
-        "address": "Calle Américo Vespucio",
-        "email": "cisdiscapacidad@gmail.com",
-        "zip_code": 41092
-      }
-    },
-    {
-      "model": "organizations.organization",
-      "pk": 9,
-      "fields": {
-        "name": "Asociación de Arquitectos Paisajistas de Sevilla",
-        "telephone_number": "954556677",
-        "address": "Calle San Juan de Ribera",
-        "email": "aapsevilla@gmail.com",
-        "zip_code": 41009
-      }
-    },
-    {
-      "model": "organizations.organization",
-      "pk": 10,
+      "pk": 4,
       "fields": {
         "name": "Asociación de Ingenieros Industriales de Sevilla",
         "telephone_number": "954444555",

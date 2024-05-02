@@ -3,6 +3,11 @@ from .models import Document
 from professionals.models import Professional
 
 class PDFUploadForm(forms.ModelForm):
+
+    pdf_file = forms.FileField(
+        widget=forms.FileInput(attrs={'accept': '.pdf'})
+    )
+
     professionals = forms.ModelMultipleChoiceField(
         queryset=Professional.objects.filter(is_superuser=False),
         widget=forms.CheckboxSelectMultiple,

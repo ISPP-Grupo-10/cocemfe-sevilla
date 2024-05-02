@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-{% block title %}Subir Documentos{% endblock %}
+{% load static %}
+{% block title %}Modificar Documentos{% endblock %}
 {% block encabezado %}{% endblock %}
 {% block contenido %}
     <!DOCTYPE html>
@@ -12,7 +13,7 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-ZAElWN6PqB8kyByGWGdIV6yB/wWw+2sBOnTgCZlb5B5KZl3IFIKo3sggs2pihGzwCwPbLjBOvDT6xg6lL7sR7Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
-        <title>Subir Documentos</title>
+        <title>Modificar Documentos</title>
         <style>
             body {
                 color: #000;
@@ -66,9 +67,14 @@
                 font-weight: 400;
                 height: 43px;
                 cursor: pointer;
-                background-color: rgba(0, 162, 151, 0.842); /* Color del botón "Crear" */
+                background-color: rgba(0, 162, 151, 0.842);
                 color: white;
                 border: none;
+            }
+
+            .btn-orange2 {
+            background-color: #FFA500; 
+            color: white; 
             }
         
             .btn-block:hover {
@@ -89,17 +95,34 @@
                 box-shadow: 0 0 10px rgba(0, 165, 153, 0.3);
             }
         
-            /* Hacer el formulario más estrecho */
             .col-xl-7,
             .col-lg-8,
             .col-md-9,
             .col-11 {
-                max-width: 600px; /* Ajusta el ancho según tus necesidades */
+                max-width: 600px;
             }
+            
+            .card.form-container {
+                height: 80%;
+                overflow-y: auto; 
+            }
+            
+            .professional-list-container {
+                max-height: 150px;
+                overflow-y: auto;
+            }
+
+            .second-card {
+            margin-top: 60px;
+            margin-bottom: 60px;
+            border: none !important; 
+            box-shadow: 0 0 10px rgba(0, 165, 153, 0.3);
+        }
         </style>
     </head>
     
     <body>
+
         {% if messages %}
             {% for message in messages %}
                 <div class="alert alert-danger" role="alert">
@@ -107,105 +130,185 @@
                 </div>
             {% endfor %}
         {% endif %}
+
         <div class="container-fluid px-1 py-5 mx-auto text-center">
             <h1 class="form-heading mb-4" style="font-family: 'Arial', sans-serif; font-weight: bold;">
                 Modificar Documento
             </h1>
-            <div class="row d-flex justify-content-center">
-                <div class="col-xl-7 col-lg-8 col-md-9 col-11 text-center card form-container">
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
+            
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row d-flex justify-content-between" style="text-align: left; margin-left: 300px; margin-right: 300px;">                
+                    
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-11 text-align:left card form-container">                    
                         <div class="row justify-content-between text-left">
-                            <div class="form-group col-12 flex-column d-flex mb-4">
-                                <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                                    <i class="fas fa-user"></i> Nombre<span class="text-danger"> *</span>
-                                </label>
-                                {{ form.name }}
-                                {% for error in form.name.errors %}
-                                    <span class="error">{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="row justify-content-between text-left">
-                            <div class="form-group col-sm-6 flex-column d-flex mb-4">
-                                <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                                    <i class="far fa-calendar-alt"></i> Inicio de aportaciones
-                                </label>
-                                <input type="date" name="suggestion_start_date" value="{{ document.suggestion_start_date|date:'Y-m-d' }}">
-                                {% for error in form.suggestion_start_date.errors %}
-                                    <span class="error text-danger">{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                            <div class="form-group col-sm-6 flex-column d-flex mb-4">
-                                <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                                    <i class="far fa-calendar-alt"></i> Cierre de aportaciones
-                                </label>
-                                <input type="date" name="suggestion_end_date" value="{{ document.suggestion_end_date|date:'Y-m-d' }}">
-                                {% for error in form.suggestion_end_date.errors %}
-                                    <span class="error text-danger">{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                            <div class="form-group col-sm-6 flex-column d-flex mb-4">
-                                <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                                    <i class="far fa-calendar-alt"></i> Cierre de votaciones
-                                </label>
-                                <input type="date" name="voting_end_date" value="{{ document.voting_end_date|date:'Y-m-d' }}">
-                                {% for error in form.voting_end_date.errors %}
-                                    <span class="error text-danger">{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="row justify-content-between text-left">
-                            <div class="form-group col-12 flex-column d-flex mb-4">
-                                <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                                    <i class="fas fa-map-marker-alt"></i> Ubicación<span class="text-danger"> *</span>
-                                </label>
-                                {{ form.ubication }}
-                                {% for error in form.ubication.errors %}
-                                    <span class="error text-danger">{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="row justify-content-between text-left">
-                            <div class="form-group col-12 flex-column d-flex mb-4">
-                                <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                                    <i class="fas fa-file-pdf"></i> Seleccione un archivo<span class="text-danger"> *</span>
-                                </label>
-                                {{ form.pdf_file }}
-                                {% for error in form.pdf_file.errors %}
-                                    <span class="error text-danger">{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="row justify-content-between text-left">
-                            <div class="form-group col-12 flex-column d-flex mb-4">
-                                <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                                    <i class="fas fa-users"></i> Seleccione los revisores
-                                </label>
-                                {% for professional in form.professionals.field.queryset %}
-                                    {% if professional in professionals_not_superuser %}
-                                        <input type="checkbox" id="id_professional_{{ professional.id }}" name="professionals" value="{{ professional.id }}" {% if professional in document.professionals.all %}checked{% endif %}>
-                                        <label for="id_professional_{{ professional.id }}">{{ professional.username }}</label><br>
-                                    {% endif %}
-                                {% endfor %}
-                                {% for error in form.professionals.errors %}
-                                    <span class="error text-danger">{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="row justify-content-start">
-                            <div class="form-group col-sm-6">
-                                <div class="row justify-content-start">
-                                    <div class="form-group col-sm-6 text-left"> 
-                                        <button type="submit" class="btn-block">Guardar Cambios</button>
+                            <div class="col-md-12">
+                                <div class="form-group flex-column d-flex mb-4">
+                                    <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                        <i class="fas fa-user"></i> Nombre<span class="text-danger"> *</span>
+                                    </label>
+                                    {{ form.name }}
+                                    {% for error in form.name.errors %}
+                                        <span class="error">{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                                <div class="row justify-content-between text-left">
+                                    <div class="form-group col-sm-6 flex-column d-flex mb-4">
+                                        <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                            Comienzo de aportaciones<span class="text-danger"> *</span>
+                                        </label>
+                                        <input type="date" name="suggestion_start_date" value="{{ document.suggestion_start_date|date:'Y-m-d' }}">
+                                        {% for error in form.suggestion_start_date.errors %}
+                                            <span class="error">{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="form-group col-sm-6 flex-column d-flex mb-4">
+                                        <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                            Cierre de aportaciones<span class="text-danger"> *</span>
+                                        </label>
+                                        <input type="date" name="suggestion_end_date" value="{{ document.suggestion_end_date|date:'Y-m-d' }}">
+                                        {% for error in form.suggestion_end_date.errors %}
+                                            <span class="error">{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="row justify-content-between text-left">
+                                    <div class="form-group col-sm-6 flex-column d-flex mb-4">
+                                        <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                            Cierre de votaciones <span class="text-danger"> *</span>
+                                        </label>
+                                        <input type="date" name="voting_end_date" value="{{ document.voting_end_date|date:'Y-m-d' }}">
+                                        {% for error in form.voting_end_date.errors %}
+                                            <span class="error">{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="form-group col-sm-6 flex-column d-flex mb-4">
+                                        <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                            <i class="fas fa-map-marker-alt"></i> Ubicación<span class="text-danger"> *</span>
+                                        </label>
+                                        {{ form.ubication }}
+                                        {% for error in form.ubication.errors %}
+                                            <span class="error">{{ error }}</span>
+                                        {% endfor %}
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </form>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-11 card form-container second-card">
+                        <div class="form-group flex-column d-flex mb-4">
+                            {% if document.pdf_file %}
+                                <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                    <i class="fas fa-file-pdf"></i> Archivo actual: <span id="nombreArchivo"></span><span class="text-danger"></span>
+                                </label>
+                                <button type="button" class="btn btn-danger" id="deletePdfBtn">Eliminar PDF</button>
+                            {% else %}
+                                <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                    <i class="fas fa-file-pdf"></i> Selecciona un archivo:<span class="text-danger"> *</span>
+                                </label>
+                                {{form.pdf_file}}
+                            {% endif %}
+                            {% for error in form.pdf_file.errors %}
+                                <span class="error text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group flex-column d-flex mb-4">
+                            <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
+                                <i class="fas fa-users"></i> Seleccione los revisores
+                            </label>
+                            <input type="text" id="searchProfessional" class="form-control mb-2" placeholder="Buscar por nombre...">
+                            <div id="professionalListContainer" class="professional-list-container" style="text-align: left; margin-left: 20px; max-height: 200px; overflow-y: auto;">
+                                <div id="professionalList" class="professional-list">
+                                    {% for professional in form.professionals.field.queryset %}
+                                        {% if professional in professionals_not_superuser %}
+                                            <label style="display: block; margin-left: 0;">
+                                                <input type="checkbox" id="id_professional_{{ professional.id }}" name="professionals" value="{{ professional.id }}" {% if professional in document.professionals.all %}checked{% endif %}>
+                                                {{ professional.first_name }} {{ professional.last_name }}
+                                            </label>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+                <div class="row justify-content-start">
+                    <div class="form-group col-sm-6">
+                        <div class="row justify-content-between ">
+                            <div class="col-sm-6 " style="margin-left: 200px;"> 
+                                <button type="submit" class="btn-orange2">Guardar</button>
+                                <button type="button" class="btn btn-danger" style="margin-left: 50px;" id="cancelBtn">Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </body>
     </html>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var input = document.getElementById("searchProfessional");
+            var professionalList = document.getElementById("professionalList");
+    
+            input.addEventListener("input", function () {
+                var filter = input.value.toUpperCase();
+                var professionals = professionalList.getElementsByTagName("label");
+    
+                for (var i = 0; i < professionals.length; i++) {
+                    var professional = professionals[i];
+                    var txtValue = professional.textContent || professional.innerText;
+    
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        professional.style.display = "block"; 
+                    } else {
+                        professional.style.display = "none"; 
+                    }
+                }
+    
+                if (filter.trim() === "") {
+                    for (var i = 0; i < professionals.length; i++) {
+                        professionals[i].style.display = "block";
+                    }
+                }
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+        const cancelBtn = document.getElementById("cancelBtn");
+        cancelBtn.addEventListener("click", function () {
+            window.history.back(); // Retrocede a la página anterior
+            });
+        });
+    </script>
+    <script>
+        var nombreArchivoCompleto = "{{ document.pdf_file.name }}";
+        
+        var nombreArchivoSinPdf = nombreArchivoCompleto.replace("pdfs/", "").replace(".pdf","").replace("_"," ");
+
+        document.getElementById("nombreArchivo").textContent = nombreArchivoSinPdf;
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const deletePdfBtn = document.getElementById("deletePdfBtn");
+    
+            deletePdfBtn.addEventListener("click", function () {
+                if (confirm("¿Estás seguro de que deseas eliminar este PDF?")) {
+                    const pk = "{{ document.pk }}"; 
+                    const xhr = new XMLHttpRequest();
+                    xhr.open("POST", "{% url 'delete_pdf_form' 0 %}".replace("0", pk));
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    xhr.onload = function () {
+                        if (xhr.status === 200) {
+                            location.reload();
+                        } else {
+                            console.error("Error al eliminar el PDF");
+                        }
+                    };
+                    xhr.send();
+                }
+            });
+        });
+    </script>
+    
 {% endblock %}

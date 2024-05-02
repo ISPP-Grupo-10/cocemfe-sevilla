@@ -1,0 +1,34 @@
+<!-- IMPORTANTE: Dejad este html como está sin los estilos de la web porque se usa para crear el contenido del email de activación de cuenta-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenida a COCEMFE Sevilla</title>
+</head>
+<body>
+    <p>Estimado/a {{ professional.first_name }},</p>
+
+    <p>Es un placer darle la bienvenida al Sistema de Gestión de Documentos de COCEMFE Sevilla. Estamos encantados de contar con usted como parte de nuestra comunidad.</p>
+
+    <p>Para facilitar su acceso, le hemos asignado las siguientes credenciales:</p>
+
+    <ul>
+        <li>Usuario: {{ professional.username }}</li>
+        <li>Contraseña: {{ password }}</li>
+    </ul>
+
+    <p>Por favor, tenga en cuenta que su correo electrónico también servirá como usuario para iniciar sesión en el sistema ({{ professional.email }}).</p>
+
+    <p><b>IMPORTANTE: </b>Para activar su cuenta y poder usarla para sus actividades profesionales haga click <a href="{{ verify_url }}">aquí</a></p>
+
+    <p>El Sistema de Gestión de Documentos está diseñado para ayudarle a gestionar eficientemente la información relevante para su labor en COCEMFE Sevilla. Desde la gestión de archivos hasta la colaboración en documentos, nuestro sistema está aquí para respaldar su trabajo diario.</p>
+
+    <p>Si tiene alguna pregunta sobre el uso del sistema o necesita asistencia adicional, no dude en ponerse en contacto con nosotros. Estamos aquí para ayudarle en cualquier momento.</p>
+
+    <p>¡Una vez más, le damos una cálida bienvenida y esperamos que su experiencia con COCEMFE Sevilla sea gratificante y productiva!</p>
+
+    <p>Atentamente,<br>El Equipo de COCEMFE Sevilla</p>
+</body>
+</html>

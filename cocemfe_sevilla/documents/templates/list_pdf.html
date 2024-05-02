@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-
+{% block title %}Listado de Documentos{% endblock %}
 {% block contenido %}
 
 <link rel="stylesheet" href="{% static 'css/list_pdf.css' %}"/>
@@ -45,15 +45,15 @@
           <table class="w-full caption-bottom text-sm">
             <thead class="[&amp;_tr]:border-b">
               <tr class="border-b border-gray-200 transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 style="color: black;">
+                <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 style="color: black;"">
                     Nombre
                   </th>
                                   
                 <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
-                  Fecha de Subida
+                  Inicio de Aportaciones
                 </th>
                 <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
-                  Fecha de Cierre
+                  Inicio de Votaciones
                 </th>
                 <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
                   Estado
@@ -78,8 +78,16 @@
         <td class="p-4 align-middle">
             <a href="{% url 'view_pdf_admin' doc.id %}" class="font-semibold text-[#00bfa5]" style="max-width: 400px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block;">{{ doc.name }}</a>
         </td>
-        <td class="p-4 align-middle">{{ doc.start_date }}</td>
-        <td class="p-4 align-middle">{{ doc.end_date }}</td>
+        {% if doc.status == 'Votaciones' or doc.status == 'En revisión' or doc.status == 'Revisado' %}
+        <td class="p-4 align-middle">Periodo Cerrado</td>
+        {%else%}
+        <td class="p-4 align-middle">{{ doc.suggestion_start_date }}</td>
+        {%endif%}
+        {% if doc.status == 'En revisión' or doc.status == 'Revisado' %}
+        <td class="p-4 align-middle">Periodo Cerrado</td>
+        {%else%}
+        <td class="p-4 align-middle">{{ doc.voting_start_date }}</td>
+        {%endif%}
         <td class="p-4 align-middle">
             {% for status_value, status_display in doc.STATUS %}
                 {% if doc.status == status_value %}
@@ -92,7 +100,7 @@
             <div class="d-flex space-x-2">
                 <a href="{% url 'update_pdf' pk=doc.pk %}">
                   <button  class="btn btn-outline-primary">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0000FF" class="bi bi-pen" viewBox="0 0 16 16">
                       <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
                     </svg>
                   </button>
@@ -100,7 +108,7 @@
                 <form method="post" action="{% url 'delete_pdf' pk=doc.pk %}">
                   {% csrf_token %}
                   <button  class="btn btn-outline-danger">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#FF0000" class="bi bi-trash3" viewBox="0 0 16 16">
                       <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
                     </svg>
                   </button>

@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% block title %}Detalles{% endblock %}
+{% block encabezado %}
+{% endblock %}
+{% block contenido %}
+
+<style>
+    .map-container {
+        flex: 80;
+        width: 80%;
+        height: 100vh;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    .list-container {
+        flex: 20;
+        width: 20%;
+        height: 100vh;
+        overflow-y: auto;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    .document-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .document-item {
+        margin-bottom: 10px;
+    }
+
+    .container-map {
+        display: flex;
+        flex-direction: row;
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    .search-input {
+        margin-bottom: 10px;
+    }
+
+    /* Estilo para botones de acordeón cerrados */
+    .accordion-button[aria-expanded="false"] {
+        background-color: #fff;
+        color: #212529;
+    }
+</style>
+
+<div class="container-map">
+    <div class="map-container">
+        {{ mapa_html | safe }}
+    </div>
+    <div class="list-container">
+        <input type="text" id="city-search" class="form-control search-input" placeholder="Buscar ciudad...">
+        <div id="accordion">
+            {% for city, documents in documents_by_city.items %}
+            <div class="accordion-item city-accordion">
+                <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="false" aria-controls="collapse{{ forloop.counter }}">
+                        {{ city }}
+                    </button>
+                </h2>
+                <div id="collapse{{ forloop.counter }}" class="accordion-item collapse" aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#accordion">
+                    <div class="accordion-body">
+                        <ul class="document-list">
+                            {% for document in documents %}
+                            {% for coordinate in coordinates %}
+                            {% if coordinate.location == document.ubication %}
+                            <li class="document-item">
+                                <a href="{% url 'maps:map_search' coordinate.latitude coordinate.longitude %}">
+                                    {{ document.name }}
+                                </a>
+                            </li>
+                            {% endif %}
+                            {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('city-search').addEventListener('keyup', function() {
+        var input, filter, accordions, accordion, i, txtValue;
+        input = document.getElementById('city-search');
+        filter = input.value.toUpperCase();
+        accordions = document.getElementsByClassName('city-accordion');
+        for (i = 0; i < accordions.length; i++) {
+            accordion = accordions[i].getElementsByTagName('button')[0];
+            txtValue = accordion.textContent || accordion.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                accordions[i].style.display = '';
+            } else {
+                accordions[i].style.display = 'none';
+            }
+        }
+    });
+</script>
+
+{% endblock %}
