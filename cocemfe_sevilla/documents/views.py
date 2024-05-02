@@ -14,23 +14,13 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator
 from django.conf import settings
-<<<<<<< HEAD
-from selenium import *
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium import webdriver
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-import pyautogui
-import time
-import os
-=======
 import os
 from django.http import JsonResponse
 from calendars.views import create_event
 from datetime import datetime, time
 from django.forms.models import model_to_dict
 from calendars.views import edit_event_from_document
->>>>>>> develop
+
 
 @login_required
 def upload_pdf(request):
@@ -52,21 +42,13 @@ def upload_pdf(request):
                 document.save()
                 document.professionals.set(professionals)
                 document.save()
-
-                # Obtener el directorio de descarga
-                download_directory = os.path.dirname(document.pdf_file.path)
-                selenium_converter(document.pdf_file.path, download_directory)
-
                 # Enviar correo electrónico a cada profesional asignado
                 subject = 'Nuevo plan de accesibilidad'
-                from_email = 'cocemfesevillanotificaciones@gmail.com'
+                from_email = settings.EMAIL_HOST_USER
                 for professional in professionals:
                     # Renderizar el mensaje de correo electrónico desde un template
                     message = render_to_string('email/new_document_notification.txt', {'document': document, 'professional': professional})
                     send_mail(subject, message, from_email, [professional.email], fail_silently=False)
-<<<<<<< HEAD
-                return redirect('list_pdf')
-=======
                     
                 if suggestion_start_date:
                     create_event(request = request, title=f'Inicio: {document.name}', description='Inicio periodo aportaciones', creator= request.user, event_datetime=datetime.combine(suggestion_start_date, time(23, 59, 00)), document=document, type='aportaciones')
@@ -76,13 +58,14 @@ def upload_pdf(request):
                 if voting_end_date:
                     create_event(request = request, title=f'Final: {document.name}', description='Final periodo votaciones', creator= request.user, event_datetime=datetime.combine(voting_end_date, time(23, 59, 00)), document=document, type='votaciones')
                 return redirect('view_pdf_admin', document.id)
->>>>>>> develop
         else:
             form = PDFUploadForm()
         return render(request, 'upload_pdf.html', {'form': form, 'professionals_not_superuser': professionals})
     else:
         return render(request, '403.html')
 
+
+'''
 def selenium_converter(file_path, download_directory):
     webdriver_path = "/static/selenium/chromedriver.exe"
 
@@ -170,6 +153,8 @@ def selenium_converter(file_path, download_directory):
     finally:
         # Cerrar el navegador al finalizar
         driver.quit()        
+
+'''
 
 def view_pdf(request, pk):
     pdf = get_object_or_404(Document, pk=pk)
