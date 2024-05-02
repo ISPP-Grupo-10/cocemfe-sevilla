@@ -21,6 +21,7 @@ from datetime import datetime, time
 from django.forms.models import model_to_dict
 from calendars.views import edit_event_from_document
 
+
 @login_required
 def upload_pdf(request):
     if request.user.is_superuser:
@@ -62,6 +63,7 @@ def upload_pdf(request):
         return render(request, 'upload_pdf.html', {'form': form, 'professionals_not_superuser': professionals})
     else:
         return render(request, '403.html')
+
 
 def view_pdf(request, pk):
     pdf = get_object_or_404(Document, pk=pk)
