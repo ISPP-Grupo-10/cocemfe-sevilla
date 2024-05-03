@@ -97,7 +97,7 @@
         
         .btn-delete-profile {
             background-color: #ff0000; /* Color rojo para el botón */
-            color: #ffffff; /* Texto en blanco */
+            color: #ffffff !important; /* Texto en blanco con prioridad */
             border: none;
             padding: 10px 20px;
             border-radius: 5px;
@@ -232,22 +232,26 @@
                             </div>
 
                             
-                            <div class="row justify-content-between">
-                                <div class="col-sm-4 text-left">
+                            <div class="row justify-content-center mb-3">
+                                <div class="col-sm-4 text-center">
                                     <button type="submit" class="btn-orange2">Guardar</button>
                                 </div>
                                 <div class="col-sm-4 text-center">
-                                    <a href="{% url 'professionals:update_password' %}" style="display: inline-block;"><span class="btn btn-primary" style="overflow: hidden;">Cambiar Contraseña</span></a>
-                                </div>
-                                <div class="col-sm-4 text-right">
                                     <button type="button" class="btn btn-danger" id="cancelBtn">Cancelar</button>
-                                    
+                                </div>
+                            </div>
+                            
+                            <div class="row justify-content-center mb-3">
+                                <div class="col-sm-4 text-center">
+                                    <a href="{% url 'professionals:update_password' %}" style="display: inline-block;">
+                                        <span class="btn btn-primary" style="overflow: hidden; width: auto;">Cambiar Contraseña</span>
+                                    </a>
                                 </div>
                             </div>
 
                             <div class="button-container">
                                 <div class="btn-container">
-                                    <a class="btn-delete-profile" href="{% url "professionals:delete_account" %}">Borrar perfil</a>
+                                    <a class="btn-delete-profile" href="{% url 'professionals:delete_account' %}">Borrar perfil</a>
                                 </div>
                                 <div class="checkbox-delete-data">
                                     <input type="checkbox" id="delete-data" name="delete-data">
