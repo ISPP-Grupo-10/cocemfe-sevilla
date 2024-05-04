@@ -25,9 +25,9 @@ STATIC_DIR = Path(BASE_DIR) / 'static'
 SECRET_KEY = "django-insecure-@4zj0j16-pk64hd61$o0tz6r6)gs%%4@^780#ar-ij&qrf22_s"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -159,4 +159,3 @@ CHANNEL_LAYERS = {
         "BACKEND": "channels.layers.InMemoryChannelLayer"
     }
 }
-
