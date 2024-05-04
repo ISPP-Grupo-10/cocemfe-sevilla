@@ -184,7 +184,7 @@
                                     </div>
                                     <div class="form-group col-sm-6 flex-column d-flex mb-4">
                                         <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                                            <i class="fas fa-map-marker-alt"></i> Ubicación<span class="text-danger"> *</span>
+                                            <i class="fas fa-map-marker-alt"></i> Localidad<span class="text-danger"> *</span>
                                         </label>
                                         {{ form.ubication }}
                                         {% for error in form.ubication.errors %}
@@ -201,11 +201,21 @@
                                 <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
                                     <i class="fas fa-file-pdf"></i> Archivo actual: <span id="nombreArchivo"></span><span class="text-danger"></span>
                                 </label>
+                                <div class="alert alert-info mt-2" role="alert">
+                                    <i class="fas fa-info-circle"></i>
+                                    Por favor, si desea asegurarse de que la función de subrayado funcione correctamente, convierta su PDF en la siguiente página y a continuación suba el PDF descargado resultante.
+                                    <a href="https://www.pdf2go.com/es/convertir-de-pdf" target="_blank">https://www.pdf2go.com/es/convertir-de-pdf.</a>
+                                </div>
                                 <button type="button" class="btn btn-danger" id="deletePdfBtn">Eliminar PDF</button>
                             {% else %}
                                 <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
                                     <i class="fas fa-file-pdf"></i> Selecciona un archivo:<span class="text-danger"> *</span>
                                 </label>
+                                <div class="alert alert-info mt-2" role="alert">
+                                    <i class="fas fa-info-circle"></i>
+                                    Por favor, si desea asegurarse de que la función de subrayado funcione correctamente, convierta su PDF en la siguiente página y a continuación suba el PDF descargado resultante.
+                                    <a href="https://www.pdf2go.com/es/convertir-de-pdf" target="_blank">https://www.pdf2go.com/es/convertir-de-pdf.</a>
+                                </div>
                                 {{form.pdf_file}}
                             {% endif %}
                             {% for error in form.pdf_file.errors %}
