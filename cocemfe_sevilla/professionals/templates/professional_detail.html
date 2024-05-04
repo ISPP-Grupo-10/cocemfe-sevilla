@@ -244,33 +244,33 @@
 
                             
                             <div class="row justify-content-center mb-3">
+                                <a href="{% url 'professionals:update_password' %}" style="text-decoration: underline; color:#0000ff !important">
+                                    ¿Desea cambiar su contraseña?
+                                </a>
+                        </div>     
+                            <div class="row justify-content-center mb-3">
                                 <div class="col-sm-4 text-center">
-                                    <button type="submit" class="btn btn-primary">Guardar</button>
+                                    <button type="submit" class="btn btn-orange2">Guardar</button>
                                 </div>
                                 <div class="col-sm-4 text-center">
-                                    <button type="button" class="btn btn-secondary" id="cancelBtn">Cancelar</button>
+                                    <button type="button" class="btn btn-outline-secondary" id="cancelBtn">Cancelar</button>
                                 </div>
                             </div>                         
                             
-                            <div class="row justify-content-center mb-3">
-                                <div class="col-sm-4 text-center">
-                                    <a href="{% url 'professionals:update_password' %}" style="display: inline-block;">
-                                        <span class="btn btn-custom">Cambiar Contraseña</span>
-                                    </a>
-                                </div>
-                            </div>                            
+                                                   
 
-                            <div class="button-container">
-                                <div class="btn-container">
-                                    <a class="btn-delete-profile" href="{% url 'professionals:delete_account' %}">Borrar perfil</a>
-                                </div>
-                                <div class="checkbox-delete-data">
-                                    <input type="checkbox" id="delete-data" name="delete-data">
-                                    <label for="delete-data">Eliminar también los datos de la base de datos</label>
-                                </div>
-                            </div>
+                            
                         </form>
                         
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
+                    <div class="btn-container">
+                        <a class="btn-delete-profile" href="{% url 'professionals:delete_account' %}">Borrar perfil</a>
+                    </div>
+                    <div class="checkbox-delete-data">
+                        <input type="checkbox" id="delete-data" name="delete-data">
+                        <label for="delete-data">Eliminar también los datos de la base de datos</label>
                     </div>
                 </div>
             </div>
