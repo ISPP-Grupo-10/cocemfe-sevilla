@@ -6,23 +6,37 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/chat.css' %}"><!DOCTYPE html>
 <html>
   <body>
-    <div class="contenedor-table2" style="margin-top: 50px; margin-bottom: 10px; margin-left: 40px">
-      <h2 style="margin: 20px;">Chat Documento: {{ doc.name }}</h2>
-  </div>
-  <div class="contenedor-table3" style="margin-top: 50px; margin-left: auto; margin-right: auto; width: 70%;">
-    <div class="scroll-messages" id="id_chat_item_container">
-      {% for comentario in chat_messages %}
-          <div>
-              <p class="user-label"><strong>{{ comentario.author.username }}</strong></p>
-          <br/>
-              <div class="message-box" style="margin-bottom: 5px;">
-                  {{ comentario.content }}
-                  <p class="message-date"><em>{{ comentario.post_date }}</em></p>
+    
+    <div class="contenedor-table2">
+      <h2 style="margin: 20px;">Chat del documento {{ doc.name }}</h2>
+    </div>
+    <div class="contenedor-table3">
+      <div class="scroll-messages" id="id_chat_item_container" style="max-width: 70%;">
+        {% for comentario in chat_messages %}
+          <div class="message-container {% if comentario.author == request.user %}sent{% else %}received{% endif %}">
+
+            {% if comentario.author.profile_picture %}
+              <div>
+                <img src="{{ comentario.author.profile_picture.url }}" alt="Imagen de perfil actual"  class="avatar">
               </div>
+            {% else %}
+              <div>
+                <img src="/media/IconoUsuario.jpg" alt="Imagen por defecto"  class="avatar">
+              </div>
+            {% endif %}
+
+            <div class="message-content">
+              <p class="user-label">{{ comentario.author.username }}</p>
+              <div class="message-box" style="margin-bottom: 5px;">
+                {{ comentario.content }}
+                <p class="message-date"><em>{{ comentario.post_date }}</em></p>
+              </div>
+            </div>
           </div>
           <br>
-      {% endfor %}
-  </div>
+        {% endfor %}
+      </div>
+    </div>
     <br />
     <div class="textarea-container">
       <input class="textarea-style" type="text" id="id_message_send_input" />
@@ -32,6 +46,8 @@
         </svg>
       </button>
     </div>
+  
+
     <script>
       function formatearFechaHora(fechaHoraString) {
         var partes = fechaHoraString.split(', ');
@@ -44,8 +60,8 @@
         var mesNumero = parseInt(fechaPartes[1]);
         var año = fechaPartes[2];
         var meses = [
-            "enero", "febrero", "marzo", "abril", "mayo", "junio",
-            "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+          "enero", "febrero", "marzo", "abril", "mayo", "junio",
+          "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
         ];
         var mesNombre = meses[mesNumero - 1];
         var horaPartes = horaParte.split(':');
@@ -54,8 +70,8 @@
         var fechaFormateada = dia + " de " + mesNombre + " de " + año + " a las " + hora + ":" + minutos;
     
         return fechaFormateada;
-    }
-
+      }
+    
       const chatSocket = new WebSocket("ws://" + window.location.host + "/");
       chatSocket.onopen = function (e) {
         console.log("The connection was setup successfully !");
@@ -73,45 +89,54 @@
         var document_id = "{{ document_id }}";
         var fechaActual = new Date();
         var fechaHoraActual = fechaActual.toLocaleString();
-        var fechaFormateada =formatearFechaHora(fechaHoraActual)
+        var fechaFormateada = formatearFechaHora(fechaHoraActual)
         var messageInput = document.querySelector(
           "#id_message_send_input"
         ).value;
-        chatSocket.send(JSON.stringify({ message: messageInput, username : "{{request.user.username}}", doc_id: document_id, date: fechaFormateada}));
+
+        chatSocket.send(JSON.stringify({ message: messageInput, username: "{{request.user.username}}", profile_picture: "{{picture}}", doc_id: document_id, date: fechaFormateada }));
       };
       chatSocket.onmessage = function (e) {
         const data = JSON.parse(e.data);
-        var div = document.createElement("div");
+        
+        var div1 = document.createElement("div");
+        if (data.username == "{{ request.user.username }}") {
+          div1.classList.add("message-container", "sent");
+        } else {
+          div1.classList.add("message-container", "received");
+        }
 
+        var div2 = document.createElement("div");
+        var img = document.createElement("img");
+        img.src = data.profile_picture;
+        img.classList.add("avatar");
+        div2.appendChild(img);
+        div1.appendChild(div2);
+
+        var div3 = document.createElement("div");
+        div3.classList.add("message-content");
         var usernameElement = document.createElement("p");
         usernameElement.textContent = data.username;
         usernameElement.classList.add("user-label");
+        div3.appendChild(usernameElement);
+        div1.appendChild(div3);
 
-        var messageElement = document.createElement("div");
+        var div4 = document.createElement("div");
+        div4.classList.add("message-box");
+        var messageElement = document.createElement("p");
         messageElement.textContent = data.message;
-        messageElement.classList.add("message-box");
-
-        var dateElement = document.createElement("p");
         var italicDateElement = document.createElement("em");
         italicDateElement.textContent = data.date;
         italicDateElement.classList.add("message-date");
-        
-        var doc_id_elemet = data.doc_id;
-        
+        div4.appendChild(messageElement);
+        div4.appendChild(italicDateElement);
+        div3.appendChild(div4);
+
         var salto = document.createElement("br");
-        var salto2 = document.createElement("br");
-        
-        div.appendChild(usernameElement);
-        div.appendChild(salto);
-        div.appendChild(messageElement);
-        dateElement.appendChild(italicDateElement)
-        messageElement.appendChild(dateElement);
-        div.appendChild(salto2);
-
+        div1.appendChild(salto);
+    
         document.querySelector("#id_message_send_input").value = "";
-        document.querySelector("#id_chat_item_container").appendChild(div);
-        document.querySelector("#id_chat_item_container").appendChild(salto2);
-
+        document.querySelector("#id_chat_item_container").appendChild(div1);
       };
     </script>
   </body>

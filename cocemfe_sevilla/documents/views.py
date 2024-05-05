@@ -18,7 +18,6 @@ import os
 from django.http import JsonResponse
 from calendars.views import create_event
 from datetime import datetime, time
-from django.forms.models import model_to_dict
 from calendars.views import edit_event_from_document
 
 
@@ -32,6 +31,7 @@ def upload_pdf(request):
                 suggestion_end_date = form.cleaned_data['suggestion_end_date']
                 suggestion_start_date = form.cleaned_data['suggestion_start_date']
                 voting_end_date = form.cleaned_data['voting_end_date']
+                ubication = form.cleaned_data['ubication']
                 document = form.save(commit=False)
                 document.voting_start_date = suggestion_end_date
                 if suggestion_start_date and suggestion_start_date.date() == timezone.now().date():
@@ -63,7 +63,6 @@ def upload_pdf(request):
         return render(request, 'upload_pdf.html', {'form': form, 'professionals_not_superuser': professionals})
     else:
         return render(request, '403.html')
-
 
 def view_pdf(request, pk):
     pdf = get_object_or_404(Document, pk=pk)
