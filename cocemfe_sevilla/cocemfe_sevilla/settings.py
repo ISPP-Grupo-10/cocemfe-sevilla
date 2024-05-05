@@ -71,6 +71,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "base.middleware.CheckUserStatusMiddleware",
+    "base.middleware.CustomRedirectMiddleware",
 ]
 
 ROOT_URLCONF = "cocemfe_sevilla.urls"

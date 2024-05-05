@@ -32,7 +32,7 @@ def politica_terminos(request):
     
     return render(request, 'politica_terminos.html', {'form': form})
 
-def error_404(request, exception):
+def error_404(request, exception=None):
     return render(request, '404.html', status=404)
 
 def error_500(request):
