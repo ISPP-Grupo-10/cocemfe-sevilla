@@ -1,5 +1,7 @@
 from django.db import models
 from django.core.validators import RegexValidator
+import re
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 class Organization(models.Model):
@@ -16,7 +18,14 @@ class Organization(models.Model):
     email = models.EmailField()
     zip_code = models.IntegerField(validators=[RegexValidator(regex=r'^\d{5}$', message='El codigo postal debe tener exactamente 5 dígitos numéricos')])
 
-
-
     def __str__(self):
         return self.name
+    
+    def clean(self):
+
+        if not re.match(r'^[a-zA-Z0-9\s]*$', self.name):
+            raise ValidationError({'name': 'El nombre solo puede contener letras, números y espacios.'})
+
+
+
+        

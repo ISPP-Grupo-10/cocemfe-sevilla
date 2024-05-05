@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.utils.translation import gettext as _
 import requests
+import re
 from maps.models import Coordinates
 
 class Document(models.Model):
@@ -16,7 +17,7 @@ class Document(models.Model):
         ('Revisado', 'Revisado'),
         )
 
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=200)
     pdf_file = models.FileField(upload_to='pdfs/', null=True, blank=True)
     ubication = models.CharField(max_length=100, null=True, blank=True)
     status = models.CharField(max_length=40, choices=STATUS, default='Borrador')
@@ -31,6 +32,10 @@ class Document(models.Model):
         return self.name
     
     def clean(self):
+            
+            if not re.match(r'^[a-zA-Z0-9\s]*$', self.name):
+                raise ValidationError({'name': 'El nombre solo puede contener letras, números y espacios.'})
+    
             if self.suggestion_start_date and self.suggestion_end_date:
                 if self.suggestion_start_date > self.suggestion_end_date:
                     raise ValidationError({'suggestion_end_date': ('La fecha de fin de sugerencia no puede ser anterior a la fecha de inicio.')})
