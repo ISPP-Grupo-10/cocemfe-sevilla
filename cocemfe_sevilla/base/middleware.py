@@ -23,10 +23,12 @@ class CustomRedirectMiddleware:
 
     def __call__(self, request):
         response = self.get_response(request)
-        if response.status_code == 404 and not request.path.startswith('/error/404/'):
+        if response.status_code == 404 and not request.path.startswith('/error/404/') and not request.path.startswith('/static/pdfjs/web/viewer.html'):
+            #imprime la ruta actual
+            print(request.path)
             error_404_url = reverse('error_404')
             return HttpResponseRedirect(error_404_url)
-        if response.status_code == 500 and not request.path.startswith('/error/500/'):
+        if response.status_code == 500 and not request.path.startswith('/error/500/') and not request.path.startswith('/static/pdfjs/web/viewer.html'):
             error_500_url = reverse('error_500')
             return HttpResponseRedirect(error_500_url)
         return response
