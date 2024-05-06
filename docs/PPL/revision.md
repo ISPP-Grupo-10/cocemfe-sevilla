@@ -130,7 +130,7 @@ Proyecto desplegado: https://cocemfe-4a7kpawtwa-uc.a.run.app/
 Credenciales del administrador: correo: admin@gmail.com / contraseña: admin
 Credenciales de un profesional: correo:  fvvn.dubvy50@buvxa.com / contraseña: ptUMJ7tDk2F3
 Landing Page: https://cocemfe-web-landing-page.vercel.app/
-Clockify: https://app.clockify.me/shared/66394364307ec931c67c2ac1
+Clockify: https://app.clockify.me/shared/663946947f949f49e474ca80
 GitHub: https://github.com/ISPP-Grupo-10/cocemfe-sevilla
 Demo de la aplicación: https://github.com/ISPP-Grupo-10/cocemfe-sevilla/blob/main/docs/PPL/demo.mp4
 
