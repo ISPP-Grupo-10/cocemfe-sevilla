@@ -54,7 +54,7 @@ We welcome contributions! To contribute to the project, follow these steps:
 ```bash
 git checkout -b feature/issueNumber-branch-name
 ```
-Por ejemplo:
+For example:
 ```bash
 git checkout -b feature/123-new-feature
 ```
