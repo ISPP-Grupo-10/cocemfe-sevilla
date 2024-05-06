@@ -25,7 +25,7 @@ def custom_login(request):
             professional = Professional.objects.get(email=email)
             username = professional.username
         except Professional.DoesNotExist:
-            error_message = "Nombre de usuario o contraseña incorrectos."
+            error_message = "El correo electrónico no está registrado en el sistema."
             return render(request, 'registration/login.html', {'error_message': error_message})
         
         password = request.POST.get('password')
@@ -51,12 +51,9 @@ def create_professional(request):
     if request.method == 'POST':
         form = ProfessionalCreationForm(request.POST, request.FILES)
         if form.is_valid():
-            professional = form.save(commit=False)
+            professional, password = form.save(commit=False)
             professional.save()
   
-
-            password = ''.join(random.choices(string.ascii_letters + string.digits, k=12))
-            professional.password = make_password(password)
             uid = urlsafe_base64_encode(force_bytes(professional.pk))
             verify_url = reverse('professionals:verify_email', args=[uid])
 

@@ -1,0 +1,144 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block contenido %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/chat.css' %}"><!DOCTYPE html>
+<html>
+  <body>
+    
+    <div class="contenedor-table2">
+      <h2 style="margin: 20px;">Chat del documento {{ doc.name }}</h2>
+    </div>
+    <div class="contenedor-table3">
+      <div class="scroll-messages" id="id_chat_item_container" style="max-width: 70%;">
+        {% for comentario in chat_messages %}
+          <div class="message-container {% if comentario.author == request.user %}sent{% else %}received{% endif %}">
+
+            {% if comentario.author.profile_picture %}
+              <div>
+                <img src="{{ comentario.author.profile_picture.url }}" alt="Imagen de perfil actual"  class="avatar">
+              </div>
+            {% else %}
+              <div>
+                <img src="/media/IconoUsuario.jpg" alt="Imagen por defecto"  class="avatar">
+              </div>
+            {% endif %}
+
+            <div class="message-content">
+              <p class="user-label">{{ comentario.author.username }}</p>
+              <div class="message-box" style="margin-bottom: 5px;">
+                {{ comentario.content }}
+                <p class="message-date"><em>{{ comentario.post_date }}</em></p>
+              </div>
+            </div>
+          </div>
+          <br>
+        {% endfor %}
+      </div>
+    </div>
+    <br />
+    <div class="textarea-container">
+      <input class="textarea-style" type="text" id="id_message_send_input" />
+      <button class="btn btn-primary btn-enviar" type="submit" id="id_message_send_button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+          <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"/>
+        </svg>
+      </button>
+    </div>
+  
+
+    <script>
+      function formatearFechaHora(fechaHoraString) {
+        var partes = fechaHoraString.split(', ');
+    
+        var fechaParte = partes[0];
+        var horaParte = partes[1];
+    
+        var fechaPartes = fechaParte.split('/');
+        var dia = fechaPartes[0];
+        var mesNumero = parseInt(fechaPartes[1]);
+        var año = fechaPartes[2];
+        var meses = [
+          "enero", "febrero", "marzo", "abril", "mayo", "junio",
+          "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+        ];
+        var mesNombre = meses[mesNumero - 1];
+        var horaPartes = horaParte.split(':');
+        var hora = horaPartes[0];
+        var minutos = horaPartes[1];
+        var fechaFormateada = dia + " de " + mesNombre + " de " + año + " a las " + hora + ":" + minutos;
+    
+        return fechaFormateada;
+      }
+    
+      const chatSocket = new WebSocket("wss://" + window.location.host + "/");
+      chatSocket.onopen = function (e) {
+        console.log("The connection was setup successfully !");
+      };
+      chatSocket.onclose = function (e) {
+        console.log("Something unexpected happened !");
+      };
+      document.querySelector("#id_message_send_input").focus();
+      document.querySelector("#id_message_send_input").onkeyup = function (e) {
+        if (e.keyCode == 13) {
+          document.querySelector("#id_message_send_button").click();
+        }
+      };
+      document.querySelector("#id_message_send_button").onclick = function (e) {
+        var document_id = "{{ document_id }}";
+        var fechaActual = new Date();
+        var fechaHoraActual = fechaActual.toLocaleString();
+        var fechaFormateada = formatearFechaHora(fechaHoraActual)
+        var messageInput = document.querySelector(
+          "#id_message_send_input"
+        ).value;
+
+        chatSocket.send(JSON.stringify({ message: messageInput, username: "{{request.user.username}}", profile_picture: "{{picture}}", doc_id: document_id, date: fechaFormateada }));
+      };
+      chatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        
+        var div1 = document.createElement("div");
+        if (data.username == "{{ request.user.username }}") {
+          div1.classList.add("message-container", "sent");
+        } else {
+          div1.classList.add("message-container", "received");
+        }
+
+        var div2 = document.createElement("div");
+        var img = document.createElement("img");
+        img.src = data.profile_picture;
+        img.classList.add("avatar");
+        div2.appendChild(img);
+        div1.appendChild(div2);
+
+        var div3 = document.createElement("div");
+        div3.classList.add("message-content");
+        var usernameElement = document.createElement("p");
+        usernameElement.textContent = data.username;
+        usernameElement.classList.add("user-label");
+        div3.appendChild(usernameElement);
+        div1.appendChild(div3);
+
+        var div4 = document.createElement("div");
+        div4.classList.add("message-box");
+        var messageElement = document.createElement("p");
+        messageElement.textContent = data.message;
+        var italicDateElement = document.createElement("em");
+        italicDateElement.textContent = data.date;
+        italicDateElement.classList.add("message-date");
+        div4.appendChild(messageElement);
+        div4.appendChild(italicDateElement);
+        div3.appendChild(div4);
+
+        var salto = document.createElement("br");
+        div1.appendChild(salto);
+    
+        document.querySelector("#id_message_send_input").value = "";
+        document.querySelector("#id_chat_item_container").appendChild(div1);
+      };
+    </script>
+  </body>
+</html>
+{% endblock %}
