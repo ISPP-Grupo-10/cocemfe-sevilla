@@ -73,6 +73,7 @@ uso de la IA, así como para aprovechar al máximo su potencial en la asistencia
 21/04/2024 | Generación de la voz a partir de texto| Se uso la IA de Elevenlabs para generar la voz del narrador del anuncio a partir de un texto generado por chatgpt |https://chat.openai.com/share/e507693a-3934-4c73-b252-18713d13957a , https://elevenlabs.io/ |
 21/04/2024 | Generación del vídeo a partir del texto | Se uso la IA de invideo AI para la generación del vídeo a partir del guión generado | https://ai.invideo.io/ |
 21/04/2024 | Generación de la música de fondo a partir de un texto | Se uso la IA de Suno para la generación de la música de fondo a utilizar en el vídeo a partir de un prompt de texto generado | https://suno.com/ |
+05/05/2024 | Creación de base para el vídeo de inversores | Se uso la IA de Lumen5 para la generación de una base para el víde de los inversores | https://lumen5.com/ |
 
 ### REFERENCIAS Y BIBLIOGRAFÍA
 ****
