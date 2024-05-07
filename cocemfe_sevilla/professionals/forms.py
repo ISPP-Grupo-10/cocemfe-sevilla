@@ -232,4 +232,7 @@ class SecurePasswordChangeForm(forms.Form):
         self.user.set_password(password)
         if commit:
             self.user.save()
+
+
         return self.user
+

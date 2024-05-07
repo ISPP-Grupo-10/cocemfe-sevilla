@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
-{% load static %}
-{% block title %}Modificar Documentos{% endblock %}
+{% block title %}Subir Documentos{% endblock %}
 {% block encabezado %}{% endblock %}
 {% block contenido %}
     <!DOCTYPE html>
@@ -13,7 +12,7 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-ZAElWN6PqB8kyByGWGdIV6yB/wWw+2sBOnTgCZlb5B5KZl3IFIKo3sggs2pihGzwCwPbLjBOvDT6xg6lL7sR7Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
-        <title>Modificar Documentos</title>
+        <title>Subir Documentos</title>
         <style>
             body {
                 color: #000;
@@ -67,7 +66,7 @@
                 font-weight: 400;
                 height: 43px;
                 cursor: pointer;
-                background-color: rgba(0, 162, 151, 0.842);
+                background-color: rgba(0, 162, 151, 0.842); /* Color del botón "Crear" */
                 color: white;
                 border: none;
             }
@@ -95,6 +94,7 @@
                 box-shadow: 0 0 10px rgba(0, 165, 153, 0.3);
             }
         
+            /* Hacer el formulario más estrecho */
             .col-xl-7,
             .col-lg-8,
             .col-md-9,
@@ -184,7 +184,7 @@
                                     </div>
                                     <div class="form-group col-sm-6 flex-column d-flex mb-4">
                                         <label for="id_name" class="form-control-label px-3" style="font-family: 'Arial', sans-serif; font-weight: bold;">
-                                            <i class="fas fa-map-marker-alt"></i> Ubicación<span class="text-danger"> *</span>
+                                            <i class="fas fa-map-marker-alt"></i> Localidad<span class="text-danger"> *</span>
                                         </label>
                                         {{ form.ubication }}
                                         {% for error in form.ubication.errors %}

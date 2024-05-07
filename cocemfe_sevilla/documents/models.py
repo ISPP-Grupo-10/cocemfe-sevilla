@@ -3,9 +3,9 @@ from professionals.models import Professional
 from django.core.validators import FileExtensionValidator
 from django.core.exceptions import ValidationError
 from django.utils import timezone
-import datetime
 from django.utils.translation import gettext as _
-
+import requests
+from maps.models import Coordinates
 
 class Document(models.Model):
     STATUS = (
@@ -67,6 +67,21 @@ class Document(models.Model):
                 raise ValidationError({'pdf_file': ('Debe subir un archivo PDF.')})
             
             if not self.ubication:
-                raise ValidationError({'ubication': ('Debe indicar la ubicación.')})
+                raise ValidationError({'ubication': ('Debe indicar la localidad.')})
+            
+            if not valid_location(self.ubication):
+                raise ValidationError({'ubication': ('La localidad introducida no es válida.')})
        
       
+def valid_location(city):
+    url = f'https://nominatim.openstreetmap.org/search?q={city}&format=json'
+    response = requests.get(url)
+    data = response.json()
+
+    if data:
+        latitude = float(data[0]['lat'])
+        longitude = float(data[0]['lon'])
+        Coordinates.objects.create(location=city, latitude=latitude, longitude=longitude)
+        return True
+    else:
+        return False

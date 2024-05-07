@@ -1,6 +1,5 @@
 from django.shortcuts import render
 import folium
-import requests
 from documents.models import Document
 from .models import Coordinates
 
@@ -13,14 +12,8 @@ def map_index(request):
     for city in cities_with_documents:
         documents = Document.objects.filter(ubication=city)
         coordinate = Coordinates.objects.filter(location=city).first()
-        if not coordinate:
-            latitude, longitude = get_coordinates_openstreetmap(city)
-            if latitude and longitude:
-                Coordinates.objects.create(location=city, latitude=latitude, longitude=longitude)
-            else:
-                continue
-        else:
-            latitude, longitude = coordinate.latitude, coordinate.longitude
+       
+        latitude, longitude = coordinate.latitude, coordinate.longitude
             
         marker = folium.Marker(location=[latitude, longitude], popup=city)
         marker.add_to(mapa)
@@ -53,14 +46,8 @@ def map_search(request, latitude, longitude):
     for city in cities_with_documents:
         documents = Document.objects.filter(ubication=city)
         coordinate = Coordinates.objects.filter(location=city).first()
-        if not coordinate:
-            latitude, longitude = get_coordinates_openstreetmap(city)
-            if latitude and longitude:
-                Coordinates.objects.create(location=city, latitude=latitude, longitude=longitude)
-            else:
-                continue
-        else:
-            latitude, longitude = coordinate.latitude, coordinate.longitude
+        
+        latitude, longitude = coordinate.latitude, coordinate.longitude
 
         marker = folium.Marker(location=[latitude, longitude], popup=city)
         marker.add_to(mapa)
@@ -77,15 +64,3 @@ def map_search(request, latitude, longitude):
     mapa_html = mapa._repr_html_()
 
     return render(request, 'maps_index.html', {'mapa_html': mapa_html, 'documents_by_city': documents_by_city, 'coordinates': coordinates})
-
-def get_coordinates_openstreetmap(city):
-    url = f'https://nominatim.openstreetmap.org/search?q={city}&format=json'
-    response = requests.get(url)
-    data = response.json()
-
-    if data:
-        latitude = float(data[0]['lat'])
-        longitude = float(data[0]['lon'])
-        return latitude, longitude
-    else:
-        return None, None

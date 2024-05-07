@@ -14,7 +14,7 @@ from professionals.models import Professional
 from professionals.views import create_professional
 
 
-"""
+
 class ProfessionalViewTest(TestCase):
     def setUp(self):
         self.professional = Professional.objects.create(
@@ -40,9 +40,7 @@ class ProfessionalViewTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'John')
-"""
 
-'''
 class ProfessionalListTestCase(TestCase):
     def setUp(self):
         self.organization = Organization.objects.create(
@@ -122,9 +120,7 @@ class ProfessionalListTestCase(TestCase):
         response = self.client.get(reverse('professionals:professional_list') + '?organization=Test Organization')
         self.assertIn(self.professional1, response.context['professionals'])
         self.assertIn(self.professional2, response.context['professionals'])
-'''
 
-'''
 class ProfessionalChatTestCase(TestCase):
     def setUp(self):
         self.organization = Organization.objects.create(
@@ -185,9 +181,7 @@ class ProfessionalChatTestCase(TestCase):
         self.assertContains(response, 'Documento de prueba 1')
         self.assertContains(response, 'Documento de prueba 3')
         self.assertNotContains(response, 'Documento de prueba 2')
-'''
 
-'''
 class ProfessionalCreationTest(TestCase):
     def setUp(self):
         self.client = Client()
@@ -273,8 +267,6 @@ class ProfessionalCreationTest(TestCase):
         self.assertEqual(response.status_code, 200)
         professionals_after = Professional.objects.count()
         self.assertEqual(professionals_after, professionals_before)
-'''
-
 
 class EditUserViewTestCase(TestCase):
     def setUp(self):

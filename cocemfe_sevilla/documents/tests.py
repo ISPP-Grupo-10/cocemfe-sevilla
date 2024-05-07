@@ -1,13 +1,11 @@
 from django.test import TestCase
 from django.urls import reverse
-from documents.models import Document
+from documents.models import Document, valid_location
 from professionals.models import Professional
 from django.utils import timezone
 from datetime import timedelta
 from organizations.models import Organization
-from django.test import RequestFactory
 from django.core.files.uploadedfile import SimpleUploadedFile
-from pathlib import Path
 from django.utils.translation import gettext as _  
 class DocumentTestCase(TestCase):
     def setUp(self):
@@ -41,7 +39,7 @@ class DocumentTestCase(TestCase):
             suggestion_end_date=timezone.now() + timedelta(days=30),
             voting_start_date=timezone.now() + timedelta(days=30),
             voting_end_date=timezone.now() + timedelta(days=60),
-            ubication='Ubicación de prueba',
+            ubication='Sevilla',
             status='Cerrado'
         )
         self.document.professionals.add(self.professional)
@@ -53,7 +51,6 @@ class DocumentTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.document.name)
 
-    '''
     def test_view_pdf_admin_as_admin(self):
         self.client.login(username='admin', password='admin')
         response = self.client.get(reverse('view_pdf_admin', kwargs={'pk': self.document.pk}))
@@ -63,14 +60,12 @@ class DocumentTestCase(TestCase):
         self.assertContains(response, self.document.name)
         self.assertContains(response, self.document.ubication)
         self.assertContains(response, self.document.status)
-    '''
 
     def test_view_pdf_admin_invalid_pk(self):
         self.client.login(username='admin', password='admin')
         response = self.client.get(reverse('view_pdf_admin', args=[1000]))
         self.assertEqual(response.status_code, 404)
 
-    '''
     def test_redirection_from_list_pdf_to_view_pdf_admin(self):
         list_pdf_url = reverse('list_pdf')
         response = self.client.get(list_pdf_url)
@@ -81,7 +76,6 @@ class DocumentTestCase(TestCase):
 
         response = self.client.get(view_pdf_admin_url)
         self.assertEqual(response.status_code, 200)
-    '''
 
     def test_filter_documents_by_name(self):
         response = self.client.get(reverse('list_pdf'), {'name': 'prueba'})
@@ -104,7 +98,7 @@ class DocumentTestCase(TestCase):
 
         data = {
             'name': 'Documento de prueba',
-            'ubication': 'Ubicación de prueba', 
+            'ubication': 'Sevilla', 
             'status': 'Borrador',
             'suggestion_start_date': self.document.suggestion_start_date,
             'suggestion_end_date': self.document.suggestion_end_date,
@@ -123,7 +117,7 @@ class DocumentTestCase(TestCase):
         data = {
             'suggestion_start_date': timezone.now().date(),
             'name': 'Documento de prueba',
-            'ubication': 'Ubicación de prueba',  
+            'ubication': 'Sevilla',  
             'status': 'Abierto',  
             'suggestion_end_date': '01/01/2021',
             'pdf_file': self.pdf_file,
@@ -174,7 +168,7 @@ class DocumentTestCase(TestCase):
             'voting_end_date':new_voting_end_date,
             'professionals': [self.professional.id, new_professional_id],
             'pdf_file': self.pdf_file,
-            'ubication': 'Ubicación de prueba',  
+            'ubication': 'Sevilla',  
         })
         self.assertEqual(response.status_code, 302) 
 
@@ -243,7 +237,7 @@ class DocumentTestCase(TestCase):
             'voting_end_date':new_voting_end_date,
             'professionals': [self.professional.id],
             'pdf_file': self.pdf_file,
-            'ubication': 'Ubicación de prueba', 
+            'ubication': 'Sevilla', 
         })
 
         self.assertEqual(response.status_code, 302) 
@@ -253,3 +247,12 @@ class DocumentTestCase(TestCase):
 
         self.assertEqual(modified_document.name, new_name)
         self.assertEqual(modified_suggestion_end_date, new_suggestion_end_date)
+
+class GetCoordinatesOpenStreetMapTestCase(TestCase):
+    def test_get_coordinates_openstreetmap(self):
+        city = 'Seville'
+        self.assertTrue(valid_location(city))
+
+    def test_get_coordinates_openstreetmap_not_exist(self):
+        city = 'ADFASDJIV'
+        self.assertFalse(valid_location(city))

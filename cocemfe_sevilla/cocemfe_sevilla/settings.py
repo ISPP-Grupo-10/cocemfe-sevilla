@@ -25,9 +25,9 @@ STATIC_DIR = Path(BASE_DIR) / 'static'
 SECRET_KEY = "django-insecure-@4zj0j16-pk64hd61$o0tz6r6)gs%%4@^780#ar-ij&qrf22_s"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "daphne",
     "channels",
     "django.contrib.staticfiles",
+    "corsheaders",
     "chat_messages",
     "documents",
     "professionals",
@@ -71,10 +72,19 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "base.middleware.CheckUserStatusMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = "cocemfe_sevilla.urls"
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",
+    "https://cocemfe-4a7kpawtwa-uc.a.run.app"
+]
 
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8000",
+    "https://cocemfe-4a7kpawtwa-uc.a.run.app"
+]
 
 TEMPLATES = [
     {
@@ -85,6 +95,7 @@ TEMPLATES = [
             "context_processors": [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
+                'django.template.context_processors.csrf',
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
@@ -142,12 +153,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 STATICFILES_DIRS = [
     STATIC_DIR
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -159,4 +172,3 @@ CHANNEL_LAYERS = {
         "BACKEND": "channels.layers.InMemoryChannelLayer"
     }
 }
-
