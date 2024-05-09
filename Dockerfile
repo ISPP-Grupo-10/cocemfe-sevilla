@@ -19,6 +19,7 @@ WORKDIR /app/cocemfe_sevilla
 
 RUN python manage.py makemigrations --noinput
 RUN python manage.py migrate
+RUN python fixtures/jsonmerge.py
 RUN python manage.py loaddata fixtures/data.json
 
 

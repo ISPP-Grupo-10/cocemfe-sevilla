@@ -51,7 +51,6 @@ class DocumentTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.document.name)
 
-    '''
     def test_view_pdf_admin_as_admin(self):
         self.client.login(username='admin', password='admin')
         response = self.client.get(reverse('view_pdf_admin', kwargs={'pk': self.document.pk}))
@@ -61,14 +60,12 @@ class DocumentTestCase(TestCase):
         self.assertContains(response, self.document.name)
         self.assertContains(response, self.document.ubication)
         self.assertContains(response, self.document.status)
-    '''
 
     def test_view_pdf_admin_invalid_pk(self):
         self.client.login(username='admin', password='admin')
         response = self.client.get(reverse('view_pdf_admin', args=[1000]))
         self.assertEqual(response.status_code, 404)
 
-    '''
     def test_redirection_from_list_pdf_to_view_pdf_admin(self):
         list_pdf_url = reverse('list_pdf')
         response = self.client.get(list_pdf_url)
@@ -79,7 +76,6 @@ class DocumentTestCase(TestCase):
 
         response = self.client.get(view_pdf_admin_url)
         self.assertEqual(response.status_code, 200)
-    '''
 
     def test_filter_documents_by_name(self):
         response = self.client.get(reverse('list_pdf'), {'name': 'prueba'})

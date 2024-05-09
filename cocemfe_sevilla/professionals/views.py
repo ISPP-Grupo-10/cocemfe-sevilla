@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views import View
@@ -14,10 +15,8 @@ from .models import Professional, Request
 from .forms import ProfessionalCreationForm, ProfessionalForm, SecurePasswordChangeForm, RequestCreateForm, RequestUpdateForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.hashers import make_password 
-from django.http import HttpResponseForbidden
 import random
 import string
-
 
 def custom_login(request):
     if request.method == 'POST':
