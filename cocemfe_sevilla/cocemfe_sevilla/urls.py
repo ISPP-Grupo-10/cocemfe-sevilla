@@ -21,6 +21,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from professionals import views as profViews
 from base import views as baseViews
+from django.views.static import serve
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -38,8 +39,8 @@ urlpatterns = [
 
 ]
 if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
 
 urlpatterns += [
     path('error/404/', baseViews.error_404, name='error_404'),

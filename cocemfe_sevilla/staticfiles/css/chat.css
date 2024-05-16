@@ -1,0 +1,73 @@
+.message-container {
+    margin-bottom: 10px;
+    overflow: hidden; /* Evita que el contenido de los contenedores sobresalga */
+}
+
+.contenedor-table2{
+    margin-top: 50px; 
+    margin-bottom: 10px; 
+    margin-left: 40px;
+}
+
+.contenedor-table3{
+    margin-top: 50px;
+    margin-left: auto; 
+    margin-right: auto; 
+    width: 70%;
+}
+
+/* Estilo para los mensajes enviados */
+.sent {
+    text-align: right;
+}
+
+/* Estilo para los mensajes recibidos */
+.received {
+    text-align: left;
+}
+
+/* Estilo para los avatares */
+.avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+/* Estilo para las burbujas de chat */
+.message-content {
+    word-wrap: break-word;
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+/* Estilo para los elementos de fecha y hora */
+.message-date {
+    margin-top: 5px;
+    font-style: italic;
+    font-size: 0.8em;
+}
+
+/* Estilo para la barra de entrada de mensajes */
+.textarea-container {
+    display: flex;
+    align-items: center;
+    border-top: 1px solid #ccc;
+    padding: 15px 30% 15px 15%;
+}
+
+.textarea-style {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.btn-enviar {
+    margin-left: 10px;
+}
+
+.user-label {
+    font-weight: bold !important;
+}
