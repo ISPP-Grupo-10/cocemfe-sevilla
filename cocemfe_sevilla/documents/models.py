@@ -76,12 +76,13 @@ class Document(models.Model):
 def valid_location(city):
     url = f'https://nominatim.openstreetmap.org/search?q={city}&format=json'
     response = requests.get(url)
-    data = response.json()
-
-    if data:
-        latitude = float(data[0]['lat'])
-        longitude = float(data[0]['lon'])
-        Coordinates.objects.create(location=city, latitude=latitude, longitude=longitude)
-        return True
-    else:
-        return False
+    res = False
+    if response:
+        data = response.json()
+        if data:
+            latitude = float(data[0]['lat'])
+            longitude = float(data[0]['lon'])
+            Coordinates.objects.create(location=city, latitude=latitude, longitude=longitude)
+            res = True
+ 
+    return res

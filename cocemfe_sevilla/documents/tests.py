@@ -40,7 +40,8 @@ class DocumentTestCase(TestCase):
             voting_start_date=timezone.now() + timedelta(days=30),
             voting_end_date=timezone.now() + timedelta(days=60),
             ubication='Sevilla',
-            status='Cerrado'
+            status='Cerrado',
+            pdf_file=self.pdf_file
         )
         self.document.professionals.add(self.professional)
 
@@ -102,7 +103,6 @@ class DocumentTestCase(TestCase):
             'status': 'Borrador',
             'suggestion_start_date': self.document.suggestion_start_date,
             'suggestion_end_date': self.document.suggestion_end_date,
-            'voting_start_date' :self.document.voting_start_date,
             'voting_end_date':self.document.voting_end_date,
             'pdf_file': self.pdf_file, 
         }
@@ -238,9 +238,10 @@ class DocumentTestCase(TestCase):
             'professionals': [self.professional.id],
             'pdf_file': self.pdf_file,
             'ubication': 'Sevilla', 
-        })
+         })
 
-        self.assertEqual(response.status_code, 302) 
+
+        self.assertEqual(response.status_code, 302)
 
         modified_document = Document.objects.get(pk=self.document.pk)
         modified_suggestion_end_date = timezone.localtime(modified_document.suggestion_end_date).date()
