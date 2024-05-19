@@ -74,7 +74,7 @@ class Document(models.Model):
         
         if not self.ubication:
             raise ValidationError({'ubication': ('Debe indicar la localidad.')})
-        
+'''
         if not valid_location(self.ubication):
             raise ValidationError({'ubication': ('La localidad introducida no es válida.')})
        
@@ -94,3 +94,4 @@ def valid_location(city):
             res = True
  
     return res
+'''
