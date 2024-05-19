@@ -7,6 +7,7 @@ from django.utils.translation import gettext as _
 import requests
 import re
 from maps.models import Coordinates
+import time
 
 class Document(models.Model):
     STATUS = (
@@ -80,6 +81,7 @@ class Document(models.Model):
       
 def valid_location(city):
     url = f'https://nominatim.openstreetmap.org/search?q={city}&format=json'
+    time.sleep(1)
     response = requests.get(url)
     res = False
     print(response)
