@@ -16,7 +16,7 @@ def map_index(request):
 
         if not coordinate:
             url = f'https://nominatim.openstreetmap.org/search?q={city}&format=json'
-            response = requests.get(url)
+            response = requests.get(url, timeout=None)
             data = response.json()
 
             if data:
@@ -62,7 +62,7 @@ def map_search(request, latitude, longitude):
 
         if not coordinate:
             url = f'https://nominatim.openstreetmap.org/search?q={city}&format=json'
-            response = requests.get(url)
+            response = requests.get(url, timeout=None)
             data = response.json()
 
             if data:
