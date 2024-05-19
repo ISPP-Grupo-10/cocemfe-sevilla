@@ -137,18 +137,6 @@ def map_search(request, latitude, longitude):
 
     return render(request, 'maps_index.html', {'mapa_html': mapa_html, 'documents_by_city': documents_by_city, 'coordinates': coordinates})
 
-                popup_content += "<li><a href='/documents/view_pdf/{0}' target='_top'>{1}</a></li>".format(document.id, document.name)
-            else:
-                popup_content += "<li>{}</li>".format(document.name)
-        popup_content += "</ul>"
-
-        folium.Popup(popup_content).add_to(marker)
-        documents_by_city[city] = documents
-
-    mapa_html = mapa._repr_html_()
-
-    return render(request, 'maps_index.html', {'mapa_html': mapa_html, 'documents_by_city': documents_by_city, 'coordinates': coordinates})
-
 def map_search(request, latitude, longitude):
     latitude = float(latitude)
     longitude = float(longitude)
