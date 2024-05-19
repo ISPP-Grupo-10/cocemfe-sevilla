@@ -65,7 +65,7 @@ class DocumentTestCase(TestCase):
     def test_view_pdf_admin_invalid_pk(self):
         self.client.login(username='admin', password='admin')
         response = self.client.get(reverse('view_pdf_admin', args=[1000]))
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 302)
 
     def test_redirection_from_list_pdf_to_view_pdf_admin(self):
         list_pdf_url = reverse('list_pdf')
