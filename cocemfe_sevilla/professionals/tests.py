@@ -367,12 +367,12 @@ class ProfessionalDataViewTest(TestCase):
                                                         terms_accepted=True
                                                         )
         self.client.force_login(unauthorized_user)
-        response = self.client.get(reverse('professionals:professional_data',
-                                        kwargs={'professional_id': self.professional_staff.pk}))
+        response = self.client.get(reverse('professionals:professional_details',
+                                        kwargs={'pk': self.professional_staff.pk}))
         self.assertEqual(response.status_code, 403)
 
     def test_view_redirects_for_non_authenticated_user(self):
-        response = self.client.get(reverse('professionals:professional_data', kwargs={'professional_id': self.professional_normal.pk}))
+        response = self.client.get(reverse('professionals:professional_details', kwargs={'pk': self.professional_normal.pk}))
         self.assertEqual(response.status_code, 302)
 
 

@@ -16,18 +16,21 @@
         height: 100%;
     }
     .top {
+        margin-top: 10px;
         display: flex;
         height: 65%;
         justify-content: space-between; /* Espacio entre los divs */
     }
     .left {
-        width: 48%;
+        width: 60%; 
         background-color: #f7f7f7;
         border-radius: 15px;
         padding: 20px;
+        overflow: hidden; /* Asegura que el contenido no sobresalga */
+        
     }
     .right {
-        width: 48%;
+        width: 38%; /* Ajusta el tamaño para mantener el diseño */
         background-color: #f7f7f7;
         border-radius: 15px;
         padding: 20px;
@@ -36,7 +39,8 @@
         height: 25%;
         background-color: #f7f7f7;
         border-radius: 15px;
-        padding: 20px;
+        padding: 5px;
+        margin-top: 20px; /* Espacio entre el top y el bottom */
     }
     .button-container {
         display: flex;
@@ -58,7 +62,7 @@
 <div class="container">
     <div class="top">
         <div class="left">
-            <div id='calendar' class='my-2 space-y-1 mb-4' style="max-height: 450px;"></div>
+            <div id='calendar' class='my-2 space-y-1 mb-4' style="height: 100%; max-height: 100%; overflow: auto;"></div>
         </div>
         <div class="right">
             <h3 class="my-2 text-center">Documentos</h3>
@@ -76,13 +80,13 @@
                 </div>
             </form>
             <div class="relative w-full overflow-auto" style="max-height: 400px;">
-                <table class="w-full caption-bottom text-sm ">
+                <table class="w-full caption-bottom text-sm">
                     <thead class="[&amp;_tr]:border-b sticky">
                         <tr class="border-b border-gray-200 transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 style="color: black;"">
+                            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground" style="color: black;">
                                 Nombre
                             </th>
-                            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
+                            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
                                 Estado
                             </th>
                         </tr>
@@ -120,21 +124,14 @@
     {% if request.user.is_superuser %}
         <div class="bottom">
             <h3 class="my-2 mb-5 text-center">Acciones rápidas</h3>
-            <div class="button-container">
-                <div class="button">
-                    <a href="{% url 'upload_pdf' %}">+ Subir documento</a>
-                </div>
-                <div class="button">
-                    <a href="{% url 'professionals:create_professional' %}">+ Nuevo profesional</a>
-                </div>
-                <div class="button">
-                    <a href="{% url 'organizations:create_organization' %}">+ Añadir organización</a>
-                </div>
+            <div class="button-container" >
+                <a href="{% url 'upload_pdf' %}" class="btn btn-orange">+ Subir documento</a>
+                <a href="{% url 'professionals:create_professional' %}" class="btn btn-orange">+ Nuevo profesional</a>
+                <a href="{% url 'organizations:create_organization' %}" class="btn btn-orange">+ Añadir organización</a>
             </div>
         </div>
     {% endif %}
 </div>
-
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/moment/moment.min.js"></script>

@@ -19,8 +19,15 @@
       <div class="w-full px-4 space-y-4 d-flex flex-row justify-content-between">
         <div class="col-4 max-w-lg space-y-1 mb-4 d-flex flex-col">
           <div class="input-group mb-3 col-3">
-            <button class="btn btn-outline-secondary" type="button" id="button-addon1">Buscar</button>
-            <input type="text" class="form-control form-control-xs" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" style="width: 200px;">
+            <button class="btn btn-primary" type="button" id="button-addon1">Buscar</button>
+            <input type="text" class="form-control form-control-xs" placeholder="Nombre..." aria-label="Example text with button addon" aria-describedby="button-addon1" style="width: 200px;">
+            {% if request.GET.name %}
+              <button type="button" class="btn btn-primary" onclick="clearFilter()" title="Borrar filtro">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                  <path d="M4.354 4.354a.5.5 0 0 1 0 .708L8 8l-3.646 3.646a.5.5 0 0 1-.708-.708L7.293 8 3.646 4.354a.5.5 0 0 1 .708-.708L8 7.293l3.646-3.646a.5.5 0 0 1 .708.708L8.707 8l3.647 3.646a.5.5 0 0 1-.708.708L8 8.707l-3.646 3.647a.5.5 0 0 1-.708-.708L7.293 8 3.646 4.354a.5.5 0 0 1 .708-.708z"/>
+                </svg>
+              </button>
+            {% endif %}
           </div>
         </div>
         <!-- Añade aquí el botón de subir documento si es necesario -->
@@ -84,6 +91,10 @@
             }
         });
     });
+
+    function clearFilter() {
+        window.location.href = "{% url 'professionals:request_list' %}";
+    }
 </script>
 
 {% endblock %}

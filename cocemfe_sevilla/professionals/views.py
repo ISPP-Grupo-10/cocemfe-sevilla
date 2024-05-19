@@ -90,7 +90,11 @@ def professional_data(request, professional_id):
 @login_required
 def professional_details(request, pk):
     professional = get_object_or_404(Professional, id=pk)
-    return render(request, 'professional_details.html', {'professional': professional})
+    user_is_staff = request.user.is_staff or request.user.is_superuser
+    if user_is_staff:
+        return render(request, 'professional_details.html', {'professional': professional})
+    else:
+        return HttpResponseForbidden(render(request, '403.html'))
 
 @login_required
 def edit_user_view(request, pk):
