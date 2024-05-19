@@ -19,8 +19,7 @@ class Organization(models.Model):
     zip_code = models.IntegerField(validators=[RegexValidator(regex=r'^\d{5}$', message='El codigo postal debe tener exactamente 5 dígitos numéricos')])
 
     def __str__(self):
-        return self.name
-    
+        return self.name 
     def clean(self):
         
         if not re.match(r'^[a-zA-Z0-9\s\u00C0-\u00FF]*$', self.name):

@@ -34,7 +34,6 @@ class Suggestion(models.Model):
         # Validación: Verificar que los objetos relacionados existan en la base de datos.
         if self.professional_id is not None and not Professional.objects.filter(pk=self.professional_id).exists():
             raise ValidationError("El profesional especificado no existe.")
-        
         if self.document_id is not None and not Document.objects.filter(pk=self.document_id).exists():
             raise ValidationError("El documento especificado no existe.")
 

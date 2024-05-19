@@ -17,7 +17,6 @@ class ChatMessage(models.Model):
 
     def clean(self):
         super().clean()
-        
         # Validación: Verificar que el campo 'content' no exceda una cierta longitud máxima.
         if len(self.content) > 500:
             raise ValidationError("El contenido del mensaje no puede exceder los 500 caracteres.")
