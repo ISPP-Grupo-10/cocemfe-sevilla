@@ -31,11 +31,11 @@ class Events(models.Model):
             raise ValidationError("La fecha y hora del evento no pueden ser anteriores a la fecha y hora actuales.")
         
         # Validación: Verificar que el título solo contenga letras, números y espacios.
-        if not re.match(r'^[a-zA-Z0-9\s]*$', self.title):
+        if not re.match(r'^[a-zA-Z0-9\s\u00C0-\u00FF]*$', self.title):
             raise ValidationError({"El título del evento solo puede contener letras, números y espacios."})
         
         # Validación: Verificar que la descripción solo contenga letras, números y espacios.
-        if not re.match(r'^[a-zA-Z0-9\s]*$', self.description):
+        if not re.match(r'^[a-zA-Z0-9\s\u00C0-\u00FF]*$', self.description):
             raise ValidationError({"La descripción del evento solo puede contener letras, números y espacios."})
         
         # Validación: Tipo de evento debe ser uno de los tipos permitidos.

@@ -33,7 +33,7 @@ class Document(models.Model):
     
     def clean(self):
             
-            if not re.match(r'^[a-zA-Z0-9\s]*$', self.name):
+            if not re.match(r'^[a-zA-Z0-9\s\u00C0-\u00FF]*$', self.name):
                 raise ValidationError({'name': 'El nombre solo puede contener letras, números y espacios.'})
     
             if self.suggestion_start_date and self.suggestion_end_date:
@@ -82,6 +82,7 @@ def valid_location(city):
     url = f'https://nominatim.openstreetmap.org/search?q={city}&format=json'
     response = requests.get(url)
     res = False
+    print(response)
     if response:
         data = response.json()
         if data:

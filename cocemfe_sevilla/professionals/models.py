@@ -29,10 +29,10 @@ class Professional(AbstractUser):
         if not re.match(r'^[a-zA-Z0-9_\s]*$', self.username):
             raise ValidationError({'username': 'El nombre de usuario solo puede contener letras, números y espacios.'})
 
-        if not re.match(r'^[a-zA-Z0-9\s]*$', self.first_name):
+        if not re.match(r'^[a-zA-Z0-9\s\u00C0-\u00FF]*$', self.first_name):
             raise ValidationError({'first_name': 'El nombre solo puede contener letras, números y espacios.'})
 
-        if not re.match(r'^[a-zA-Z0-9\s]*$', self.last_name):
+        if not re.match(r'^[a-zA-Z0-9\s\u00C0-\u00FF]*$', self.last_name):
             raise ValidationError({'last_name': 'Los apellidos solo puede contener letras, números y espacios.'})
 
 class Request(models.Model):

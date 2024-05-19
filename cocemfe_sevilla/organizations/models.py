@@ -23,7 +23,7 @@ class Organization(models.Model):
     
     def clean(self):
 
-        if not re.match(r'^[a-zA-Z0-9\s]*$', self.name):
+        if not re.match(r'^[a-zA-Z0-9\s\u00C0-\u00FF]*$', self.name):
             raise ValidationError({'name': 'El nombre solo puede contener letras, números y espacios.'})
 
 

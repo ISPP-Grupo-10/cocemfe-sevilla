@@ -23,12 +23,3 @@ class ChatMessage(models.Model):
         if len(self.content) > 500:
             raise ValidationError("El contenido del mensaje no puede exceder los 500 caracteres.")
         
-        # Validación: Verificar que la fecha de publicación del mensaje sea anterior a la fecha y hora actuales.
-        if self.post_date > timezone.now():
-            raise ValidationError("La fecha de publicación del mensaje no puede ser en el futuro.")
-        
-        # Validación: Verificar que los objetos relacionados existan en la base de datos.
-        if not Professional.objects.filter(pk=self.author_id).exists():
-            raise ValidationError("El autor especificado no existe.")
-        if not Document.objects.filter(pk=self.document_id).exists():
-            raise ValidationError("El documento especificado no existe.")

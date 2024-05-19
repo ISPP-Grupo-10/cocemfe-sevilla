@@ -5,6 +5,7 @@ from chat_messages.admin import ChatMessageAdmin
 from documents.models import Document
 from professionals.models import Professional
 from django.contrib.admin.sites import AdminSite
+from django.utils import timezone
 
 class ChatMessageAdminTest(TestCase):
     def setUp(self):
@@ -53,7 +54,11 @@ class ChatMessageFormTest(TestCase):
         self.assertIn('content', form.errors)
 
     def test_valid_form_with_document_and_author(self):
-        data = {'content': 'This is a test message'}
+        data = {
+            'content': 'This is a test message',
+            'author': self.professional,
+            'document': self.document,
+            }
         form = MessageForm(data=data)
         self.assertTrue(form.is_valid())
 
