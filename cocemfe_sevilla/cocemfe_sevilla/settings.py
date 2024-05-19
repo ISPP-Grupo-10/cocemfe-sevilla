@@ -89,7 +89,8 @@ MIDDLEWARE = [
 ROOT_URLCONF = "cocemfe_sevilla.urls"
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
-    "https://cocemfe-4a7kpawtwa-uc.a.run.app"
+    "https://cocemfe-4a7kpawtwa-uc.a.run.app",
+    "https://cocemfe-wpl-4a7kpawtwa-no.a.run.app/"
 ]
 
 CSRF_TRUSTED_ORIGINS = [
