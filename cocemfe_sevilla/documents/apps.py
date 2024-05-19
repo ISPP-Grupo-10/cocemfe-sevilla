@@ -1,9 +1,10 @@
 from django.apps import AppConfig
-
+import sys
 
 class DocumentsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'documents'
 
     def ready(self):
-        import documents.tasks  # Importa el archivo tasks.py
+        if 'migrate' not in sys.argv and 'makemigrations' not in sys.argv:
+            import documents.tasks
