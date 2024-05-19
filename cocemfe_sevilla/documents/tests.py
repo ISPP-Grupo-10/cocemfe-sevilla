@@ -248,7 +248,7 @@ class DocumentTestCase(TestCase):
 
         self.assertEqual(modified_document.name, new_name)
         self.assertEqual(modified_suggestion_end_date, new_suggestion_end_date)
-    '''
+
 class GetCoordinatesOpenStreetMapTestCase(TestCase):
     
     def test_get_coordinates_openstreetmap(self):
@@ -258,3 +258,4 @@ class GetCoordinatesOpenStreetMapTestCase(TestCase):
     def test_get_coordinates_openstreetmap_not_exist(self):
         city = 'ADFASDJIV'
         self.assertFalse(valid_location(city))
+    '''
