@@ -22,7 +22,7 @@ def map_index(request):
             if data:
                 latitude = float(data[0]['lat'])
                 longitude = float(data[0]['lon'])
-                coords = Coordinates.objects.get_or_create(location=city, defaults={'latitude': latitude, 'longitude': longitude})
+                coords,_ = Coordinates.objects.get_or_create(location=city, defaults={'latitude': latitude, 'longitude': longitude})
                 latitude, longitude = coords.latitude, coords.longitude
             else:
                 continue
@@ -68,7 +68,7 @@ def map_search(request, latitude, longitude):
             if data:
                 latitude = float(data[0]['lat'])
                 longitude = float(data[0]['lon'])
-                coords = Coordinates.objects.get_or_create(location=city, defaults={'latitude': latitude, 'longitude': longitude})
+                coords,_ = Coordinates.objects.get_or_create(location=city, defaults={'latitude': latitude, 'longitude': longitude})
                 latitude, longitude = coords.latitude, coords.longitude
             else:
                 continue
