@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from documents.models import Document, valid_location
+from documents.models import Document
 from professionals.models import Professional
 from django.utils import timezone
 from datetime import timedelta
