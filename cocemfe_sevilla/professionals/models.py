@@ -23,6 +23,7 @@ class Professional(AbstractUser):
 
     def __str__(self):
         return self.username
+    
     def clean(self):
 
         if not re.match(r'^[a-zA-Z0-9_\s]*$', self.username):

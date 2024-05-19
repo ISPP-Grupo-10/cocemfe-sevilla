@@ -49,19 +49,19 @@ class Suggestion(models.Model):
         # Validación: Requerir que se proporcione una sección para cada sugerencia.
         if not self.section:
             raise ValidationError("Se requiere una sección para la sugerencia.")
-        
+
         # Validación: Verificar que la longitud de la sección no exceda cierto valor.
         if len(self.section) > 2000:
             raise ValidationError("La sección de la sugerencia no puede exceder los 2000 caracteres.")
-        
+
         # Validación: Verificar que la longitud del campo 'main' no exceda cierto valor.
         if len(self.main) > 255:
             raise ValidationError("El campo 'main' no puede exceder los 255 caracteres.")
-        
+
         # Validación: Verificar que el campo 'page' sea un número entero positivo.
         if self.page < 0:
             raise ValidationError("El número de página debe ser un entero positivo.")
-        
+
         # Validación: Verificar que la longitud de la justificación no exceda cierto valor.
         if len(self.justification) > 500:
             raise ValidationError("La justificación de la sugerencia no puede exceder los 500 caracteres.")
