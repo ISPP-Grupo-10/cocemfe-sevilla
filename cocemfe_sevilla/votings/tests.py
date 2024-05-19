@@ -66,7 +66,7 @@ class VotingStatisticsTestCase(TestCase):
         invalid_document_id = self.document.pk + 100
         url = reverse('votings:voting_statistics', kwargs={'pk': invalid_document_id})
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 302)
 
     def test_voting_statistics_view_without_suggestions(self):
         self.suggestion1.delete()

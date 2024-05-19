@@ -25,7 +25,7 @@ STATIC_DIR = Path(BASE_DIR) / 'static'
 SECRET_KEY = "django-insecure-@4zj0j16-pk64hd61$o0tz6r6)gs%%4@^780#ar-ij&qrf22_s"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -59,9 +59,19 @@ INSTALLED_APPS = [
     "calendars",
     "bootstrap5",
     "base",
+    'django_q',
 
 ]
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+Q_CLUSTER = {
+    'name': 'DjangORM',
+    'workers': 4,
+    'recycle': 500,
+    'timeout': 60,
+    'django_redis': 'default',
+    'orm': 'default'
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -72,18 +82,21 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "base.middleware.CheckUserStatusMiddleware",
+    "base.middleware.CustomRedirectMiddleware",
     "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = "cocemfe_sevilla.urls"
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
-    "https://cocemfe-4a7kpawtwa-uc.a.run.app"
+    "https://cocemfe-4a7kpawtwa-uc.a.run.app",
+    "https://cocemfe-wpl-4a7kpawtwa-no.a.run.app"
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8000",
-    "https://cocemfe-4a7kpawtwa-uc.a.run.app"
+    "https://cocemfe-4a7kpawtwa-uc.a.run.app",
+    "https://cocemfe-wpl-4a7kpawtwa-no.a.run.app"
 ]
 
 TEMPLATES = [

@@ -25,27 +25,27 @@
         <div class="d-flex flex-row">
           <form id="searchForm" method="GET" action="{% url 'professionals:professional_list' %}" class="flex-form">
             <div class="d-flex flex-col">
-              <div class="form-group2">
-                <label for="name">Nombre:</label>
-                <input type="text" name="name" id="name" value="{{ name_filter }}" class="form-control" placeholder="Nombre">
-              </div>
-              <div class="form-group2">
-                  <label for="surname">Apellidos:</label>
-                  <input type="text" name="surname" id="surname" value="{{ surname_filter }}" class="form-control" placeholder="Apellidos">
-              </div>
-              <div class="form-group2">
-                <label for="license_number">Número de licencia:</label>
-                <input type="text" name="license_number" id="license_number" value="{{ license_number }}" class="form-control" placeholder="Número de licencia">
-              </div>
-              <div class="form-group2">
-                  <label for="organization">Organización:</label>
-                  <input type="text" name="organization" id="organization" value="{{ organization }}" class="form-control" placeholder="Organización">
-              </div>
-            </div>
-          <div class="form-group2 mt-2 text-right" style="flex-direction: row;">
               <button type="submit" class="btn btn-primary">Buscar</button>
-              <a href="{% url 'professionals:professional_list' %}"><span class="btn btn-primary">Limpiar</span></a>
-          </div>
+              <div class="form-group2">
+                <input type="text" name="name" id="name" value="{{ name_filter }}" class="form-control" placeholder="Nombre...">
+              </div>
+              <div class="form-group2">
+                  <input type="text" name="surname" id="surname" value="{{ surname_filter }}" class="form-control" placeholder="Apellidos...">
+              </div>
+              <div class="form-group2">
+                <input type="text" name="license_number" id="license_number" value="{{ license_number_filter }}" class="form-control" placeholder="Número de licencia...">
+              </div>
+              <div class="form-group2">
+                  <input type="text" name="organization" id="organization" value="{{ organization_filter }}" class="form-control" placeholder="Organización...">
+              </div>
+              {% if request.GET.name or request.GET.surname or request.GET.license_number or request.GET.organization %}  
+              <button type="button" class="btn btn-primary" onclick="clearFilter()" title="Borrar filtro">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                    <path d="M4.354 4.354a.5.5 0 0 1 0 .708L8 8l-3.646 3.646a.5.5 0 0 1-.708-.708L7.293 8 3.646 4.354a.5.5 0 0 1 .708-.708L8 7.293l3.646-3.646a.5.5 0 0 1 .708.708L8.707 8l3.647 3.646a.5.5 0 0 1-.708.708L8 8.707l-3.646 3.647a.5.5 0 0 1-.708-.708L7.293 8 3.646 4.354a.5.5 0 0 1 .708-.708z"/>
+                </svg>
+              </button>
+              {% endif %}
+            </div>
           </form>
         </div>
         {% if request.user.is_superuser %}
@@ -148,5 +148,9 @@
             }
         });
     });
+
+    function clearFilter() {
+      window.location.href = window.location.href.split('?')[0];  // Elimina cualquier parámetro de consulta en la URL actual
+    }
 </script>
 {% endblock %}

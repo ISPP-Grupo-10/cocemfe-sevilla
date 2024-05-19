@@ -22,6 +22,5 @@ RUN python manage.py migrate
 RUN python fixtures/jsonmerge.py
 RUN python manage.py loaddata fixtures/data.json
 
-
 EXPOSE 8000
 CMD ["python", "manage.py", "runserver","0.0.0.0:8000"]
