@@ -8,9 +8,6 @@ from django.core.exceptions import ValidationError
 
 
 class Professional(AbstractUser):
-    username = models.CharField(max_length=30, unique=True)
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=60)
     phone_number_validator = RegexValidator(
         regex=r'^\d{9}$',  
         message='El número de teléfono debe tener exactamente 9 dígitos numéricos.',
@@ -29,14 +26,14 @@ class Professional(AbstractUser):
     
     def clean(self):
 
-        if not re.match(r'^[a-zA-Z0-9\s]*$', self.username):
-            raise ValidationError({'name': 'El nombre de usuario solo puede contener letras, números y espacios.'})
+        if not re.match(r'^[a-zA-Z0-9_\s]*$', self.username):
+            raise ValidationError({'username': 'El nombre de usuario solo puede contener letras, números y espacios.'})
 
         if not re.match(r'^[a-zA-Z0-9\s]*$', self.first_name):
-            raise ValidationError({'name': 'El nombre solo puede contener letras, números y espacios.'})
+            raise ValidationError({'first_name': 'El nombre solo puede contener letras, números y espacios.'})
 
         if not re.match(r'^[a-zA-Z0-9\s]*$', self.last_name):
-            raise ValidationError({'name': 'Los apellidos solo puede contener letras, números y espacios.'})
+            raise ValidationError({'last_name': 'Los apellidos solo puede contener letras, números y espacios.'})
 
 class Request(models.Model):
     class Status(models.TextChoices):
