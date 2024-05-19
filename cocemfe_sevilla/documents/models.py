@@ -33,49 +33,49 @@ class Document(models.Model):
     
     def clean(self):
             
-            if not re.match(r'^[a-zA-Z0-9\s\u00C0-\u00FF]*$', self.name):
-                raise ValidationError({'name': 'El nombre solo puede contener letras, números y espacios.'})
-    
-            if self.suggestion_start_date and self.suggestion_end_date:
-                if self.suggestion_start_date > self.suggestion_end_date:
-                    raise ValidationError({'suggestion_end_date': ('La fecha de fin de sugerencia no puede ser anterior a la fecha de inicio.')})
-                elif self.suggestion_start_date == self.suggestion_end_date:
-                    raise ValidationError({'suggestion_end_date': ('La fecha de fin de sugerencia no puede ser igual que la fecha de inicio.')})
+        if not re.match(r'^[a-zA-Z0-9\s\u00C0-\u00FF]*$', self.name):
+            raise ValidationError({'name': 'El nombre solo puede contener letras, números y espacios.'})
 
-            if self.voting_start_date and self.voting_end_date:
-                if self.voting_start_date > self.voting_end_date:
-                    raise ValidationError({'voting_end_date': ('La fecha de fin de votación no puede ser anterior a la fecha de inicio.')})
-                elif self.voting_start_date == self.voting_end_date:
-                    raise ValidationError({'voting_end_date': ('La fecha de fin de votación no puede ser igual que la fecha de inicio.')})
-                
-            if self.suggestion_end_date and self.voting_end_date:
-                if self.suggestion_end_date > self.voting_end_date:
-                    raise ValidationError({'voting_end_date': ('La fecha de fin de votación no puede ser anterior a la fecha de fin de sugerencia.')})
-                elif self.voting_end_date == self.suggestion_end_date:
-                    raise ValidationError({'voting_end_date': ('La fecha de fin de votación no puede ser igual que la fecha de fin de sugerencia.')})
-            
-            if self.suggestion_start_date and self.suggestion_start_date.date() < timezone.now().date():
-                raise ValidationError({'suggestion_start_date': ('La fecha de inicio de sugerencia no puede ser anterior a la fecha actual.')})
-            
-            if self.suggestion_end_date and self.suggestion_end_date.date() < timezone.now().date():
-                raise ValidationError({'suggestion_end_date': ('La fecha de fin de sugerencia no puede ser anterior a la fecha actual.')})
-            
-            if self.voting_end_date and self.voting_end_date.date() < timezone.now().date():
-                raise ValidationError({'voting_end_date': ('La fecha de fin de votación no puede ser anterior a la fecha actual.')})
+        if self.suggestion_start_date and self.suggestion_end_date:
+            if self.suggestion_start_date > self.suggestion_end_date:
+                raise ValidationError({'suggestion_end_date': ('La fecha de fin de sugerencia no puede ser anterior a la fecha de inicio.')})
+            elif self.suggestion_start_date == self.suggestion_end_date:
+                raise ValidationError({'suggestion_end_date': ('La fecha de fin de sugerencia no puede ser igual que la fecha de inicio.')})
 
-            if self.pdf_file:
-                try:
-                    FileExtensionValidator(allowed_extensions=['pdf'])(self.pdf_file)
-                except ValidationError as e:
-                    raise ValidationError({'pdf_file': ('El archivo debe ser un PDF.')}) 
-            else:
-                raise ValidationError({'pdf_file': ('Debe subir un archivo PDF.')})
+        if self.voting_start_date and self.voting_end_date:
+            if self.voting_start_date > self.voting_end_date:
+                raise ValidationError({'voting_end_date': ('La fecha de fin de votación no puede ser anterior a la fecha de inicio.')})
+            elif self.voting_start_date == self.voting_end_date:
+                raise ValidationError({'voting_end_date': ('La fecha de fin de votación no puede ser igual que la fecha de inicio.')})
             
-            if not self.ubication:
-                raise ValidationError({'ubication': ('Debe indicar la localidad.')})
-            
-            if not valid_location(self.ubication):
-                raise ValidationError({'ubication': ('La localidad introducida no es válida.')})
+        if self.suggestion_end_date and self.voting_end_date:
+            if self.suggestion_end_date > self.voting_end_date:
+                raise ValidationError({'voting_end_date': ('La fecha de fin de votación no puede ser anterior a la fecha de fin de sugerencia.')})
+            elif self.voting_end_date == self.suggestion_end_date:
+                raise ValidationError({'voting_end_date': ('La fecha de fin de votación no puede ser igual que la fecha de fin de sugerencia.')})
+        
+        if self.suggestion_start_date and self.suggestion_start_date.date() < timezone.now().date():
+            raise ValidationError({'suggestion_start_date': ('La fecha de inicio de sugerencia no puede ser anterior a la fecha actual.')})
+        
+        if self.suggestion_end_date and self.suggestion_end_date.date() < timezone.now().date():
+            raise ValidationError({'suggestion_end_date': ('La fecha de fin de sugerencia no puede ser anterior a la fecha actual.')})
+        
+        if self.voting_end_date and self.voting_end_date.date() < timezone.now().date():
+            raise ValidationError({'voting_end_date': ('La fecha de fin de votación no puede ser anterior a la fecha actual.')})
+
+        if self.pdf_file:
+            try:
+                FileExtensionValidator(allowed_extensions=['pdf'])(self.pdf_file)
+            except ValidationError as e:
+                raise ValidationError({'pdf_file': ('El archivo debe ser un PDF.')}) 
+        else:
+            raise ValidationError({'pdf_file': ('Debe subir un archivo PDF.')})
+        
+        if not self.ubication:
+            raise ValidationError({'ubication': ('Debe indicar la localidad.')})
+        
+        if not valid_location(self.ubication):
+            raise ValidationError({'ubication': ('La localidad introducida no es válida.')})
        
       
 def valid_location(city):

@@ -2,7 +2,6 @@ from django.db import models
 from documents.models import Document
 from professionals.models import Professional
 from django.core.exceptions import ValidationError
-from django.utils import timezone
 
 class ChatMessage(models.Model):
     document = models.ForeignKey(Document, on_delete=models.CASCADE, related_name='chat_messages')
@@ -22,4 +21,3 @@ class ChatMessage(models.Model):
         # Validación: Verificar que el campo 'content' no exceda una cierta longitud máxima.
         if len(self.content) > 500:
             raise ValidationError("El contenido del mensaje no puede exceder los 500 caracteres.")
-        

@@ -5,7 +5,6 @@ from chat_messages.admin import ChatMessageAdmin
 from documents.models import Document
 from professionals.models import Professional
 from django.contrib.admin.sites import AdminSite
-from django.utils import timezone
 
 class ChatMessageAdminTest(TestCase):
     def setUp(self):
