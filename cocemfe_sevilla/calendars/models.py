@@ -25,31 +25,24 @@ class Events(models.Model):
     
     def clean(self):
         super().clean()
-
         # Validación: La fecha y hora del evento no pueden ser anteriores a la fecha y hora actuales.
         if self.datetime and self.datetime < timezone.now():
             raise ValidationError("La fecha y hora del evento no pueden ser anteriores a la fecha y hora actuales.")
-        
         # Validación: Verificar que el título solo contenga letras, números y espacios.
         if not re.match(r'^[a-zA-Z0-9\s\u00C0-\u00FF]*$', self.title):
             raise ValidationError({"El título del evento solo puede contener letras, números y espacios."})
-        
         # Validación: Verificar que la descripción solo contenga letras, números y espacios.
         if not re.match(r'^[a-zA-Z0-9\s\u00C0-\u00FF]*$', self.description):
             raise ValidationError({"La descripción del evento solo puede contener letras, números y espacios."})
-        
         # Validación: Tipo de evento debe ser uno de los tipos permitidos.
         if self.type not in [choice[0] for choice in self.TIPO_CHOICES.choices]:
             raise ValidationError("El tipo de evento no es válido.")
-        
         # Validación: Verificar que la longitud del título no exceda cierto valor.
         if len(self.title) > 50:
             raise ValidationError("El título del evento no puede exceder los 50 caracteres.")
-
         # Validación: Verificar que la longitud de la descripción no exceda cierto valor.
         if len(self.description) > 255:
             raise ValidationError("La descripción del evento no puede exceder los 255 caracteres.")
-
         if not self.document_id:
             raise ValidationError("El documento asociado al evento es requerido.")
         if not Document.objects.filter(pk=self.document_id).exists():

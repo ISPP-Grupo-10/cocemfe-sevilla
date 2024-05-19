@@ -62,7 +62,7 @@ class Document(models.Model):
         
         if self.voting_end_date and self.voting_end_date.date() < timezone.now().date():
             raise ValidationError({'voting_end_date': ('La fecha de fin de votación no puede ser anterior a la fecha actual.')})
-
+        
         if self.pdf_file:
             try:
                 FileExtensionValidator(allowed_extensions=['pdf'])(self.pdf_file)

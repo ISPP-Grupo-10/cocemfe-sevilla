@@ -91,7 +91,7 @@ def professional_data(request, professional_id):
 def professional_details(request, pk):
     professional = get_object_or_404(Professional, id=pk)
     user_is_staff = request.user.is_staff or request.user.is_superuser
-    if(user_is_staff):
+    if user_is_staff:
         return render(request, 'professional_details.html', {'professional': professional})
     else:
         return HttpResponseForbidden(render(request, '403.html'))
