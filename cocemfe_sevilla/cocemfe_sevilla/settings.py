@@ -59,9 +59,19 @@ INSTALLED_APPS = [
     "calendars",
     "bootstrap5",
     "base",
+    'django_q',
 
 ]
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+Q_CLUSTER = {
+    'name': 'DjangORM',
+    'workers': 4,
+    'recycle': 500,
+    'timeout': 60,
+    'django_redis': 'default',
+    'orm': 'default'
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
