@@ -82,6 +82,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "base.middleware.CheckUserStatusMiddleware",
+    "base.middleware.CustomRedirectMiddleware",
     "corsheaders.middleware.CorsMiddleware",
 ]
 

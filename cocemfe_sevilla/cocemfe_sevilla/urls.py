@@ -49,12 +49,7 @@ else:
         # URL para servir archivos de medios
         path('media/<path:path>', serve, {'document_root': settings.MEDIA_ROOT}),
     ]
-'''
-handler404 = 'base.views.error_404'
-handler500 = 'base.views.error_500'
-
 urlpatterns += [
     path('error/404/', baseViews.error_404, name='error_404'),
     path('error/500/', baseViews.error_500, name='error_500'),
 ]
-'''

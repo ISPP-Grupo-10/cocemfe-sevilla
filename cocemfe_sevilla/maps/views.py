@@ -16,13 +16,13 @@ def map_index(request):
 
         if not coordinate:
             url = f'https://nominatim.openstreetmap.org/search?q={city}&format=json'
-            response = requests.get(url)
+            response = requests.get(url, timeout=None)
             data = response.json()
 
             if data:
                 latitude = float(data[0]['lat'])
                 longitude = float(data[0]['lon'])
-                coords, created = Coordinates.objects.get_or_create(location=city, defaults={'latitude': latitude, 'longitude': longitude})
+                coords = Coordinates.objects.get_or_create(location=city, defaults={'latitude': latitude, 'longitude': longitude})
                 latitude, longitude = coords.latitude, coords.longitude
             else:
                 continue
@@ -62,13 +62,13 @@ def map_search(request, latitude, longitude):
 
         if not coordinate:
             url = f'https://nominatim.openstreetmap.org/search?q={city}&format=json'
-            response = requests.get(url)
+            response = requests.get(url, timeout=None)
             data = response.json()
 
             if data:
                 latitude = float(data[0]['lat'])
                 longitude = float(data[0]['lon'])
-                coords, created = Coordinates.objects.get_or_create(location=city, defaults={'latitude': latitude, 'longitude': longitude})
+                coords = Coordinates.objects.get_or_create(location=city, defaults={'latitude': latitude, 'longitude': longitude})
                 latitude, longitude = coords.latitude, coords.longitude
             else:
                 continue
