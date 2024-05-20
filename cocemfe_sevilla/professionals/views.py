@@ -91,10 +91,37 @@ def professional_data(request, professional_id):
 def professional_details(request, pk):
     professional = get_object_or_404(Professional, id=pk)
     user_is_staff = request.user.is_staff or request.user.is_superuser
-    if(user_is_staff):
+    if user_is_staff:
         return render(request, 'professional_details.html', {'professional': professional})
     else:
         return HttpResponseForbidden(render(request, '403.html'))
+    
+@login_required
+def professional_profile(request, pk):
+    template_name = 'professional_profile.html'
+    professional = get_object_or_404(Professional, id=pk)
+    user_is_staff = request.user.is_staff or request.user.is_superuser
+    if request.method == 'GET':
+        form = ProfessionalForm(user_is_staff=user_is_staff, instance=professional)
+        return render(request, template_name, {'form': form, 'professional': professional})
+
+    if request.method == 'POST':
+        form = ProfessionalForm(request.POST, request.FILES, user_is_staff=user_is_staff, instance=professional)
+        if form.is_valid():
+            if user_is_staff and not request.user.id == professional.id:
+                form.save()
+                return redirect('/professionals/?message=Profesional editado&status=Success')
+            elif request.user.id == professional.id:
+                form.save()
+                previous_url = request.META.get('HTTP_REFERER')
+                if previous_url:
+                    return redirect(previous_url + '?message=Datos de perfil actualizados&status=Success')
+                else:
+                    return redirect('/?message=Datos de perfil actualizados&status=Success')
+            else:
+                return render(request, '403.html')
+        else:
+            return render(request, template_name, {'form': form, 'professional': professional})
 
 @login_required
 def edit_user_view(request, pk):

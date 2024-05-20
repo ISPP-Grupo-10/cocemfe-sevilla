@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.urls import path
-from .views import professional_data
+from .views import professional_data, professional_profile
 from django.conf.urls.static import static
 
 
@@ -15,6 +15,7 @@ urlpatterns = [
     path('<int:id>/delete/', delete_professional, name='delete_professional'),
     path('<int:pk>/update', edit_user_view, name='professional_detail'),
     path('<int:pk>/', professional_details, name='professional_details'),
+    path('profile/<int:pk>/', professional_profile, name='professional_profile'),
     path('login/', custom_login, name='login'),
     path('logout/', custom_logout, name='logout'),
     path('requests/', request_list, name='request_list'),

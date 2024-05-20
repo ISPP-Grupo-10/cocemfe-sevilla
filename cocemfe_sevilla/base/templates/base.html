@@ -106,7 +106,7 @@
             <div class="collapse navbar-collapse d-flex justify-content-center" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="/documents">Documentos</a>
+                        <a class="nav-link" href="/documents/">Documentos</a>
                     </li>
                     {% if user.is_staff %}
                         <li class="nav-item">
@@ -134,7 +134,7 @@
 
             <div class="d-flex justify-content-end align-items-center">
                 <div class="me-5">
-                    <a href="{% url 'professionals:professional_detail' pk=user.id  %}" class="btn btn-orange">Perfil</a>
+                    <a href="{% url 'professionals:professional_profile' pk=user.id  %}" class="btn btn-orange">Perfil</a>
                 </div>
         {% endif %}
                 <div>
