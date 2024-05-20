@@ -16,8 +16,12 @@ def map_index(request):
 
         if not coordinate:
             url = f'https://nominatim.openstreetmap.org/search?q={city}&format=json'
+            headers = {
+                "Referer": "https://cocemfe-wpl-4a7kpawtwa-no.a.run.app/",
+                "User-Agent": "CocemfeWebNGO/1.0 (https://cocemfe-wpl-4a7kpawtwa-no.a.run.app/; info@cocemfesevilla.es)"
+            }
             try:
-                response = requests.get(url, timeout=None)
+                response = requests.get(url, timeout=None, headers=headers)
                 response.raise_for_status()
             except requests.exceptions.RequestException as e:
                 if response.status_code == 403:
@@ -72,8 +76,12 @@ def map_search(request, latitude, longitude):
 
         if not coordinate:
             url = f'https://nominatim.openstreetmap.org/search?q={city}&format=json'
+            headers = {
+                "Referer": "https://cocemfe-wpl-4a7kpawtwa-no.a.run.app/",
+                "User-Agent": "CocemfeWebNGO/1.0 (https://cocemfe-wpl-4a7kpawtwa-no.a.run.app/; info@cocemfesevilla.es)"
+            }
             try:
-                response = requests.get(url, timeout=None)
+                response = requests.get(url, timeout=None, headers=headers)
                 response.raise_for_status()
             except requests.exceptions.RequestException as e:
                 if response.status_code == 403:
