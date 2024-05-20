@@ -68,7 +68,7 @@ Para modificar documentos también se debe iniciar sesión y listar documentos. 
 5. **Registro del profesional introduciendo los datos**
 ![Registrar Profesional](images/cap_nuevo_user.png)
 
-Cuando el administrador registra al profesional, este recibe un correo en el que obtiene una contraseña provisional generada. Con esta contraseña puede acceder al sistema.
+Cuando el administrador registra al profesional, este recibe un correo en el que obtiene una contraseña provisional generada. Con esta contraseña puede acceder al sistema y clickando el link proporcionado en el mismo activará su cuenta verificando el email.
 
 Además, puede cambiar la contraseña las veces que quiera en el futuro:
 ![Cambio Contraseña](images/cap_contraseña.png)
