@@ -81,10 +81,20 @@ class Document(models.Model):
       
 def valid_location(city):
     url = f'https://nominatim.openstreetmap.org/search?q={city}&format=json'
+    headers = {
+        "Referer": "https://cocemfe-wpl-4a7kpawtwa-no.a.run.app/",
+        "User-Agent": "CocemfeWebNGO/1.0 (https://cocemfe-wpl-4a7kpawtwa-no.a.run.app/; info@cocemfesevilla.es)"
+    }
     time.sleep(1)
-    response = requests.get(url)
     res = False
-    print(response)
+    try:
+        response = requests.get(url, timeout=None, headers=headers)
+        response.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        if response.status_code == 403:
+            res = True
+        else:
+            raise e
     if response:
         data = response.json()
         if data:

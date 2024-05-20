@@ -240,14 +240,7 @@
                                         <span class="error">{{ error }}</span>
                                     {% endfor %}
                                 </div>
-                            </div>
-
-                            
-                            <div class="row justify-content-center mb-3">
-                                <a href="{% url 'professionals:update_password' %}" style="text-decoration: underline; color:#0000ff !important">
-                                    ¿Desea cambiar su contraseña?
-                                </a>
-                        </div>     
+                            </div> 
                             <div class="row justify-content-center mb-3">
                                 <div class="col-sm-4 text-center">
                                     <button type="submit" class="btn btn-orange2">Guardar</button>
@@ -262,15 +255,6 @@
                             
                         </form>
                         
-                    </div>
-                </div>
-                <div style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
-                    <div class="btn-container">
-                        <a class="btn-delete-profile" href="{% url 'professionals:delete_account' %}">Borrar perfil</a>
-                    </div>
-                    <div class="checkbox-delete-data">
-                        <input type="checkbox" id="delete-data" name="delete-data">
-                        <label for="delete-data">Eliminar también los datos de la base de datos</label>
                     </div>
                 </div>
             </div>

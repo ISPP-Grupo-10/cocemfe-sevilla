@@ -41,70 +41,70 @@ En primer lugar, debemos conocer que hay dos roles distintos con funcionalidades
 Solo el administrador es capaz de registrar profesionales, por lo que no cualquier persona puede acceder al sistema. Para ello, es necesario indicar los datos del profesional y de la organización a la que pertenece.
 Cuando se registre al profesional, recibirá un correo electrónico, que le proporcionará una contraseña provisional. Tendrá que activar su cuenta mediante el enlace que recibe y cambiará su contraseña. 
 
-![Nueva Organizacion](../../static/images/cap_nueva_org.png)
+![Nueva Organizacion](images/cap_nueva_org.png)
 
-![Nuevo Documento](../../static/images/cap_nuevo_user.png)
+![Nuevo Documento](images/cap_nuevo_user.png)
 
 Por otro lado, para facilitar el registro a los administradores, aunque un usuario cualquiera no puede registrarse por si mismo en el sistema, sí que puede enviar una solicitud, mediante la que el administrador podrá obtener sus datos. Para ello, en la pantalla de registra se pulsa “¿No tienes una cuenta?”
 
 #### 3.1.1 Cambio de constaseña
 En la pantalla de inicio de sesión, encontrarás un botón “¿Has olvidado tu contraseña?” que te llevará a la siguiente pantalla:
 
-![Contraseña olvidada](../../static/images/cap_contra_olv.png)
+![Contraseña olvidada](images/cap_contra_olv.png)
 
 Tras introducir el correo electrónico te llegará un mensaje con el enlace mediante el cual podrás acceder al cambio de contraseña:
 
-![Cambio contraseña](../../static/images/cap_cambio_contra.png)
+![Cambio contraseña](images/cap_cambio_contra.png)
 ### 3.2 Documentos
 Como hemos mencionado antes, solo los administradores pueden publicar documentos. Los documentos solo podrán ser en formato pdf. Para ello, introducirán los datos del documento:
 
-![Subir Documento](../../static/images/cap_nuevo_doc.png)
+![Subir Documento](images/cap_nuevo_doc.png)
 
 En este proceso, se definirán las fechas de inicio y fin de las aportaciones, y el inicio y fin de las votaciones. También, se decide qué profesionales son los que tendrán acceso a ese documento.
 Cuando se sube el documento, se envía un correo notificación a los profesionales seleccionados.
 Dependiendo de las fechas que se introduzcan, el estado del documento será diferente. Si la fecha de inicio de aportaciones está en el futuro, el estado será ‘Borrador’. Cuando llegue esa fecha, cambiará a ‘Aportaciones’. Cuando llegue la fecha de cierre de aportaciones, se pasa al estado ‘Votaciones’. Una vez pase la fecha de Votaciones, pasa a ‘Revisión’
 
-![Visalizar documento en estado Borrador](../../static/images/cap_borrador.png)
+![Visalizar documento en estado Borrador](images/cap_borrador.png)
 
 En caso de que el estado sea Aportaciones, se podrán crear los comentarios. Para crearlos hay dos opciones:
 
 - Se puede crear manualmente rellenando los campos uno a uno, donde ‘Cuerpo del comentario’ hace referencia a lo que se quiere aportar y ‘Sección’ es la parte del documento al que influye el comentario.
 - También se puede capturar la selección de manera automática, seleccionando en el documento la parte a comentar y pulsando el botón de Capturar Selección. Cuando se haga esto, se rellena automáticamente la sección y el número de página. Cuando se cree el comentario, aparecerá en la parte derecha. Si se pulsa en él, se mostrará la página a la que hace referencia y se resaltará en amarillo la sección seleccionada.
 
-![Visalizar documento en estado Aportaciones](../../static/images/cap_aportaciones.png)
+![Visalizar documento en estado Aportaciones](images/cap_aportaciones.png)
 
 En caso de que el estado sea ‘Votaciones’, se mostrará una pantalla parecida a la anterior, solo que ya no se podrán crear aportaciones y los comentarios tendrán un contador de aprobación/rechazo. Cada usuario (solo los profesionales) cuando pulsen en cada comentario podrán dar su voto a favor o en contra.
-![Votar en sugerencia](../../static/images/cap_votar.png)
+![Votar en sugerencia](images/cap_votar.png)
 
 
 
 ### 3.3 Eventos
 
 Cuando se crea el documento, se crean eventos con las fechas de inicio y fin de aportaciones y votaciones, las cuales se muestran en el calendario. Cada usuario ve en su calendario, los eventos en los que participa. El administrador ve todos los eventos:
-![Calendario](../../static/images/cap_calendario.png)
+![Calendario](images/cap_calendario.png)
 
 Además, el administrador puede crear un evento independiente. Normalmente enfocado a reuniones:
 
-![Crear Evento](../../static/images/cap_crear_evento.png)
+![Crear Evento](images/cap_crear_evento.png)
 
 ### 3.4 Mapa
 
 El administrador tiene a su disposición un mapa que marca todos los municipios y localidades que tienen un plan de accesibilidad. De esta forma, es fácil registrar cuales son los municipios a los que les falta:
 
-![Mapa](../../static/images/cap_mapa.png)
+![Mapa](images/cap_mapa.png)
 
 ### 3.5 Perfil
 
 En la parte superior derecha vemos un botón de ‘Perfil’. Accediendo a él se puede editar el perfil del usuario, además de cambiar la contraseña o eliminar la cuenta:
 
-![Perfil](../../static/images/cap_perfil.png)
+![Perfil](images/cap_perfil.png)
 
 
 ### 3.6 Donaciones
 
 Cualquier usuario, sea profesional o no, puede hacer una donación a la ONG. Accediendo al botón de ‘Donar’ que se encuentra en la pantalla de inicio de sesión, a la que puede acceder todo el mundo, se puede realizar la transferencia mediante PayPal:
 
-![Donaciones](../../static/images/cap_donaciones.png)
+![Donaciones](images/cap_donaciones.png)
 
 ## 4. PROBLEMAS Y DUDAS FRECUENTES
 

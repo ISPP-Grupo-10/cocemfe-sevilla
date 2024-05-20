@@ -16,14 +16,28 @@ def map_index(request):
 
         if not coordinate:
             url = f'https://nominatim.openstreetmap.org/search?q={city}&format=json'
-            response = requests.get(url, timeout=None)
-            data = response.json()
+            headers = {
+                "Referer": "https://cocemfe-wpl-4a7kpawtwa-no.a.run.app/",
+                "User-Agent": "CocemfeWebNGO/1.0 (https://cocemfe-wpl-4a7kpawtwa-no.a.run.app/; info@cocemfesevilla.es)"
+            }
+            try:
+                response = requests.get(url, timeout=None, headers=headers)
+                response.raise_for_status()
+            except requests.exceptions.RequestException as e:
+                if response.status_code == 403:
+                    continue
+                else:
+                    raise e
+            if response:
+                data = response.json()
 
-            if data:
-                latitude = float(data[0]['lat'])
-                longitude = float(data[0]['lon'])
-                coords,_ = Coordinates.objects.get_or_create(location=city, defaults={'latitude': latitude, 'longitude': longitude})
-                latitude, longitude = coords.latitude, coords.longitude
+                if data:
+                    latitude = float(data[0]['lat'])
+                    longitude = float(data[0]['lon'])
+                    coords, _ = Coordinates.objects.get_or_create(location=city, defaults={'latitude': latitude, 'longitude': longitude})
+                    latitude, longitude = coords.latitude, coords.longitude
+                else:
+                    continue
             else:
                 continue
         else:
@@ -36,7 +50,7 @@ def map_index(request):
         popup_content = "<h3>{}</h3><ul>".format(city)
         for document in documents:
             if request.user.is_staff:
-                popup_content += "<li><a href='/documents/view_pdf/{0}' target='_top'>{1}</a></li>".format(document.id, document.name)
+                popup_content += "<li><a href='/documents/view_pdf/{0}/' target='_top'>{1}</a></li>".format(document.id, document.name)
             else:
                 popup_content += "<li>{}</li>".format(document.name)
         popup_content += "</ul>"
@@ -62,14 +76,28 @@ def map_search(request, latitude, longitude):
 
         if not coordinate:
             url = f'https://nominatim.openstreetmap.org/search?q={city}&format=json'
-            response = requests.get(url, timeout=None)
-            data = response.json()
+            headers = {
+                "Referer": "https://cocemfe-wpl-4a7kpawtwa-no.a.run.app/",
+                "User-Agent": "CocemfeWebNGO/1.0 (https://cocemfe-wpl-4a7kpawtwa-no.a.run.app/; info@cocemfesevilla.es)"
+            }
+            try:
+                response = requests.get(url, timeout=None, headers=headers)
+                response.raise_for_status()
+            except requests.exceptions.RequestException as e:
+                if response.status_code == 403:
+                    continue
+                else:
+                    raise e
+            if response:
+                data = response.json()
 
-            if data:
-                latitude = float(data[0]['lat'])
-                longitude = float(data[0]['lon'])
-                coords,_ = Coordinates.objects.get_or_create(location=city, defaults={'latitude': latitude, 'longitude': longitude})
-                latitude, longitude = coords.latitude, coords.longitude
+                if data:
+                    latitude = float(data[0]['lat'])
+                    longitude = float(data[0]['lon'])
+                    coords,created = Coordinates.objects.get_or_create(location=city, defaults={'latitude': latitude, 'longitude': longitude})
+                    latitude, longitude = coords.latitude, coords.longitude
+                else:
+                    continue
             else:
                 continue
         else:
@@ -81,7 +109,7 @@ def map_search(request, latitude, longitude):
         # Crear un control de tipo Popup con el listado de documentos
         popup_content = "<h3>{}</h3><ul>".format(city)
         for document in documents:
-            popup_content += "<li><a href='/documents/view_pdf/{0}' target='_top'>{1}</a></li>".format(document.id, document.name)
+            popup_content += "<li><a href='/documents/view_pdf/{0}/' target='_top'>{1}</a></li>".format(document.id, document.name)
         popup_content += "</ul>"
         
         folium.Popup(popup_content).add_to(marker)
