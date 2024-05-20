@@ -74,7 +74,7 @@ class Document(models.Model):
         
         if not self.ubication:
             raise ValidationError({'ubication': ('Debe indicar la localidad.')})
-'''
+        
         if not valid_location(self.ubication):
             raise ValidationError({'ubication': ('La localidad introducida no es válida.')})
        
@@ -82,9 +82,15 @@ class Document(models.Model):
 def valid_location(city):
     url = f'https://nominatim.openstreetmap.org/search?q={city}&format=json'
     time.sleep(1)
-    response = requests.get(url)
     res = False
-    print(response)
+    try:
+        response = requests.get(url, timeout=None)
+        response.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        if response.status_code == 403:
+            res = True
+        else:
+            raise e
     if response:
         data = response.json()
         if data:
@@ -94,4 +100,3 @@ def valid_location(city):
             res = True
  
     return res
-'''
